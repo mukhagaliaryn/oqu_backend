@@ -37,6 +37,7 @@ class ChapterTable(admin.TabularInline):
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('name', 'product_type', 'class_level', )
     list_filter = ('class_level', 'product_type', )
+    filter_horizontal = ('authors',)
 
     inlines = [PurposeTable, FeaturesTable, ChapterTable, ]
 

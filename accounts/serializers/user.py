@@ -27,10 +27,16 @@ class UserAvatarSerializer(serializers.ModelSerializer):
 
 # Platforms app
 # --------------------------------------------------------------------------------------------------------
-
 # For student
 class PlatformStatusStudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'first_name', 'last_name')
-        
+
+
+# Product view
+# --------------------------------------------------------------------------------------------------------
+class ProductUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'first_name', 'last_name', 'image', )
