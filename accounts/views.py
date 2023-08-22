@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from .models import User
 from rest_framework.parsers import MultiPartParser, FormParser
 
-from .serializers.account import AccountSerializer
-from .serializers.user import UserSerializer, UserUpdateSerializer, UserAvatarSerializer
+from .serializers import AccountSerializer
+from .serializers import UserSerializer, UserUpdateSerializer, UserAvatarSerializer
 
 
 # All users

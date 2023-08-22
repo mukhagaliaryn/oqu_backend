@@ -179,9 +179,9 @@ DJOSER = {
     'USERNAME_RESET_CONFIRM_URL': 'email/reset/confirm/{uid}/{token}',
 
     'SERIALIZERS': {
-        'user_create': 'accounts.serializers.user.UserSerializer',
-        'user': 'accounts.serializers.user.UserSerializer',
-        'current_user': 'accounts.serializers.user.UserSerializer',
-        'user_delete': 'djoser.serializers.user.UserSerializer',
+        'user_create': 'accounts.serializers.UserSerializer',
+        'user': 'accounts.serializers.UserSerializer',
+        'current_user': 'accounts.serializers.UserSerializer',
+        'user_delete': 'djoser.serializers.UserSerializer',
     }
 }

@@ -95,7 +95,7 @@ class Product(models.Model):
 # Purpose
 class Purpose(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Цель')
-    item = models.CharField(verbose_name='Название', max_length=64, null=True, blank=True)
+    item = models.TextField(verbose_name='Цель обучение', null=True, blank=True)
 
     class Meta:
         verbose_name = 'Цель обучение'

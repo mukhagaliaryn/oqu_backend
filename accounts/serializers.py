@@ -1,10 +1,12 @@
 from djoser.serializers import UserCreateSerializer
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
+from .models import Account
+
 User = get_user_model()
 
 
-# Accounts app
+# User
 # --------------------------------------------------------------------------------------------------------
 class UserSerializer(UserCreateSerializer):
 
@@ -25,18 +27,11 @@ class UserAvatarSerializer(serializers.ModelSerializer):
         fields = ('image', )
 
 
-# Platforms app
+# Account
 # --------------------------------------------------------------------------------------------------------
-# For student
-class PlatformStatusStudentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('id', 'first_name', 'last_name')
+class AccountSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
 
-
-# Product view
-# --------------------------------------------------------------------------------------------------------
-class ProductUserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ('id', 'first_name', 'last_name', 'image', )
+        model = Account
+        fields = ('id', 'user', 'birthday', 'gender', 'city', 'address', 'phone', )
