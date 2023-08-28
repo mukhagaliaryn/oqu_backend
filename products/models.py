@@ -80,6 +80,7 @@ class Product(models.Model):
     topic = models.ForeignKey(Topic, related_name='topic', on_delete=models.CASCADE, verbose_name='Тема')
     poster = models.ImageField(verbose_name='Обложка', upload_to='products/poster/',
                                blank=True, null=True)
+    about = models.TextField(verbose_name='О продукте', blank=True, null=True)
     description = models.TextField(verbose_name='Описание', blank=True, null=True)
     authors = models.ManyToManyField(User, verbose_name='Авторы',
                                      related_name="authors", blank=True)
@@ -117,6 +118,7 @@ class Feature(models.Model):
 class Chapter(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Раздел')
     chapter_name = models.CharField(verbose_name='Название раздела', max_length=64)
+    about = models.TextField(verbose_name='О разделе', blank=True, null=True)
     date_created = models.DateTimeField(verbose_name='Дата создания', auto_now_add=True)
 
     def __str__(self):

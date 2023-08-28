@@ -30,7 +30,7 @@ class FeaturesTable(admin.TabularInline):
 
 class ChapterTable(admin.TabularInline):
     model = Chapter
-    fields = ('product', 'chapter_name',)
+    fields = ('product', 'chapter_name', 'about', )
     extra = 1
 
 

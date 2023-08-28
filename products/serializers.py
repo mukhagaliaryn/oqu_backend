@@ -1,10 +1,11 @@
 from rest_framework import serializers
 
 from accounts.models import User
-from .models import Category, Topic, Product, Chapter, Purpose, Feature, Lesson
+from .models import Category, Topic, Product, Chapter, Purpose, Feature, Lesson, Video, Task
 
 
 # Generic category
+# --------------------------------------------------------------------------------------------------
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
@@ -62,4 +63,40 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
+        fields = '__all__'
+
+
+# Chapter view
+# --------------------------------------------------------------------------------------------------
+class ChapterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Chapter
+        fields = ('id', 'chapter_name', 'date_created', 'about', )
+
+
+# Video
+class ChapterVideoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Video
+        fields = ('id', 'lesson', 'title', )
+
+
+# Tasks
+class ChapterTaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = ('id', 'lesson', 'title', 'task_type', )
+
+
+# Lesson view
+# --------------------------------------------------------------------------------------------------
+class LessonVideoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Video
+        fields = '__all__'
+
+
+class LessonTaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
         fields = '__all__'
