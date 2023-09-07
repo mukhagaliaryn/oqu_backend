@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django_summernote.admin import SummernoteModelAdmin, SummernoteModelAdminMixin
+
 from .models import Category, Topic, Product, Purpose, Feature, Chapter, Lesson, Video, Task, Question, Answer
 
 
@@ -16,10 +18,11 @@ class CategoryAdmin(admin.ModelAdmin):
 
 # Product admin
 # ---------------------------------------------------------------------------------------
-class PurposeTable(admin.TabularInline):
+class PurposeTable(SummernoteModelAdminMixin, admin.StackedInline):
     model = Purpose
     fields = ('product', 'item',)
     extra = 1
+    summernote_fields = ('item',)
 
 
 class FeaturesTable(admin.TabularInline):
@@ -34,10 +37,11 @@ class ChapterTable(admin.TabularInline):
     extra = 1
 
 
-class ProductAdmin(admin.ModelAdmin):
+class ProductAdmin(SummernoteModelAdmin):
     list_display = ('name', 'product_type', 'class_level', )
     list_filter = ('class_level', 'product_type', )
     filter_horizontal = ('authors',)
+    summernote_fields = ('about', 'description', )
 
     inlines = [PurposeTable, FeaturesTable, ChapterTable, ]
 

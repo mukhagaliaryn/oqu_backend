@@ -8,10 +8,13 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     re_path(r'^auth/', include('djoser.urls')),
     re_path(r'^auth/', include('djoser.urls.jwt')),
+    path('summernote/', include('django_summernote.urls')),
 
+    # apps...
     path('accounts/', include('accounts.urls')),
     path('', include('platforms.urls')),
     path('products/', include('products.urls')),
+    path('profiles/', include('profiles.urls')),
 ]
 
 

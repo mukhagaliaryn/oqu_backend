@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'djoser',
     'corsheaders',
     'storages',
+    'django_summernote',
 
     'accounts.apps.AccountsConfig',
     'platforms.apps.PlatformsConfig',

@@ -98,6 +98,9 @@ class Purpose(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Цель')
     item = models.TextField(verbose_name='Цель обучение', null=True, blank=True)
 
+    def __str__(self):
+        return self.item
+
     class Meta:
         verbose_name = 'Цель обучение'
         verbose_name_plural = 'Цели обучения'
@@ -108,6 +111,9 @@ class Feature(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Особенности')
     label = models.CharField(verbose_name='Название', max_length=64, null=True, blank=True)
     item = models.CharField(verbose_name='Значение', max_length=64, null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.label}: {self.item}'
 
     class Meta:
         verbose_name = 'Особенность'
@@ -194,6 +200,7 @@ class Question(models.Model):
     )
 
     title = models.CharField(verbose_name='Вопрос', blank=False, null=False)
+    body = models.TextField(verbose_name='Тело вопроса', blank=True, null=True)
     format = models.CharField(verbose_name='Формат', choices=FORMAT, default=FORMAT[0][1], max_length=64)
     solution = models.TextField(verbose_name='Решение', blank=True, null=True)
     quiz = models.ForeignKey(Task, on_delete=models.CASCADE, verbose_name='Задание')
@@ -201,8 +208,8 @@ class Question(models.Model):
     def __str__(self):
         return self.title
 
-    # def get_answers(self):
-    #     return self.answer_set.all()
+    def get_answers(self):
+        return self.answer_set.all()
 
     class Meta:
         verbose_name = 'Вопрос'

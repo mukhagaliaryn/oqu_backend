@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from accounts.models import User
-from .models import Category, Topic, Product, Chapter, Purpose, Feature, Lesson, Video, Task
+from .models import Category, Topic, Product, Chapter, Purpose, Feature, Lesson, Video, Task, Answer, Question
 
 
 # Generic category
@@ -53,7 +53,7 @@ class ProductChapterSerializer(serializers.ModelSerializer):
 class ProductLessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
-        fields = '__all__'
+        fields = ('id', 'title', 'chapter', 'duration', )
 
 
 # Result serializer
@@ -90,13 +90,32 @@ class ChapterTaskSerializer(serializers.ModelSerializer):
 
 # Lesson view
 # --------------------------------------------------------------------------------------------------
+# Video
 class LessonVideoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Video
         fields = '__all__'
 
 
+# Task/Quiz
 class LessonTaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = '__all__'
+
+
+# Quiz question
+class QuestionAnswerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Answer
+        fields = ('id', 'text', 'correct', )
+
+
+class LessonQuestionSerializer(serializers.ModelSerializer):
+    get_answers = QuestionAnswerSerializer(many=True)
+    quiz = LessonTaskSerializer(read_only=True)
+
+    class Meta:
+        model = Question
+        fields = ('id', 'title', 'body', 'format', 'quiz', 'get_answers',)
+
