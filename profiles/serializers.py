@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from products.models import Task, Question, Answer
-from profiles.models import UserQuizData, UserChapter, UserProduct
+from products.models import Task, Question, Answer, Chapter, Lesson, Video
+from profiles.models import UserQuizData, UserChapter, UserProduct, UserLesson, UserVideo
 
 
 # UserProduct
@@ -14,9 +14,54 @@ class UserProductSerializer(serializers.ModelSerializer):
 
 # UserChapter
 # -----------------------------------------------------------------------------------
-class UserChapterSerializer(serializers.ModelSerializer):
+
+# Chapter
+class ChapterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Chapter
+        fields = ('id', 'chapter_name', 'date_created', 'about', )
+
+
+# Chapter list
+class ChapterListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Chapter
+        fields = ('id', 'chapter_name', )
+
+
+# User chapter list
+class UserChapterListSerializer(serializers.ModelSerializer):
+    chapter = ChapterListSerializer(read_only=True)
+
     class Meta:
         model = UserChapter
+        fields = ('id', 'chapter',  'is_done', )
+
+
+# Main
+class UserChapterSerializer(serializers.ModelSerializer):
+    chapter = ChapterSerializer(read_only=True)
+
+    class Meta:
+        model = UserChapter
+        fields = '__all__'
+
+
+# User Lesson
+# -----------------------------------------------------------------------------------
+# Lesson list
+class LessonListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Lesson
+        fields = ('id', 'title', 'chapter', 'duration', )
+
+
+# Main list
+class UserLessonListSerializer(serializers.ModelSerializer):
+    lesson = LessonListSerializer(read_only=True)
+
+    class Meta:
+        model = UserLesson
         fields = '__all__'
 
 

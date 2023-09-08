@@ -1,6 +1,6 @@
 from django.db import models
 from accounts.models import User
-from products.models import Task, Question, Answer, Chapter, Lesson
+from products.models import Task, Question, Answer, Chapter, Lesson, Video
 
 
 # Profile model
@@ -20,7 +20,7 @@ class Profile(models.Model):
 # User Product model
 class UserProduct(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
-    product = models.ForeignKey(to='products.Product', on_delete=models.CASCADE, verbose_name='Продукт')
+    product = models.OneToOneField(to='products.Product', on_delete=models.CASCADE, verbose_name='Продукт')
     score = models.PositiveSmallIntegerField(verbose_name='Балл', default=0)
     max_score = models.PositiveSmallIntegerField(verbose_name='Максимальный балл', default=100)
     is_subscribe = models.BooleanField(verbose_name='Подписка', default=False)
@@ -37,13 +37,14 @@ class UserProduct(models.Model):
 # -----------------------------------------------------------------------------------------------
 class UserChapter(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
-    chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE, verbose_name='Раздел')
+    chapter = models.OneToOneField(Chapter, on_delete=models.CASCADE, verbose_name='Раздел')
     score = models.PositiveSmallIntegerField(verbose_name='Балл', default=0)
     max_score = models.PositiveSmallIntegerField(verbose_name='Максимальный балл', default=100)
     is_done = models.BooleanField(verbose_name='Завершено', default=False)
+    is_subscribe = models.BooleanField(verbose_name='Подписка', default=False)
 
     def __str__(self):
-        return f'Глава пользователя: {self.user.username}'
+        return f'Глава пользователя: {self.user}'
 
     class Meta:
         verbose_name = 'Глава пользователя'
@@ -54,17 +55,49 @@ class UserChapter(models.Model):
 # -----------------------------------------------------------------------------------------------
 class UserLesson(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
-    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, verbose_name='Урок')
+    lesson = models.OneToOneField(Lesson, on_delete=models.CASCADE, verbose_name='Урок')
     score = models.PositiveSmallIntegerField(verbose_name='Балл', default=0)
     max_score = models.PositiveSmallIntegerField(verbose_name='Максимальный балл', default=100)
     is_done = models.BooleanField(verbose_name='Завершено', default=False)
 
     def __str__(self):
-        return f'Урок пользователя: {self.user.username}'
+        return f'Урок пользователя: {self.user}'
 
     class Meta:
         verbose_name = 'Урок пользователя'
         verbose_name_plural = 'Уроки пользователей'
+
+
+# User video
+class UserVideo(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
+    video = models.OneToOneField(Video, on_delete=models.CASCADE, verbose_name='Видео')
+    score = models.PositiveSmallIntegerField(verbose_name='Балл', default=0)
+    max_score = models.PositiveSmallIntegerField(verbose_name='Максимальный балл', default=100)
+    is_done = models.BooleanField(verbose_name='Завершено', default=False)
+
+    def __str__(self):
+        return f'Видео пользователя: {self.user}'
+
+    class Meta:
+        verbose_name = 'Видео пользователя'
+        verbose_name_plural = 'Все видео пользователей'
+
+
+# User video
+class UserTask(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
+    task = models.OneToOneField(Task, on_delete=models.CASCADE, verbose_name='Задание')
+    score = models.PositiveSmallIntegerField(verbose_name='Балл', default=0)
+    max_score = models.PositiveSmallIntegerField(verbose_name='Максимальный балл', default=100)
+    is_done = models.BooleanField(verbose_name='Завершено', default=False)
+
+    def __str__(self):
+        return f'Видео пользователя: {self.user}'
+
+    class Meta:
+        verbose_name = 'Видео пользователя'
+        verbose_name_plural = 'Все видео пользователей'
 
 
 # UserQuiz
@@ -76,22 +109,24 @@ class UserQuizData(models.Model):
         ('FINISH', 'Завершено'),
     )
     user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)
-    quiz = models.ForeignKey(Task, on_delete=models.CASCADE, verbose_name='Тест')
+    quiz = models.OneToOneField(Task, on_delete=models.CASCADE, verbose_name='Тест')
     questions = models.ManyToManyField(Question, verbose_name='Вопросы')
     start_time = models.DateTimeField(verbose_name='Время начинание', auto_now_add=True)
     finish_time = models.DateTimeField(verbose_name='Закончание', blank=True, null=True)
+    score = models.PositiveSmallIntegerField(verbose_name='Балл', default=0)
+    max_score = models.PositiveSmallIntegerField(verbose_name='Максимальный балл', default=1)
     status = models.CharField(verbose_name='Статус', max_length=255,
                               choices=STATUS_CHOICE, default=STATUS_CHOICE[0][1])
 
     def __str__(self):
-        return f'Тестовые данные: {self.user.username}'
+        return f'Тест пользователя: {self.user}'
 
     def get_user_answers(self):
         return self.useranswer_set.all()
 
     class Meta:
-        verbose_name = 'Тест данные пользователя'
-        verbose_name_plural = 'Тесты данные пользователей'
+        verbose_name = 'Тест пользователя'
+        verbose_name_plural = 'Тесты пользователей'
         ordering = ('-start_time', )
 
 

@@ -3,14 +3,15 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from products.models import Product, Lesson, Video, Task, Chapter
-from profiles.models import UserQuizData, UserProduct
-from profiles.serializers import UserQuizDataSerializer
+from profiles.models import UserQuizData, UserProduct, UserChapter, UserLesson
+from profiles.serializers import UserQuizDataSerializer, UserChapterSerializer, UserChapterListSerializer, \
+    UserLessonListSerializer
 
 from .serializers import (
     ProductSerializer, ProductChapterSerializer,
     ProductPurposeSerializer, ProductFeatureSerializer,
     ProductLessonSerializer,
-    ChapterSerializer, ChapterVideoSerializer, ChapterTaskSerializer,
+    ChapterVideoSerializer, ChapterTaskSerializer,
     LessonVideoSerializer, LessonTaskSerializer
 )
 
@@ -23,7 +24,7 @@ class ProductAPIView(APIView):
         user_type = request.user.user_type
         if user_type == 'STUDENT':
             product = get_object_or_404(Product, pk=pk)
-            user_product = get_object_or_404(UserProduct, product__pk=pk)
+            user_product = get_object_or_404(UserProduct, product=product)
             purposes = product.purpose_set.all()
             features = product.feature_set.all()
             chapters = product.chapter_set.all()
@@ -55,19 +56,25 @@ class ChapterAPIView(APIView):
     def get(self, request, pk, chapter_pk):
         user_type = request.user.user_type
         if user_type == 'STUDENT':
+            # user chapter data
             product = get_object_or_404(Product, pk=pk)
-            chapter = product.chapter_set.get(pk=chapter_pk)
-            
-            chapters = product.chapter_set.all()
+            chapter = get_object_or_404(Chapter, pk=chapter_pk)
+            user_chapter = get_object_or_404(UserChapter, chapter=chapter)
+
+            # sidebar menu
+            user_chapters = UserChapter.objects.filter(chapter__product=product)
+            user_lessons = UserLesson.objects.filter(lesson__chapter=chapter)
             lessons = Lesson.objects.filter(chapter=chapter)
 
+            # chapters list data
             videos = Video.objects.filter(lesson__in=lessons)
             tasks = Task.objects.filter(lesson__in=lessons, task_type='WRITE')
             quizzes = Task.objects.filter(lesson__in=lessons, task_type='QUIZ')
 
-            chapter_serializer = ChapterSerializer(chapter, partial=True)
-            chapters_serializer = ProductChapterSerializer(chapters, many=True)
-            lessons_serializer = ProductLessonSerializer(lessons, many=True)
+            # serializers
+            user_chapter_serializer = UserChapterSerializer(user_chapter, partial=True)
+            user_chapters_serializer = UserChapterListSerializer(user_chapters, many=True)
+            user_lessons_serializer = UserLessonListSerializer(user_lessons, many=True)
 
             videos_serializers = ChapterVideoSerializer(videos, many=True)
             tasks_serializers = ChapterTaskSerializer(tasks, many=True)
@@ -75,10 +82,10 @@ class ChapterAPIView(APIView):
 
             context = {
                 'user_type': user_type,
-                'chapter': chapter_serializer.data,
+                'user_chapter': user_chapter_serializer.data,
                 'product': product.name,
-                'chapters': chapters_serializer.data,
-                'lessons': lessons_serializer.data,
+                'user_chapters': user_chapters_serializer.data,
+                'user_lessons': user_lessons_serializer.data,
 
                 'videos': videos_serializers.data,
                 'tasks': tasks_serializers.data,
