@@ -74,30 +74,9 @@ class ChapterSerializer(serializers.ModelSerializer):
         fields = ('id', 'chapter_name', 'date_created', 'about', )
 
 
-# Video
-class ChapterVideoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Video
-        fields = ('id', 'lesson', 'title', )
-
-
-# Tasks
-class ChapterTaskSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Task
-        fields = ('id', 'lesson', 'title', 'task_type', )
-
-
 # Lesson view
 # --------------------------------------------------------------------------------------------------
-# Video
-class LessonVideoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Video
-        fields = '__all__'
-
-
-# Task/Quiz
+# Task
 class LessonTaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
@@ -117,5 +96,4 @@ class LessonQuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Question
-        fields = ('id', 'title', 'body', 'format', 'quiz', 'get_answers',)
-
+        fields = ('id', 'title', 'body', 'format', 'quiz', 'get_answers', )

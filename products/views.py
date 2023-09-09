@@ -2,17 +2,18 @@ from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+
 from products.models import Product, Lesson, Video, Task, Chapter
-from profiles.models import UserQuizData, UserProduct, UserChapter, UserLesson
-from profiles.serializers import UserQuizDataSerializer, UserChapterSerializer, UserChapterListSerializer, \
-    UserLessonListSerializer
+from profiles.models import UserQuizData, UserProduct, UserChapter, UserLesson, UserVideo, UserTask
+from profiles.serializers import (
+    UserChapterSerializer, UserChapterListSerializer,
+    UserLessonListSerializer, UserVideoListSerializer, UserTaskListSerializer, UserQuizListSerializer,
+    UserQuizDataSerializer, UserVideoSerializer, UserTaskSerializer, UserLessonSerializer
+)
 
 from .serializers import (
-    ProductSerializer, ProductChapterSerializer,
-    ProductPurposeSerializer, ProductFeatureSerializer,
+    ProductSerializer, ProductChapterSerializer, ProductPurposeSerializer, ProductFeatureSerializer,
     ProductLessonSerializer,
-    ChapterVideoSerializer, ChapterTaskSerializer,
-    LessonVideoSerializer, LessonTaskSerializer
 )
 
 
@@ -64,21 +65,20 @@ class ChapterAPIView(APIView):
             # sidebar menu
             user_chapters = UserChapter.objects.filter(chapter__product=product)
             user_lessons = UserLesson.objects.filter(lesson__chapter=chapter)
-            lessons = Lesson.objects.filter(chapter=chapter)
 
             # chapters list data
-            videos = Video.objects.filter(lesson__in=lessons)
-            tasks = Task.objects.filter(lesson__in=lessons, task_type='WRITE')
-            quizzes = Task.objects.filter(lesson__in=lessons, task_type='QUIZ')
+            user_videos = UserVideo.objects.filter(video__lesson__chapter=chapter)
+            user_tasks = UserTask.objects.filter(task__lesson__chapter=chapter)
+            user_quizzes = UserQuizData.objects.filter(quiz__lesson__chapter=chapter)
 
             # serializers
             user_chapter_serializer = UserChapterSerializer(user_chapter, partial=True)
             user_chapters_serializer = UserChapterListSerializer(user_chapters, many=True)
             user_lessons_serializer = UserLessonListSerializer(user_lessons, many=True)
 
-            videos_serializers = ChapterVideoSerializer(videos, many=True)
-            tasks_serializers = ChapterTaskSerializer(tasks, many=True)
-            quizzes_serializers = ChapterTaskSerializer(quizzes, many=True)
+            user_videos_serializers = UserVideoListSerializer(user_videos, many=True)
+            user_tasks_serializers = UserTaskListSerializer(user_tasks, many=True)
+            user_quizzes_serializers = UserQuizListSerializer(user_quizzes, many=True)
 
             context = {
                 'user_type': user_type,
@@ -87,9 +87,9 @@ class ChapterAPIView(APIView):
                 'user_chapters': user_chapters_serializer.data,
                 'user_lessons': user_lessons_serializer.data,
 
-                'videos': videos_serializers.data,
-                'tasks': tasks_serializers.data,
-                'quizzes': quizzes_serializers.data,
+                'videos': user_videos_serializers.data,
+                'tasks': user_tasks_serializers.data,
+                'quizzes': user_quizzes_serializers.data,
             }
             return Response(context, status=status.HTTP_200_OK)
         else:
@@ -100,98 +100,126 @@ class ChapterAPIView(APIView):
 # ----------------------------------------------------------------------------------------
 # Video
 class LessonVideoAPIView(APIView):
-    def get(self, request, pk, chapter_pk, lesson_id, video_id):
+    def get(self, request, pk, chapter_pk, lesson_pk, video_pk):
         user_type = request.user.user_type
         if user_type == 'STUDENT':
             product = get_object_or_404(Product, pk=pk)
             chapter = get_object_or_404(Chapter, pk=chapter_pk)
-            lesson = get_object_or_404(Lesson, pk=lesson_id)
-            video = get_object_or_404(Video, pk=video_id)
+            user_lesson = get_object_or_404(UserLesson, lesson__pk=lesson_pk)
+            user_video = get_object_or_404(UserVideo, video__pk=video_pk)
 
-            videos = Video.objects.filter(lesson=lesson)
-            tasks = Task.objects.filter(lesson=lesson, task_type='WRITE')
-            quizzes = Task.objects.filter(lesson=lesson, task_type='QUIZ')
+            user_videos = UserVideo.objects.filter(video__lesson=user_lesson.lesson)
+            user_tasks = UserTask.objects.filter(task__lesson=user_lesson.lesson)
+            user_quizzes = UserQuizData.objects.filter(quiz__lesson=user_lesson.lesson)
 
             chapter_serializer = ProductChapterSerializer(chapter, partial=True)
-            video_serializer = LessonVideoSerializer(video, partial=True, context={'request': request})
+            user_lesson_serializer = UserLessonSerializer(user_lesson, partial=True)
+            user_video_serializer = UserVideoSerializer(user_video, partial=True, context={'request': request})
 
-            videos_serializers = ChapterVideoSerializer(videos, many=True)
-            tasks_serializers = ChapterTaskSerializer(tasks, many=True)
-            quizzes_serializers = ChapterTaskSerializer(quizzes, many=True)
+            user_videos_serializers = UserVideoListSerializer(user_videos, many=True)
+            user_tasks_serializers = UserTaskListSerializer(user_tasks, many=True)
+            user_quizzes_serializers = UserQuizListSerializer(user_quizzes, many=True)
 
             context = {
                 'user_type': user_type,
+                'product': product.name,
                 'chapter': chapter_serializer.data,
-                'video': video_serializer.data,
+                'user_lesson': user_lesson_serializer.data,
+                'user_video': user_video_serializer.data,
 
-                'videos': videos_serializers.data,
-                'tasks': tasks_serializers.data,
-                'quizzes': quizzes_serializers.data,
+                'videos': user_videos_serializers.data,
+                'tasks': user_tasks_serializers.data,
+                'quizzes': user_quizzes_serializers.data,
             }
             return Response(context, status=status.HTTP_200_OK)
+        else:
+            return Response({'user_type': user_type})
+
+    def put(self, request, pk, chapter_pk, lesson_pk, video_pk):
+        user_type = request.user.user_type
+        if user_type == 'STUDENT':
+            user_video = get_object_or_404(UserVideo, video__pk=video_pk)
+
+            # user video sum
+            user_video.score += 20
+            user_video.is_done = True
+            user_video.save()
+            return Response({'status': 'All OK'})
         else:
             return Response({'user_type': user_type})
 
 
 # Task
 class LessonTaskAPIView(APIView):
-    def get(self, request, pk, chapter_pk, lesson_id, task_id):
+    def get(self, request, pk, chapter_pk, lesson_pk, task_pk):
         user_type = request.user.user_type
         if user_type == 'STUDENT':
             product = get_object_or_404(Product, pk=pk)
             chapter = get_object_or_404(Chapter, pk=chapter_pk)
-            lesson = get_object_or_404(Lesson, pk=lesson_id)
-            task = get_object_or_404(Task, pk=task_id, task_type='WRITE')
+            lesson = get_object_or_404(Lesson, pk=lesson_pk)
+            task = get_object_or_404(Task, pk=task_pk, task_type='WRITE')
+            user_task = get_object_or_404(UserTask, task=task)
 
-            videos = Video.objects.filter(lesson=lesson)
-            tasks = Task.objects.filter(lesson=lesson, task_type='WRITE')
-            quizzes = Task.objects.filter(lesson=lesson, task_type='QUIZ')
+            user_videos = UserVideo.objects.filter(video__lesson=lesson)
+            user_tasks = UserTask.objects.filter(task__lesson=lesson)
+            user_quizzes = UserQuizData.objects.filter(quiz__lesson=lesson)
 
             chapter_serializer = ProductChapterSerializer(chapter, partial=True)
-            task_serializer = LessonTaskSerializer(task, partial=True, context={'request': request})
+            user_task_serializer = UserTaskSerializer(user_task, partial=True, context={'request': request})
 
-            videos_serializers = ChapterVideoSerializer(videos, many=True)
-            tasks_serializers = ChapterTaskSerializer(tasks, many=True)
-            quizzes_serializers = ChapterTaskSerializer(quizzes, many=True)
+            user_videos_serializers = UserVideoListSerializer(user_videos, many=True)
+            user_tasks_serializers = UserTaskListSerializer(user_tasks, many=True)
+            user_quizzes_serializers = UserQuizListSerializer(user_quizzes, many=True)
 
             context = {
                 'user_type': user_type,
                 'product': product.name,
                 'chapter': chapter_serializer.data,
-                'task': task_serializer.data,
+                'user_task': user_task_serializer.data,
 
-                'videos': videos_serializers.data,
-                'tasks': tasks_serializers.data,
-                'quizzes': quizzes_serializers.data,
+                'videos': user_videos_serializers.data,
+                'tasks': user_tasks_serializers.data,
+                'quizzes': user_quizzes_serializers.data,
             }
             return Response(context, status=status.HTTP_200_OK)
+        else:
+            return Response({'user_type': user_type})
+
+    def put(self, request, pk, chapter_pk, lesson_id, task_pk):
+        user_type = request.user.user_type
+        if user_type == 'STUDENT':
+            user_task = get_object_or_404(UserTask, task__pk=task_pk)
+            user_task.score += 30
+            user_task.is_done = True
+            user_task.save()
+            return Response({'status': 'All OK'})
         else:
             return Response({'user_type': user_type})
 
 
 # Quiz
 class LessonQuizAPIView(APIView):
-    def get(self, request, pk, chapter_pk, lesson_id, quiz_id):
+    def get(self, request, pk, chapter_pk, lesson_pk, quiz_pk):
         user_type = request.user.user_type
         if user_type == 'STUDENT':
             product = get_object_or_404(Product, pk=pk)
             chapter = get_object_or_404(Chapter, pk=chapter_pk)
-            lesson = get_object_or_404(Lesson, pk=lesson_id)
+            lesson = get_object_or_404(Lesson, pk=lesson_pk)
 
             # user quiz data
-            user_quiz_data = get_object_or_404(UserQuizData, pk=quiz_id)
+            user_quiz_data = get_object_or_404(UserQuizData, quiz=quiz_pk)
 
             # Sidebar menu
-            videos = Video.objects.filter(lesson=lesson)
-            tasks = Task.objects.filter(lesson=lesson, task_type='WRITE')
-            quizzes = Task.objects.filter(lesson=lesson, task_type='QUIZ')
+            user_videos = UserVideo.objects.filter(video__lesson=lesson)
+            user_tasks = UserTask.objects.filter(task__lesson=lesson)
+            user_quizzes = UserQuizData.objects.filter(quiz__lesson=lesson)
 
             # serializers
-            chapter_serializer = ProductChapterSerializer(chapter, partial=True)
             user_quiz_data_serializer = UserQuizDataSerializer(user_quiz_data, partial=True)
-            videos_serializers = ChapterVideoSerializer(videos, many=True)
-            tasks_serializers = ChapterTaskSerializer(tasks, many=True)
-            quizzes_serializers = ChapterTaskSerializer(quizzes, many=True)
+            chapter_serializer = ProductChapterSerializer(chapter, partial=True)
+            user_videos_serializers = UserVideoListSerializer(user_videos, many=True)
+            user_tasks_serializers = UserTaskListSerializer(user_tasks, many=True)
+            user_quizzes_serializers = UserQuizListSerializer(user_quizzes, many=True)
 
             context = {
                 'user_type': user_type,
@@ -199,13 +227,23 @@ class LessonQuizAPIView(APIView):
                 'chapter': chapter_serializer.data,
                 'user_quiz_data': user_quiz_data_serializer.data,
 
-                'videos': videos_serializers.data,
-                'tasks': tasks_serializers.data,
-                'quizzes': quizzes_serializers.data,
+                'videos': user_videos_serializers.data,
+                'tasks': user_tasks_serializers.data,
+                'quizzes': user_quizzes_serializers.data,
             }
             return Response(context, status=status.HTTP_200_OK)
         else:
             return Response({'user_type': user_type})
 
+    def put(self, request, pk, chapter_pk, lesson_pk, quiz_pk):
+        user_type = request.user.user_type
+        if user_type == 'STUDENT':
+            user_quiz = get_object_or_404(UserQuizData, quiz__pk=quiz_pk)
 
-
+            # user video sum
+            user_quiz.score += 50
+            user_quiz.status = 'FINISH'
+            user_quiz.save()
+            return Response({'status': 'All OK'})
+        else:
+            return Response({'user_type': user_type})

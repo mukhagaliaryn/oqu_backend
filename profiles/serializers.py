@@ -1,10 +1,14 @@
 from rest_framework import serializers
 
 from products.models import Task, Question, Answer, Chapter, Lesson, Video
-from profiles.models import UserQuizData, UserChapter, UserProduct, UserLesson, UserVideo
+from profiles.models import UserQuizData, UserChapter, UserProduct, UserLesson, UserVideo, UserTask
 
 
-# UserProduct
+# Product View
+# -----------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------
+
+# Product Detail
 # -----------------------------------------------------------------------------------
 class UserProductSerializer(serializers.ModelSerializer):
     class Meta:
@@ -12,24 +16,18 @@ class UserProductSerializer(serializers.ModelSerializer):
         fields = ('id', 'is_subscribe', )
 
 
-# UserChapter
+# UserChapter View
+# -----------------------------------------------------------------------------------
 # -----------------------------------------------------------------------------------
 
-# Chapter
-class ChapterSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Chapter
-        fields = ('id', 'chapter_name', 'date_created', 'about', )
-
-
-# Chapter list
+# UserChapter List
+# -----------------------------------------------------------------------------------
 class ChapterListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chapter
         fields = ('id', 'chapter_name', )
 
 
-# User chapter list
 class UserChapterListSerializer(serializers.ModelSerializer):
     chapter = ChapterListSerializer(read_only=True)
 
@@ -38,7 +36,14 @@ class UserChapterListSerializer(serializers.ModelSerializer):
         fields = ('id', 'chapter',  'is_done', )
 
 
-# Main
+# UserChapter Detail
+# -----------------------------------------------------------------------------------
+class ChapterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Chapter
+        fields = ('id', 'chapter_name', 'about', )
+
+
 class UserChapterSerializer(serializers.ModelSerializer):
     chapter = ChapterSerializer(read_only=True)
 
@@ -47,16 +52,18 @@ class UserChapterSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-# User Lesson
+# UserLesson View
 # -----------------------------------------------------------------------------------
-# Lesson list
+# -----------------------------------------------------------------------------------
+
+# UserLesson List
+# -----------------------------------------------------------------------------------
 class LessonListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
         fields = ('id', 'title', 'chapter', 'duration', )
 
 
-# Main list
 class UserLessonListSerializer(serializers.ModelSerializer):
     lesson = LessonListSerializer(read_only=True)
 
@@ -65,7 +72,107 @@ class UserLessonListSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-# UserQuizData view
+# UserLesson Detail
+# -----------------------------------------------------------------------------------
+class UserLessonSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserLesson
+        fields = ('id', 'score', 'max_score', )
+
+
+# UserVideo View
+# -----------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------
+
+# UserVideo List
+# -----------------------------------------------------------------------------------
+class VideoListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Video
+        fields = ('id', 'lesson', 'title', )
+
+
+class UserVideoListSerializer(serializers.ModelSerializer):
+    video = VideoListSerializer(read_only=True)
+
+    class Meta:
+        model = UserVideo
+        fields = ('id', 'video', 'is_done')
+
+
+# UserVideo Detail
+class VideoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Video
+        fields = '__all__'
+
+
+class UserVideoSerializer(serializers.ModelSerializer):
+    video = VideoSerializer(read_only=True)
+
+    class Meta:
+        model = UserVideo
+        fields = '__all__'
+
+
+# UserTask View
+# -----------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------
+
+# UserTask List
+# -----------------------------------------------------------------------------------
+class TaskListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = ('id', 'lesson', 'title', 'task_type', )
+
+
+class UserTaskListSerializer(serializers.ModelSerializer):
+    task = TaskListSerializer(read_only=True)
+
+    class Meta:
+        model = UserTask
+        fields = ('id', 'task', 'is_done', )
+
+
+# UserTask Detail
+# -----------------------------------------------------------------------------------
+class TaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = '__all__'
+
+
+class UserTaskSerializer(serializers.ModelSerializer):
+    task = TaskSerializer(read_only=True)
+
+    class Meta:
+        model = UserTask
+        fields = '__all__'
+
+
+# UserQuiz View
+# -----------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------
+
+# UserQuiz List
+# -----------------------------------------------------------------------------------
+class QuizListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = ('id', 'lesson', 'title', 'task_type', )
+
+
+class UserQuizListSerializer(serializers.ModelSerializer):
+    quiz = QuizListSerializer(read_only=True)
+
+    class Meta:
+        model = UserQuizData
+        fields = ('id', 'quiz', 'status', )
+
+
+# UserQuiz Detail
 # -----------------------------------------------------------------------------------
 class AnswerSerializer(serializers.ModelSerializer):
     class Meta:
@@ -81,7 +188,7 @@ class UserQuestionSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'body', 'format', 'get_answers',)
 
 
-class UserQuizSerializer(serializers.ModelSerializer):
+class QuizSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = ('id', 'title', 'duration', 'task_type', 'body', )
@@ -89,7 +196,7 @@ class UserQuizSerializer(serializers.ModelSerializer):
 
 # Result
 class UserQuizDataSerializer(serializers.ModelSerializer):
-    quiz = UserQuizSerializer(read_only=True)
+    quiz = QuizSerializer(read_only=True)
     questions = UserQuestionSerializer(read_only=True, many=True)
 
     class Meta:

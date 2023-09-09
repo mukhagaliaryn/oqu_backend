@@ -93,11 +93,11 @@ class UserTask(models.Model):
     is_done = models.BooleanField(verbose_name='Завершено', default=False)
 
     def __str__(self):
-        return f'Видео пользователя: {self.user}'
+        return f'Задание пользователя: {self.user}'
 
     class Meta:
-        verbose_name = 'Видео пользователя'
-        verbose_name_plural = 'Все видео пользователей'
+        verbose_name = 'Задание пользователя'
+        verbose_name_plural = 'Задания пользователей'
 
 
 # UserQuiz
@@ -108,6 +108,7 @@ class UserQuizData(models.Model):
         ('PROGRESS', 'В процессе'),
         ('FINISH', 'Завершено'),
     )
+
     user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)
     quiz = models.OneToOneField(Task, on_delete=models.CASCADE, verbose_name='Тест')
     questions = models.ManyToManyField(Question, verbose_name='Вопросы')
