@@ -5,8 +5,10 @@ from products.models import Product
 from products.serializers import TopicSerializer
 
 
-# Platform view
+# Platform APIView
 # -----------------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------
+
 class PlatformStatusStudentInstitutionSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -40,6 +42,8 @@ class PlatformStatusStudentClassGroupSerializer(serializers.ModelSerializer):
 
 # Explorer view
 # -----------------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------
+
 # Result serializer
 class ExplorerProductSerializer(serializers.ModelSerializer):
     topic = TopicSerializer(read_only=True)

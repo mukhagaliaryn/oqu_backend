@@ -8,7 +8,8 @@ from products.serializers import TopicSerializer, CategorySerializer
 from .serializers import PlatformStatusStudentClassGroupSerializer
 
 
-# Main view
+# Main APIView
+# ----------------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------------
 class MainAPIView(APIView):
 
@@ -31,7 +32,8 @@ class MainAPIView(APIView):
             return Response({'user_type': user_type})
 
 
-# Explorer view
+# Explorer APIView
+# ----------------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------------
 class ExplorerAPIView(APIView):
 

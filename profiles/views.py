@@ -1,43 +1,7 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
-from .models import UserChapter, UserQuizData, UserLesson, UserProduct, UserVideo, UserTask
-from products.models import Task, Lesson, Product, Video
-
-
-# User Product Item Create
-# ----------------------------------------------------------------------------------
-class UserProductItemCreateAPIView(APIView):
-
-    def post(self, request, product_id):
-        user_type = request.user.user_type
-        user_product = get_object_or_404(UserProduct, product__pk=product_id)
-
-        if user_type == 'STUDENT' and not user_product.is_subscribe:
-            product = get_object_or_404(Product, pk=product_id)
-            chapters = product.chapter_set.all()
-            lessons = Lesson.objects.filter(chapter__in=chapters)
-            videos = Video.objects.filter(lesson__in=lessons)
-            tasks = Task.objects.filter(lesson__in=lessons, task_type='WRITE')
-            quizzes = Task.objects.filter(lesson__in=lessons, task_type='QUIZ')
-
-            user_product.is_subscribe = True
-            user_product.save()
-            for chapter in chapters:
-                UserChapter.objects.create(user=request.user, chapter=chapter)
-            for lesson in lessons:
-                UserLesson.objects.create(user=request.user, lesson=lesson)
-            for video in videos:
-                UserVideo.objects.create(user=request.user, video=video)
-            for task in tasks:
-                UserTask.objects.create(user=request.user, task=task)
-            for quiz in quizzes:
-                UserQuizData.objects.create(user=request.user, quiz=quiz)
-
-            return Response({'status': 'User product and items created!'})
-        else:
-            return Response({'user_type': user_type})
+from .models import UserChapter, UserLesson
 
 
 # class UserChapterAPIView(APIView):

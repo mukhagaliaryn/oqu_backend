@@ -3,7 +3,8 @@ from accounts.models import User
 
 
 # Category
-# ----------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------
 class BaseCategory(models.Model):
     name = models.CharField(verbose_name='Название', max_length=255, unique=True)
     slug = models.SlugField(verbose_name='Ключ', max_length=255, unique=True)
@@ -48,8 +49,11 @@ class Topic(Category):
         verbose_name_plural = 'Темы'
 
 
-# Main products (subjects, courses, ...) model
-# ----------------------------------------------------------------------------------------------------------------
+# Main product (subjects, courses, ...) models
+# ----------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------
+
+# Product
 class Product(models.Model):
     PRODUCT_CHOICE = (
         ('SUBJECT', 'Школьный предмет'),
@@ -164,6 +168,9 @@ class Video(models.Model):
     description = models.TextField(verbose_name='Описание видео', blank=True, null=True)
     frame_url = models.CharField(verbose_name='iFrame ссылка', max_length=255)
     duration = models.PositiveSmallIntegerField(verbose_name='Длительность (мин)', default=0)
+
+    def __str__(self):
+        return self.title
 
     class Meta:
         verbose_name = 'Видео'
