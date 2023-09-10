@@ -71,7 +71,7 @@ class ProductAPIView(APIView):
             for task in tasks:
                 UserTask.objects.create(user=request.user, task=task)
             for quiz in quizzes:
-                UserQuizData.objects.create(user=request.user, quiz=quiz)
+                UserQuizData.objects.create(user=request.user, quiz=quiz, status='START')
 
             return Response({'status': 'User product and items created!'})
         else:
@@ -79,8 +79,28 @@ class ProductAPIView(APIView):
 
     def put(self, request, pk):
         user_type = request.user.user_type
+        if user_type == 'STUDENT':
+            product = get_object_or_404(Product, pk=pk)
+            chapters = product.chapter_set.all()
+            lessons = Lesson.objects.filter(chapter__in=chapters)
+            videos = Video.objects.filter(lesson__in=lessons)
+            tasks = Task.objects.filter(lesson__in=lessons, task_type='WRITE')
+            quizzes = Task.objects.filter(lesson__in=lessons, task_type='QUIZ')
 
-        return Response({'status': 'PUT method worked!'})
+            for chapter in chapters:
+                UserChapter.objects.get_or_create(user=request.user, chapter=chapter)
+            for lesson in lessons:
+                UserLesson.objects.get_or_create(user=request.user, lesson=lesson)
+            for video in videos:
+                UserVideo.objects.get_or_create(user=request.user, video=video)
+            for task in tasks:
+                UserTask.objects.get_or_create(user=request.user, task=task)
+            for quiz in quizzes:
+                UserQuizData.objects.get_or_create(user=request.user, quiz=quiz)
+
+            return Response({'status': 'User product and items create or updated!'})
+        else:
+            return Response({'status': 'PUT method worked!'})
 
 
 # Chapter APIView
@@ -143,7 +163,7 @@ class UserLessonFinishAPIView(APIView):
         if not user_lesson.is_done:
             user_lesson.is_done = True
             user_lesson.save()
-            user_chapter.score = user_lesson.score / user_lessons.count()
+            user_chapter.score += user_lesson.score / user_lessons.count()
             user_chapter.save()
             return Response({'status': 'User lesson finished!'})
         else:
