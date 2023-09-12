@@ -3,8 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from profiles.models import UserQuizData, UserProduct, UserChapter, UserLesson, UserVideo, UserTask
-from products.models import Product, Lesson, Chapter, Video, Task
+from profiles.models import UserQuizData, UserProduct, UserChapter, UserLesson, UserVideo, UserTask, UserAnswer
+from products.models import Product, Lesson, Chapter, Video, Task, Question
 from products.serializers import (
     ProductSerializer, ProductChapterSerializer, ProductPurposeSerializer, ProductFeatureSerializer,
     ProductLessonSerializer,
@@ -343,6 +343,40 @@ class LessonQuizAPIView(APIView):
         else:
             return Response({'user_type': user_type})
 
+    def put(self, request, pk, chapter_pk, lesson_pk, quiz_pk):
+        user_type = request.user.user_type
+        if user_type == 'STUDENT':
+            user_lesson = get_object_or_404(UserLesson, lesson__pk=lesson_pk)
+            user_quiz = get_object_or_404(UserQuizData, quiz__pk=quiz_pk)
+
+            if user_quiz.status == 'START':
+                user_questions = Question.objects.filter(quiz__lesson=user_lesson.lesson).order_by('?')[:5]
+                user_quiz.questions.add(*user_questions)
+                user_quiz.status = 'PROGRESS'
+                user_quiz.save()
+
+                # Create UserAnswer
+                for question in user_quiz.questions.all():
+                    if question.format == 'MULTI':
+                        UserAnswer.objects.create(user_quiz=user_quiz, question=question, max_score=2)
+                    else:
+                        UserAnswer.objects.create(user_quiz=user_quiz, question=question)
+
+                return Response({'status': 'User quiz method worked'})
+            else:
+                return Response({'status': 'Quiz already started!'})
+        else:
+            return Response({'user_type': user_type})
+
+
+# Choice answer
+class LessonQuizChoiceAnswerAPIView(APIView):
+    def post(self, request):
+        pass
+
+
+# Finish quiz
+class LessonQuizFinishAPIView(APIView):
     def put(self, request, pk, chapter_pk, lesson_pk, quiz_pk):
         user_type = request.user.user_type
         if user_type == 'STUDENT':

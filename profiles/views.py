@@ -4,16 +4,6 @@ from rest_framework.response import Response
 from .models import UserChapter, UserLesson
 
 
-# class UserChapterAPIView(APIView):
-#
-#     def post(self, request, user_chapter_id):
-#         user_type = request.user.user_type
-#         if user_type == 'STUDENT':
-#             user_chapter = get_object_or_404(UserChapter, pk=user_chapter_id)
-#
-#         else:
-#             return Response({'user_type': user_type})
-
 # ...
 # class CreateUserQuiz(APIView):
 #

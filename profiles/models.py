@@ -101,7 +101,7 @@ class UserTask(models.Model):
 
 
 # UserQuiz
-# ---------------------------------------------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------
 class UserQuizData(models.Model):
     STATUS_CHOICE = (
         ('START', 'Старт'),
@@ -111,7 +111,7 @@ class UserQuizData(models.Model):
 
     user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)
     quiz = models.OneToOneField(Task, on_delete=models.CASCADE, verbose_name='Тест')
-    questions = models.ManyToManyField(Question, verbose_name='Вопросы')
+    questions = models.ManyToManyField(Question, verbose_name='Вопросы', blank=True)
     start_time = models.DateTimeField(verbose_name='Время начинание', auto_now_add=True)
     finish_time = models.DateTimeField(verbose_name='Закончание', blank=True, null=True)
     score = models.PositiveSmallIntegerField(verbose_name='Балл', default=0)
@@ -122,9 +122,6 @@ class UserQuizData(models.Model):
     def __str__(self):
         return f'Тест пользователя: {self.user}'
 
-    def get_user_answers(self):
-        return self.useranswer_set.all()
-
     class Meta:
         verbose_name = 'Тест пользователя'
         verbose_name_plural = 'Тесты пользователей'
@@ -132,16 +129,16 @@ class UserQuizData(models.Model):
 
 
 # User answer
-# ---------------------------------------------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------
 class UserAnswer(models.Model):
-    user_quiz_data = models.ForeignKey(UserQuizData, on_delete=models.CASCADE, verbose_name='Тест данные пользователя')
+    user_quiz = models.ForeignKey(UserQuizData, on_delete=models.CASCADE, verbose_name='Тест пользователя')
     question = models.ForeignKey(Question, on_delete=models.CASCADE, verbose_name='Вопрос')
-    answers = models.ManyToManyField(Answer, verbose_name='Ответ пользователя')
+    answers = models.ManyToManyField(Answer, verbose_name='Ответы пользователя', blank=True)
     score = models.PositiveSmallIntegerField(verbose_name='Балл', default=0)
     max_score = models.PositiveSmallIntegerField(verbose_name='Максимальный балл', default=1)
 
     def __str__(self):
-        return '{} ответ: {}'.format(self.user_quiz_data.user.username, self.pk)
+        return '{} ответ: {}'.format(self.user_quiz.user.username, self.pk)
 
     class Meta:
         verbose_name = 'Ответ пользователя'

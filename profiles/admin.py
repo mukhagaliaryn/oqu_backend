@@ -28,10 +28,11 @@ class UserTaskAdmin(admin.ModelAdmin):
 class UserQuizDataAdmin(admin.ModelAdmin):
     list_display = ('user', 'start_time', 'finish_time', 'status', )
     list_filter = ('status', )
+    filter_horizontal = ('questions', )
 
 
 class UserAnswerAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user_quiz_data', 'score', 'max_score', )
+    list_display = ('id', 'user_quiz', 'score', 'max_score', )
 
 
 admin.site.register(Profile)
