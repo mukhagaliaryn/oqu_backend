@@ -4,13 +4,13 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from profiles.models import UserQuizData, UserProduct, UserChapter, UserLesson, UserVideo, UserTask, UserAnswer
-from products.models import Product, Lesson, Chapter, Video, Task, Question
+from products.models import Product, Lesson, Chapter, Video, Task, Question, Answer
 from products.serializers import (
     ProductSerializer, ProductChapterSerializer, ProductPurposeSerializer, ProductFeatureSerializer,
     ProductLessonSerializer,
     UserChapterSerializer, UserChapterListSerializer, UserLessonListSerializer, UserLessonSerializer,
     UserVideoSerializer, UserVideoListSerializer, UserTaskSerializer, UserTaskListSerializer,
-    UserQuizListSerializer, UserQuizDataSerializer,
+    UserQuizListSerializer, UserQuizDataSerializer, UserAnswerSerializer,
 )
 
 
@@ -312,7 +312,8 @@ class LessonQuizAPIView(APIView):
             product = get_object_or_404(Product, pk=pk)
             chapter = get_object_or_404(Chapter, pk=chapter_pk)
             user_lesson = get_object_or_404(UserLesson, lesson__pk=lesson_pk)
-            user_quiz_data = get_object_or_404(UserQuizData, quiz=quiz_pk)
+            user_quiz = get_object_or_404(UserQuizData, quiz=quiz_pk)
+            user_answers = UserAnswer.objects.filter(user_quiz=user_quiz)
 
             # sidebar
             user_videos = UserVideo.objects.filter(video__lesson=user_lesson.lesson)
@@ -322,7 +323,8 @@ class LessonQuizAPIView(APIView):
             # serializers
             chapter_serializer = ProductChapterSerializer(chapter, partial=True)
             user_lesson_serializer = UserLessonSerializer(user_lesson, partial=True)
-            user_quiz_data_serializer = UserQuizDataSerializer(user_quiz_data, partial=True)
+            user_quiz_serializer = UserQuizDataSerializer(user_quiz, partial=True)
+            user_answers_serializer = UserAnswerSerializer(user_answers, many=True)
 
             user_videos_serializers = UserVideoListSerializer(user_videos, many=True)
             user_tasks_serializers = UserTaskListSerializer(user_tasks, many=True)
@@ -333,7 +335,8 @@ class LessonQuizAPIView(APIView):
                 'product': product.name,
                 'chapter': chapter_serializer.data,
                 'user_lesson': user_lesson_serializer.data,
-                'user_quiz_data': user_quiz_data_serializer.data,
+                'user_quiz_data': user_quiz_serializer.data,
+                'user_answers': user_answers_serializer.data,
 
                 'videos': user_videos_serializers.data,
                 'tasks': user_tasks_serializers.data,
@@ -371,8 +374,34 @@ class LessonQuizAPIView(APIView):
 
 # Choice answer
 class LessonQuizChoiceAnswerAPIView(APIView):
-    def post(self, request):
-        pass
+    def post(self, request, user_quiz_pk, question_pk, answer_pk):
+        user_type = request.user.user_type
+        if user_type == 'STUDENT':
+            user_quiz = get_object_or_404(UserQuizData, user=request.user, pk=user_quiz_pk)
+            question = get_object_or_404(Question, pk=question_pk)
+            answer = get_object_or_404(Answer, pk=answer_pk)
+            user_answer = get_object_or_404(UserAnswer, user_quiz=user_quiz, question=question)
+
+            if question.format == 'ONE':
+                if user_answer.answers.all().count() > 0:
+                    user_answer.answers.clear()
+                    user_answer.answers.add(answer)
+                    return Response({'status': 'Old user answer removed, new added!'})
+                else:
+                    user_answer.answers.add(answer)
+                    return Response({'status': 'Added user answer'})
+
+            elif question.format == 'MULTI':
+                if user_answer.answers.filter(id=answer.id).exists():
+                    user_answer.answers.remove(answer)
+                    return Response({'status': 'Old user answer removed!'})
+                else:
+                    user_answer.answers.add(answer)
+                    return Response({'status': 'User answer added!'})
+            else:
+                return Response({'status': 'Something error!'})
+        else:
+            return Response({'user_type': user_type})
 
 
 # Finish quiz

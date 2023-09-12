@@ -33,6 +33,7 @@ class UserQuizDataAdmin(admin.ModelAdmin):
 
 class UserAnswerAdmin(admin.ModelAdmin):
     list_display = ('id', 'user_quiz', 'score', 'max_score', )
+    filter_horizontal = ('answers', )
 
 
 admin.site.register(Profile)

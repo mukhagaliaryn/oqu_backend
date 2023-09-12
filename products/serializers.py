@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from accounts.models import User
-from profiles.models import UserChapter, UserProduct, UserLesson, UserVideo, UserTask, UserQuizData
+from profiles.models import UserChapter, UserProduct, UserLesson, UserVideo, UserTask, UserQuizData, UserAnswer
 from .models import Category, Topic, Product, Chapter, Purpose, Feature, Lesson, Video, Task, Answer, Question
 
 
@@ -263,11 +263,19 @@ class QuizSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'duration', 'task_type', 'body', )
 
 
-# Result
+# UserQuiz
 class UserQuizDataSerializer(serializers.ModelSerializer):
     quiz = QuizSerializer(read_only=True)
-    questions = UserQuestionSerializer(read_only=True, many=True)
 
     class Meta:
         model = UserQuizData
-        fields = '__all__'
+        fields = ('id', 'quiz', 'status', 'score', 'max_score', )
+
+
+# UserAnswer
+class UserAnswerSerializer(serializers.ModelSerializer):
+    question = UserQuestionSerializer(read_only=True)
+
+    class Meta:
+        model = UserAnswer
+        fields = ('id', 'question', 'answers', )

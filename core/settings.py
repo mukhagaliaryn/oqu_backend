@@ -141,6 +141,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'templates/static')
 ]
 
+
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
