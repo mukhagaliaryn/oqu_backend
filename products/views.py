@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -223,12 +224,10 @@ class LessonVideoAPIView(APIView):
                 user_video.is_done = True
                 user_video.save()
 
-                # lesson sum ball
-                video_sum = 0
-                for user_video in user_videos:
-                    video_sum += user_video.score
-                user_lesson.score += video_sum / user_videos.count()
-                user_lesson.save()
+                # sum ball
+                if user_lesson.score < 10:
+                    user_lesson.score += Decimal(user_video.score)/user_videos.count()
+                    user_lesson.save()
                 return Response({'status': 'All OK'})
             else:
                 return Response({'status': 'Video score already exists'})
@@ -280,25 +279,14 @@ class LessonTaskAPIView(APIView):
     def put(self, request, pk, chapter_pk, lesson_pk, task_pk):
         user_type = request.user.user_type
         if user_type == 'STUDENT':
-            user_lesson = get_object_or_404(UserLesson, lesson__pk=lesson_pk)
             user_task = get_object_or_404(UserTask, task__pk=task_pk)
-            user_tasks = UserTask.objects.filter(task__lesson=user_lesson.lesson)
 
-            if not user_task.is_done:
-                user_task.score = 30
-                user_task.is_done = True
-                user_task.save()
-
-                # sum ball
-                task_sum = 0
-                for user_task in user_tasks:
-                    task_sum += user_task.score
-                user_lesson.score += task_sum / user_tasks.count()
-                user_lesson.save()
-
-                return Response({'status': 'All OK'})
+            if user_task.status == 'PROGRESS':
+                return Response({'status': 'Task status already exists'})
             else:
-                return Response({'status': 'Task score already exists'})
+                user_task.status = 'PROGRESS'
+                user_task.save()
+                return Response({'status': 'All OK'})
         else:
             return Response({'user_type': user_type})
 
@@ -413,17 +401,33 @@ class LessonQuizFinishAPIView(APIView):
             user_quiz = get_object_or_404(UserQuizData, quiz__pk=quiz_pk)
             user_quizzes = UserQuizData.objects.filter(quiz__lesson=user_lesson.lesson)
 
+            user_answers = user_quiz.useranswer_set.all()
+            correct_count = 0
+            for user_answer in user_answers:
+                if user_answer.question.format == 'MULTI':
+                    if user_answer.answers.filter(answer__correct=False).count() > 1:
+                        user_answer.score = 0
+                    elif user_answer.answers.filter(answer__correct=False).count() == 1:
+                        user_answer.score = 1
+                    else:
+                        user_answer.score = 2
+                else:
+                    answer = user_answer.answers.all().first()
+                    if answer.correct:
+                        user_answer.score = 1
+
+                if user_answer.score:
+                    correct_count += 1
+
             # user video sum
             if not user_quiz.status == 'FINISH':
-                user_quiz.score = 60
+                x = (correct_count*60) / user_answers.count()
+                user_quiz.score = x
                 user_quiz.status = 'FINISH'
                 user_quiz.save()
 
                 # sum ball
-                task_sum = 0
-                for user_quiz in user_quizzes:
-                    task_sum += user_quiz.score
-                user_lesson.score += task_sum / user_quizzes.count()
+                user_lesson.score += Decimal(user_quiz.score) / user_quizzes.count()
                 user_lesson.save()
 
                 return Response({'status': 'All OK'})

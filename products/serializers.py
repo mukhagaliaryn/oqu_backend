@@ -202,7 +202,7 @@ class UserTaskListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserTask
-        fields = ('id', 'task', 'is_done', )
+        fields = ('id', 'task', 'status', )
 
 
 # UserTask Detail

@@ -22,7 +22,8 @@ class UserVideoAdmin(admin.ModelAdmin):
 
 
 class UserTaskAdmin(admin.ModelAdmin):
-    list_display = ('user', 'task', 'score', 'is_done', )
+    list_display = ('user', 'task', 'score', 'status', )
+    list_filter = ('user', 'task', )
 
 
 class UserQuizDataAdmin(admin.ModelAdmin):
