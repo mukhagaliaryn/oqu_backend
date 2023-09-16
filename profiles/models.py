@@ -21,7 +21,7 @@ class Profile(models.Model):
 class UserProduct(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
     product = models.OneToOneField(to='products.Product', on_delete=models.CASCADE, verbose_name='Продукт')
-    score = models.PositiveSmallIntegerField(verbose_name='Балл', default=0)
+    score = models.DecimalField(verbose_name='Балл', max_digits=5, decimal_places=2, default=0)
     max_score = models.PositiveSmallIntegerField(verbose_name='Максимальный балл', default=100)
     is_subscribe = models.BooleanField(verbose_name='Подписка', default=False)
 
@@ -89,6 +89,7 @@ class UserTask(models.Model):
     STATUS_CHOICE = (
         ('START', 'Старт'),
         ('PROGRESS', 'В процессе'),
+        ('CONFIRM', 'Получение оценку'),
         ('FINISH', 'Завершено'),
     )
 

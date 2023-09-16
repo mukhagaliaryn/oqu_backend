@@ -64,12 +64,6 @@ class ProductLessonSerializer(serializers.ModelSerializer):
 
 # Main
 # -----------------------------------------------------------------------------------
-class UserProductSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserProduct
-        fields = ('id', 'is_subscribe', )
-
-
 class ProductAuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -83,6 +77,15 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'
+
+
+# UserProduct
+# -----------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------
+class UserProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProduct
+        fields = ('id', 'is_subscribe', 'score', )
 
 
 # UserChapter View
@@ -275,6 +278,30 @@ class UserQuizDataSerializer(serializers.ModelSerializer):
 # UserAnswer
 class UserAnswerSerializer(serializers.ModelSerializer):
     question = UserQuestionSerializer(read_only=True)
+
+    class Meta:
+        model = UserAnswer
+        fields = ('id', 'question', 'answers', )
+
+
+# Result UserAnswer
+# -----------------------------------------------------------------------------------
+class ResultAnswerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Answer
+        fields = ('id', 'text', 'correct', )
+
+
+class ResultUserQuestionSerializer(serializers.ModelSerializer):
+    get_answers = ResultAnswerSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = Question
+        fields = ('id', 'title', 'body', 'format', 'get_answers',)
+
+
+class ResultUserAnswerSerializer(serializers.ModelSerializer):
+    question = ResultUserQuestionSerializer(read_only=True)
 
     class Meta:
         model = UserAnswer

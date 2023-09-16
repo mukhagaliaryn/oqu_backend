@@ -11,7 +11,8 @@ from products.serializers import (
     ProductLessonSerializer,
     UserChapterSerializer, UserChapterListSerializer, UserLessonListSerializer, UserLessonSerializer,
     UserVideoSerializer, UserVideoListSerializer, UserTaskSerializer, UserTaskListSerializer,
-    UserQuizListSerializer, UserQuizDataSerializer, UserAnswerSerializer,
+    UserQuizListSerializer, UserQuizDataSerializer, UserAnswerSerializer, ResultUserAnswerSerializer,
+    UserProductSerializer,
 )
 
 
@@ -114,6 +115,7 @@ class ChapterAPIView(APIView):
             # user chapter data
             product = get_object_or_404(Product, pk=pk)
             chapter = get_object_or_404(Chapter, pk=chapter_pk)
+            user_product = get_object_or_404(UserProduct, product=product)
             user_chapter = get_object_or_404(UserChapter, chapter=chapter)
 
             # sidebar menu
@@ -126,6 +128,7 @@ class ChapterAPIView(APIView):
             user_quizzes = UserQuizData.objects.filter(quiz__lesson__chapter=chapter)
 
             # serializers
+            user_product_serializer = UserProductSerializer(user_product, partial=True)
             user_chapter_serializer = UserChapterSerializer(user_chapter, partial=True)
             user_chapters_serializer = UserChapterListSerializer(user_chapters, many=True)
             user_lessons_serializer = UserLessonListSerializer(user_lessons, many=True)
@@ -137,6 +140,7 @@ class ChapterAPIView(APIView):
             context = {
                 'user_type': user_type,
                 'product': product.name,
+                'user_product': user_product_serializer.data,
                 'user_chapter': user_chapter_serializer.data,
                 'user_chapters': user_chapters_serializer.data,
                 'user_lessons': user_lessons_serializer.data,
@@ -146,6 +150,24 @@ class ChapterAPIView(APIView):
                 'quizzes': user_quizzes_serializers.data,
             }
             return Response(context, status=status.HTTP_200_OK)
+        else:
+            return Response({'user_type': user_type})
+
+    def put(self, request, pk, chapter_pk):
+        user_type = request.user.user_type
+        if user_type == 'STUDENT':
+            user_product = get_object_or_404(UserProduct, product__pk=pk)
+            user_chapter = get_object_or_404(UserChapter, chapter__pk=chapter_pk)
+            user_chapters = UserChapter.objects.filter(chapter__product=user_product.product)
+
+            if not user_chapter.is_done:
+                user_chapter.is_done = True
+                user_chapter.save()
+                user_product.score += Decimal(user_chapter.score) / user_chapters.count()
+                user_product.save()
+                return Response({'status': 'User chapter finished!'})
+            else:
+                return Response({'status': 'User chapter already finished!'})
         else:
             return Response({'user_type': user_type})
 
@@ -225,10 +247,9 @@ class LessonVideoAPIView(APIView):
                 user_video.save()
 
                 # sum ball
-                if user_lesson.score < 10:
-                    user_lesson.score += Decimal(user_video.score)/user_videos.count()
-                    user_lesson.save()
-                return Response({'status': 'All OK'})
+                user_lesson.score += Decimal(user_video.score) / user_videos.count()
+                user_lesson.save()
+                return Response({'status': 'Watching video finished!'})
             else:
                 return Response({'status': 'Video score already exists'})
         else:
@@ -291,6 +312,28 @@ class LessonTaskAPIView(APIView):
             return Response({'user_type': user_type})
 
 
+class LessonTaskFinishAPIView(APIView):
+    def put(self, request, pk, chapter_pk, lesson_pk, task_pk):
+        user_type = request.user.user_type
+        if user_type == 'STUDENT':
+            user_lesson = get_object_or_404(UserLesson, lesson__pk=lesson_pk)
+            user_task = get_object_or_404(UserTask, task__pk=task_pk)
+            user_tasks = UserTask.objects.filter(task__lesson=user_lesson.lesson)
+
+            if user_task.status == 'FINISH':
+                return Response({'status': 'Task status already exists'})
+            else:
+                user_task.status = 'FINISH'
+                user_task.save()
+
+                # sum ball
+                user_lesson.score += Decimal(user_task.score) / user_tasks.count()
+                user_lesson.save()
+                return Response({'status': 'Task finished!'})
+        else:
+            return Response({'user_type': user_type})
+
+
 # Quiz
 # ----------------------------------------------------------------------------------------
 class LessonQuizAPIView(APIView):
@@ -312,7 +355,11 @@ class LessonQuizAPIView(APIView):
             chapter_serializer = ProductChapterSerializer(chapter, partial=True)
             user_lesson_serializer = UserLessonSerializer(user_lesson, partial=True)
             user_quiz_serializer = UserQuizDataSerializer(user_quiz, partial=True)
-            user_answers_serializer = UserAnswerSerializer(user_answers, many=True)
+
+            if user_quiz.status == 'FINISH':
+                user_answers_serializer = ResultUserAnswerSerializer(user_answers, many=True)
+            else:
+                user_answers_serializer = UserAnswerSerializer(user_answers, many=True)
 
             user_videos_serializers = UserVideoListSerializer(user_videos, many=True)
             user_tasks_serializers = UserTaskListSerializer(user_tasks, many=True)
@@ -362,7 +409,7 @@ class LessonQuizAPIView(APIView):
 
 # Choice answer
 class LessonQuizChoiceAnswerAPIView(APIView):
-    def post(self, request, user_quiz_pk, question_pk, answer_pk):
+    def put(self, request, user_quiz_pk, question_pk, answer_pk):
         user_type = request.user.user_type
         if user_type == 'STUDENT':
             user_quiz = get_object_or_404(UserQuizData, user=request.user, pk=user_quiz_pk)
@@ -421,7 +468,7 @@ class LessonQuizFinishAPIView(APIView):
 
             # user video sum
             if not user_quiz.status == 'FINISH':
-                x = (correct_count*60) / user_answers.count()
+                x = (correct_count * user_quiz.max_score) / user_answers.count()
                 user_quiz.score = x
                 user_quiz.status = 'FINISH'
                 user_quiz.save()
@@ -429,8 +476,7 @@ class LessonQuizFinishAPIView(APIView):
                 # sum ball
                 user_lesson.score += Decimal(user_quiz.score) / user_quizzes.count()
                 user_lesson.save()
-
-                return Response({'status': 'All OK'})
+                return Response({'status': 'Quiz finished!'})
             else:
                 return Response({'status': 'Quiz score already exists'})
         else:
