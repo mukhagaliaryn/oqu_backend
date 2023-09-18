@@ -1,8 +1,8 @@
 from rest_framework import serializers
-
 from accounts.models import User, Institution, ClassGroup
 from products.models import Product
 from products.serializers import TopicSerializer
+from profiles.models import UserProduct
 
 
 # Platform APIView
@@ -23,21 +23,27 @@ class PlatformStatusStudentUserSerializer(serializers.ModelSerializer):
         fields = ('id', 'first_name', 'last_name', )
 
 
-class PlatformStudentProductsSerializer(serializers.ModelSerializer):
+class PlatformStudentProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ('id', 'name', 'poster', 'class_level', )
 
 
-# Result serializer
 class PlatformStatusStudentClassGroupSerializer(serializers.ModelSerializer):
     teacher = PlatformStatusStudentUserSerializer(read_only=True)
     institution = PlatformStatusStudentInstitutionSerializer(read_only=True)
-    subjects = PlatformStudentProductsSerializer(many=True, read_only=True)
 
     class Meta:
         model = ClassGroup
-        fields = ('id', 'name', 'institution', 'teacher', 'subjects')
+        fields = ('id', 'name', 'institution', 'teacher', )
+
+
+class PlatformUserProductSerializer(serializers.ModelSerializer):
+    product = PlatformStudentProductSerializer(read_only=True)
+
+    class Meta:
+        model = UserProduct
+        fields = ('id', 'product', 'score', 'max_score', )
 
 
 # Explorer view

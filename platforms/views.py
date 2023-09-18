@@ -5,7 +5,8 @@ from rest_framework import status
 
 from products.models import Category, Topic
 from products.serializers import TopicSerializer, CategorySerializer
-from .serializers import PlatformStatusStudentClassGroupSerializer
+from profiles.models import UserProduct
+from .serializers import PlatformStatusStudentClassGroupSerializer, PlatformUserProductSerializer
 
 
 # Main APIView
@@ -19,14 +20,19 @@ class MainAPIView(APIView):
         if user_type == 'STUDENT':
             user = request.user
             class_group = user.classgroup_set.all().first()
+            user_products = UserProduct.objects.filter(product__in=class_group.subjects.all())
             official = class_group.students.filter(id=user.id).exists()
 
             class_group_serializer = PlatformStatusStudentClassGroupSerializer(
                 class_group, partial=True, context={'request': request}
             )
+            user_products_serializer = PlatformUserProductSerializer(
+                user_products, many=True, context={'request': request}
+            )
             context = {
                 'official_student': official,
                 'class_group': class_group_serializer.data,
+                'user_products': user_products_serializer.data,
             }
             return Response(context, status=status.HTTP_200_OK)
         else:
