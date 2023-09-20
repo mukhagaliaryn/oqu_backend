@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django_summernote.admin import SummernoteModelAdmin, SummernoteModelAdminMixin
+from django_summernote.admin import SummernoteModelAdmin
 
 from .models import Category, Topic, Product, Purpose, Feature, Chapter, Lesson, Video, Task, Question, Answer
 
@@ -18,11 +18,10 @@ class CategoryAdmin(admin.ModelAdmin):
 
 # Product admin
 # ---------------------------------------------------------------------------------------
-class PurposeTable(SummernoteModelAdminMixin, admin.StackedInline):
+class PurposeTable(admin.TabularInline):
     model = Purpose
     fields = ('product', 'item',)
     extra = 1
-    summernote_fields = ('item',)
 
 
 class FeaturesTable(admin.TabularInline):
