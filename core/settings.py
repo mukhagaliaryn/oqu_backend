@@ -2,7 +2,6 @@ import os
 from pathlib import Path
 from decouple import config
 from datetime import timedelta
-from django.contrib.staticfiles import handlers
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -141,18 +140,6 @@ else:
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'templates/static')
 ]
-
-
-# extend StaticFilesHandler to add "Access-Control-Allow-Origin" to every response
-class CORSStaticFilesHandler(handlers.StaticFilesHandler):
-    def serve(self, request):
-        response = super().serve(request)
-        response['Access-Control-Allow-Origin'] = '*'
-        return response
-
-
-# monkeypatch handlers to use our class instead of the original StaticFilesHandler
-handlers.StaticFilesHandler = CORSStaticFilesHandler
 
 
 # Default primary key field type
