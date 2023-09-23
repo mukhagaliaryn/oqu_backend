@@ -139,10 +139,11 @@ class Language(models.Model):
 
 
 class Institution(models.Model):
+
     INST_TYPE_CHOICES = (
         ('NOT_DEFINED', 'Не выбрано'),
         ('SCHOOL', 'Школа'),
-        ('COLLEDGE', 'Колледж'),
+        ('COMMUNITY', 'Сообщество'),
     )
 
     OWNERSHIP_CHOICE = (
@@ -151,6 +152,7 @@ class Institution(models.Model):
         ('PRIVATE', 'Частная'),
     )
 
+    # for schools
     SCHOOL_VIEW_CHOICE = (
         ('NOT_DEFINED', 'Не выбрано'),
         ('GENERAL', 'Общеобразовательная'),
@@ -163,6 +165,15 @@ class Institution(models.Model):
         ('HUMAN', 'Гуманитарные'),
     )
 
+    # for community
+    DIR_CHOICE = (
+        ('NOT_DEFINED', 'Не выбрано'),
+        ('IT', 'Информационные технологии'),
+        ('GENERAL_EDU', 'Общее образование'),
+    )
+
+    image = models.ImageField(verbose_name='Изображение',
+                              upload_to='accounts/institution/images/', blank=True, null=True)
     name = models.CharField(verbose_name='Название', max_length=255)
     ln = models.ManyToManyField(Language, verbose_name='Язык обучения', blank=True)
     inst_type = models.CharField(verbose_name='Тип учреждение', max_length=255,
@@ -174,14 +185,15 @@ class Institution(models.Model):
                                    choices=SCHOOL_VIEW_CHOICE, default=SCHOOL_VIEW_CHOICE[0][1])
     slope = models.CharField(verbose_name='Уклон', max_length=255,
                              choices=SLOPE_VIEW_CHOICE, default=SLOPE_VIEW_CHOICE[0][1])
+    # for community
+    direction = models.CharField(verbose_name='Направление', max_length=255,
+                             choices=DIR_CHOICE, default=DIR_CHOICE[0][1])
     date_created = models.DateField(verbose_name='Год основания')
     license_id = models.CharField(verbose_name='Номер лиценизии', unique=True, max_length=255, blank=True, null=True)
-
     phone = models.CharField(verbose_name='Телефон', max_length=255, blank=True, null=True)
     email = models.EmailField(verbose_name='Email', max_length=255, unique=True, blank=True, null=True)
     website = models.URLField(verbose_name='Веб-сайт', max_length=255, blank=True, null=True)
     address = models.TextField(verbose_name='Адрес', blank=True, null=True)
-
     owner = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True,
                                  verbose_name='Ответственное лицо')
     # ...
@@ -194,9 +206,10 @@ class Institution(models.Model):
         verbose_name_plural = 'Учреждения'
 
 
-# ClassGroup model
+# Class/Group model
 # -----------------------------------------------------------------------------------------------
 class ClassGroup(models.Model):
+    # for school
     LEVEL_CHOICE = (
         ('NOT_DEFINED', 'Не выбрано'),
         ('ONE', 1),
@@ -212,14 +225,24 @@ class ClassGroup(models.Model):
         ('ELEVEN', 11),
     )
 
+    # for community
+    FLOW_CHOICE = (
+        ('NOT_DEFINED', 'Не выбрано'),
+        ('ONE', 1),
+        ('TWO', 2),
+        ('THREE', 3),
+    )
+
     name = models.CharField(verbose_name='Название', max_length=255)
     class_level = models.CharField(verbose_name='Уровень класса',
                                    choices=LEVEL_CHOICE, default=LEVEL_CHOICE[0][1])
+    flow = models.CharField(verbose_name='Поток',
+                            choices=FLOW_CHOICE, default=FLOW_CHOICE[0][1])
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE, verbose_name='Учереждение')
-    teacher = models.OneToOneField(User, on_delete=models.SET_NULL, related_name='teacher',
-                                   blank=True, null=True, verbose_name='Руководитель')
+    teacher = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='teacher',
+                                blank=True, null=True, verbose_name='Руководитель')
     students = models.ManyToManyField(User, blank=True, verbose_name='Ученики')
-    subjects = models.ManyToManyField(to='products.Product', blank=True, verbose_name='Предметы')
+    subjects = models.ManyToManyField(to='products.Product', blank=True, verbose_name='Программы')
 
     def __str__(self):
         return self.name

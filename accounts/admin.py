@@ -40,18 +40,31 @@ class AccountAdmin(admin.ModelAdmin):
 # Institution admin
 # ------------------------------------------------------------------------------------------------
 class InstitutionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'inst_type', 'ownership', 'school_view', 'slope', 'owner',)
-    filter_horizontal = ('ln', )
+    list_display = ('name', 'inst_type', 'ownership', 'date_created', 'owner',)
     list_filter = ('inst_type', 'ownership', 'school_view', 'slope',)
     search_fields = ('name', )
+    fieldsets = (
+        (None, {'fields': ('image', 'name', 'ln', 'inst_type', 'ownership', )}),
+        ('Для школы', {'fields': ('school_view', 'slope',)}),
+        ('Для других учереждении', {'fields': ('direction', )}),
+        ('Контакты', {'fields': ('date_created', 'license_id', 'phone', 'email', 'website', 'address', 'owner', )}),
+    )
+    filter_horizontal = ('ln', )
 
 
 # ClassGroup admin
 # ------------------------------------------------------------------------------------------------
 class ClassGroupAdmin(admin.ModelAdmin):
-    list_display = ('name', 'class_level', 'institution', 'teacher', )
+    list_display = ('name', 'class_level', 'flow', 'institution', 'teacher', )
     list_filter = ('class_level', 'institution',)
     search_fields = ('name', )
+
+    fieldsets = (
+        (None, {'fields': ('name', 'institution', 'teacher', )}),
+        ('Для школы', {'fields': ('class_level', )}),
+        ('Для других учереждении', {'fields': ('flow', )}),
+        ('Участники и программы', {'fields': ('students', 'subjects', )}),
+    )
     filter_horizontal = ('students', 'subjects', )
 
 

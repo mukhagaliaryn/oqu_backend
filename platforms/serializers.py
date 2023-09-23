@@ -13,7 +13,7 @@ class PlatformStatusStudentInstitutionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Institution
-        fields = ('id', 'name', 'school_view', )
+        fields = ('id', 'image', 'name', 'inst_type', 'direction', )
 
 
 class PlatformStatusStudentUserSerializer(serializers.ModelSerializer):

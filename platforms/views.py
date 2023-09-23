@@ -20,7 +20,7 @@ class MainAPIView(APIView):
         if user_type == 'STUDENT':
             user = request.user
             class_group = user.classgroup_set.all().first()
-            user_products = UserProduct.objects.filter(product__in=class_group.subjects.all())
+            user_products = UserProduct.objects.filter(product__in=class_group.subjects.all(), user=user)
             official = class_group.students.filter(id=user.id).exists()
 
             class_group_serializer = PlatformStatusStudentClassGroupSerializer(
