@@ -190,8 +190,6 @@ class UserChapterAPIView(APIView):
             user_chapter = get_object_or_404(UserChapter, pk=user_chapter_pk)
             product = user_product.product
             chapter = user_chapter.chapter
-            user_product = get_object_or_404(UserProduct, product=product)
-            user_chapter = get_object_or_404(UserChapter, chapter=chapter)
 
             # sidebar menu
             user_chapters = UserChapter.objects.filter(chapter__product=product)
