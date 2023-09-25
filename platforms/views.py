@@ -184,6 +184,7 @@ class UserProductAPIView(APIView):
 class UserChapterAPIView(APIView):
     def get(self, request, user_pk, user_chapter_pk):
         user_type = request.user.user_type
+        user = request.user
         if user_type == 'STUDENT':
             # user chapter data
             user_product = get_object_or_404(UserProduct, pk=user_pk)
@@ -192,13 +193,13 @@ class UserChapterAPIView(APIView):
             chapter = user_chapter.chapter
 
             # sidebar menu
-            user_chapters = UserChapter.objects.filter(chapter__product=product)
-            user_lessons = UserLesson.objects.filter(lesson__chapter=chapter)
+            user_chapters = UserChapter.objects.filter(chapter__product=product, user=user)
+            user_lessons = UserLesson.objects.filter(lesson__chapter=chapter, user=user)
 
             # chapters list data
-            user_videos = UserVideo.objects.filter(video__lesson__chapter=chapter)
-            user_tasks = UserTask.objects.filter(task__lesson__chapter=chapter)
-            user_quizzes = UserQuizData.objects.filter(quiz__lesson__chapter=chapter)
+            user_videos = UserVideo.objects.filter(video__lesson__chapter=chapter, user=user)
+            user_tasks = UserTask.objects.filter(task__lesson__chapter=chapter, user=user)
+            user_quizzes = UserQuizData.objects.filter(quiz__lesson__chapter=chapter, user=user)
 
             # serializers
             user_product_serializer = UserChapterUserProductSerializer(user_product, partial=True)
