@@ -8,7 +8,7 @@ from profiles.models import (
     UserQuizData, UserProduct, UserChapter, UserLesson, UserVideo, UserTask, UserAnswer
 )
 from products.models import (
-    Category, Topic, Product, Lesson, Chapter, Video, Task, Question, Answer
+    Category, Topic, Lesson, Video, Task, Question, Answer
 )
 from products.serializers import (
     TopicSerializer, CategorySerializer,
@@ -193,13 +193,13 @@ class UserChapterAPIView(APIView):
             chapter = user_chapter.chapter
 
             # sidebar menu
-            user_chapters = UserChapter.objects.filter(chapter__product=product, user=user)
-            user_lessons = UserLesson.objects.filter(lesson__chapter=chapter, user=user)
+            user_chapters = UserChapter.objects.filter(chapter__product=product, user=user).order_by('chapter')
+            user_lessons = UserLesson.objects.filter(lesson__chapter=chapter, user=user).order_by('lesson')
 
             # chapters list data
-            user_videos = UserVideo.objects.filter(video__lesson__chapter=chapter, user=user)
-            user_tasks = UserTask.objects.filter(task__lesson__chapter=chapter, user=user)
-            user_quizzes = UserQuizData.objects.filter(quiz__lesson__chapter=chapter, user=user)
+            user_videos = UserVideo.objects.filter(video__lesson__chapter=chapter, user=user).order_by('video')
+            user_tasks = UserTask.objects.filter(task__lesson__chapter=chapter, user=user).order_by('task')
+            user_quizzes = UserQuizData.objects.filter(quiz__lesson__chapter=chapter, user=user).order_by('quiz')
 
             # serializers
             user_product_serializer = UserChapterUserProductSerializer(user_product, partial=True)
@@ -311,10 +311,12 @@ class UserLessonVideoAPIView(APIView):
 
     def put(self, request, user_pk, user_chapter_pk, user_lesson_pk, user_video_pk):
         user_type = request.user.user_type
+        user= request.user
+
         if user_type == 'STUDENT':
             user_lesson = get_object_or_404(UserLesson, pk=user_lesson_pk)
             user_video = get_object_or_404(UserVideo, pk=user_video_pk)
-            user_videos = UserVideo.objects.filter(video__lesson=user_lesson.lesson)
+            user_videos = UserVideo.objects.filter(video__lesson=user_lesson.lesson, user=user)
 
             if not user_video.is_done:
                 # user video sum
