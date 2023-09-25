@@ -252,9 +252,10 @@ class UserChapterAPIView(APIView):
 # UserLessonFinish APIView
 class UserLessonFinishAPIView(APIView):
     def put(self, request, user_pk, user_chapter_pk, user_lesson_pk):
+        user = request.user
         user_chapter = get_object_or_404(UserChapter, pk=user_chapter_pk)
         user_lesson = get_object_or_404(UserLesson, pk=user_lesson_pk)
-        user_lessons = UserLesson.objects.filter(lesson__chapter=user_chapter.chapter)
+        user_lessons = UserLesson.objects.filter(lesson__chapter=user_chapter.chapter, user=user)
 
         if not user_lesson.is_done:
             user_lesson.is_done = True
@@ -271,6 +272,8 @@ class UserLessonFinishAPIView(APIView):
 class UserLessonVideoAPIView(APIView):
     def get(self, request, user_pk, user_chapter_pk, user_lesson_pk, user_video_pk):
         user_type = request.user.user_type
+        user = request.user
+
         if user_type == 'STUDENT':
             user_product = get_object_or_404(UserProduct, pk=user_pk)
             user_chapter = get_object_or_404(UserChapter, pk=user_chapter_pk)
@@ -278,9 +281,9 @@ class UserLessonVideoAPIView(APIView):
             user_video = get_object_or_404(UserVideo, pk=user_video_pk)
 
             # sidebar
-            user_videos = UserVideo.objects.filter(video__lesson=user_lesson.lesson)
-            user_tasks = UserTask.objects.filter(task__lesson=user_lesson.lesson)
-            user_quizzes = UserQuizData.objects.filter(quiz__lesson=user_lesson.lesson)
+            user_videos = UserVideo.objects.filter(video__lesson=user_lesson.lesson, user=user)
+            user_tasks = UserTask.objects.filter(task__lesson=user_lesson.lesson, user=user)
+            user_quizzes = UserQuizData.objects.filter(quiz__lesson=user_lesson.lesson, user=user)
 
             # serializers
             chapter_serializer = ProductChapterSerializer(user_chapter.chapter, partial=True)
@@ -335,6 +338,8 @@ class UserLessonTaskAPIView(APIView):
 
     def get(self, request, user_pk, user_chapter_pk, user_lesson_pk, user_task_pk):
         user_type = request.user.user_type
+        user = request.user
+
         if user_type == 'STUDENT':
             user_product = get_object_or_404(UserProduct, pk=user_pk)
             user_chapter = get_object_or_404(UserChapter, pk=user_chapter_pk)
@@ -342,9 +347,9 @@ class UserLessonTaskAPIView(APIView):
             user_task = get_object_or_404(UserTask, pk=user_task_pk)
 
             # sidebar
-            user_videos = UserVideo.objects.filter(video__lesson=user_lesson.lesson)
-            user_tasks = UserTask.objects.filter(task__lesson=user_lesson.lesson)
-            user_quizzes = UserQuizData.objects.filter(quiz__lesson=user_lesson.lesson)
+            user_videos = UserVideo.objects.filter(video__lesson=user_lesson.lesson, user=user)
+            user_tasks = UserTask.objects.filter(task__lesson=user_lesson.lesson, user=user)
+            user_quizzes = UserQuizData.objects.filter(quiz__lesson=user_lesson.lesson, user=user)
 
             # serializers
             chapter_serializer = ProductChapterSerializer(user_chapter.chapter, partial=True)
@@ -388,10 +393,12 @@ class UserLessonTaskAPIView(APIView):
 class UserLessonTaskFinishAPIView(APIView):
     def put(self, request, user_pk, user_chapter_pk, user_lesson_pk, user_task_pk):
         user_type = request.user.user_type
+        user = request.user
+
         if user_type == 'STUDENT':
             user_lesson = get_object_or_404(UserLesson, pk=user_lesson_pk)
             user_task = get_object_or_404(UserTask, pk=user_task_pk)
-            user_tasks = UserTask.objects.filter(task__lesson=user_lesson.lesson)
+            user_tasks = UserTask.objects.filter(task__lesson=user_lesson.lesson, user=user)
 
             if user_task.status == 'FINISH':
                 return Response({'status': 'Task status already exists'})
@@ -412,6 +419,8 @@ class UserLessonTaskFinishAPIView(APIView):
 class UserLessonQuizAPIView(APIView):
     def get(self, request, user_pk, user_chapter_pk, user_lesson_pk, user_quiz_pk):
         user_type = request.user.user_type
+        user = request.user
+
         if user_type == 'STUDENT':
             user_product = get_object_or_404(UserProduct, pk=user_pk)
             user_chapter = get_object_or_404(UserChapter, pk=user_chapter_pk)
@@ -420,9 +429,9 @@ class UserLessonQuizAPIView(APIView):
             user_answers = UserAnswer.objects.filter(user_quiz=user_quiz)
 
             # sidebar
-            user_videos = UserVideo.objects.filter(video__lesson=user_lesson.lesson)
-            user_tasks = UserTask.objects.filter(task__lesson=user_lesson.lesson)
-            user_quizzes = UserQuizData.objects.filter(quiz__lesson=user_lesson.lesson)
+            user_videos = UserVideo.objects.filter(video__lesson=user_lesson.lesson, user=user)
+            user_tasks = UserTask.objects.filter(task__lesson=user_lesson.lesson, user=user)
+            user_quizzes = UserQuizData.objects.filter(quiz__lesson=user_lesson.lesson, user=user)
 
             # serializers
             chapter_serializer = ProductChapterSerializer(user_chapter.chapter, partial=True)
@@ -516,10 +525,12 @@ class UserLessonQuizChoiceAnswerAPIView(APIView):
 class UserLessonQuizFinishAPIView(APIView):
     def put(self, request, user_pk, user_chapter_pk, user_lesson_pk, user_quiz_pk):
         user_type = request.user.user_type
+        user = request.user
+
         if user_type == 'STUDENT':
             user_lesson = get_object_or_404(UserLesson, pk=user_lesson_pk)
             user_quiz = get_object_or_404(UserQuizData, pk=user_quiz_pk)
-            user_quizzes = UserQuizData.objects.filter(quiz__lesson=user_lesson.lesson)
+            user_quizzes = UserQuizData.objects.filter(quiz__lesson=user_lesson.lesson, user=user)
 
             user_answers = user_quiz.useranswer_set.all()
             correct_count = 0
