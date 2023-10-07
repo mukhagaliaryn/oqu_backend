@@ -36,7 +36,7 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     TYPE_CHOICES = (
         ('NOT_DEFINED', 'Не выбрано'),
-        ('STUDENT', 'Оқушы'),
+        ('STUDENT', 'Студент'),
         ('TEACHER', 'Педагог'),
         ('MANAGER', 'Менеджер'),
     )
