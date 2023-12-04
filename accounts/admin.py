@@ -1,28 +1,28 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User, Account, Institution, Language, ClassGroup
+from .models import User, Account
 from django.contrib.auth.models import Group
 
 
 # User Admin
 # -----------------------------------------------------------------------------------------------
 class UserAdmin(BaseUserAdmin):
-    list_display = ('username', 'email', 'first_name', 'last_name', 'user_type', 'is_superuser', 'is_staff', 'is_active')
+    list_display = ('email', 'full_name', 'user_type', 'is_superuser', 'is_staff', 'is_active')
     list_filter = ('is_superuser', 'user_type', )
     fieldsets = (
-        (None, {'fields': ('username', 'email', 'password')}),
-        ('Персональные данные', {'fields': ('first_name', 'last_name', 'user_type', 'image', 'last_login',)}),
+        (None, {'fields': ('email', 'password')}),
+        ('Персональные данные', {'fields': ('full_name', 'user_type', 'image', 'last_login',)}),
         ('Разрешения', {'fields': ('is_superuser', 'is_active', 'is_staff')}),
     )
 
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'email', 'first_name', 'last_name', 'password1', 'password2'),
+            'fields': ('email', 'full_name', 'password1', 'password2'),
         }),
     )
-    search_fields = ('username', 'email', 'first_name', 'last_name', 'user_type', )
-    ordering = ('username',)
+    search_fields = ('email', 'full_name', 'user_type', )
+    ordering = ('email',)
     filter_horizontal = ()
 
 
@@ -37,41 +37,7 @@ class AccountAdmin(admin.ModelAdmin):
     filter_horizontal = ()
 
 
-# Institution admin
-# ------------------------------------------------------------------------------------------------
-class InstitutionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'inst_type', 'ownership', 'date_created', 'owner',)
-    list_filter = ('inst_type', 'ownership', 'school_view', 'slope',)
-    search_fields = ('name', )
-    fieldsets = (
-        (None, {'fields': ('image', 'name', 'ln', 'inst_type', 'ownership', )}),
-        ('Для школы', {'fields': ('school_view', 'slope',)}),
-        ('Для других учереждении', {'fields': ('direction', )}),
-        ('Контакты', {'fields': ('date_created', 'license_id', 'phone', 'email', 'website', 'address', 'owner', )}),
-    )
-    filter_horizontal = ('ln', )
-
-
-# ClassGroup admin
-# ------------------------------------------------------------------------------------------------
-class ClassGroupAdmin(admin.ModelAdmin):
-    list_display = ('name', 'class_level', 'flow', 'institution', 'teacher', )
-    list_filter = ('class_level', 'institution',)
-    search_fields = ('name', )
-
-    fieldsets = (
-        (None, {'fields': ('name', 'institution', 'teacher', )}),
-        ('Для школы', {'fields': ('class_level', )}),
-        ('Для других учереждении', {'fields': ('flow', )}),
-        ('Участники и программы', {'fields': ('students', 'subjects', )}),
-    )
-    filter_horizontal = ('students', 'subjects', )
-
-
 admin.site.register(User, UserAdmin)
 admin.site.register(Account, AccountAdmin)
-admin.site.register(Institution, InstitutionAdmin)
-admin.site.register(ClassGroup, ClassGroupAdmin)
-admin.site.register(Language)
 
 admin.site.unregister(Group)

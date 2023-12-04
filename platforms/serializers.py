@@ -1,7 +1,8 @@
 from rest_framework import serializers
 
-from accounts.models import User, Institution, ClassGroup
+from accounts.models import User
 from products.models import Product
+from centres.models import Institution, ClassGroup, Direction
 from products.serializers import TopicSerializer
 from profiles.models import (
     UserChapter, UserProduct, UserLesson, UserVideo, UserTask, UserQuizData, UserAnswer
@@ -21,24 +22,31 @@ from products.models import (
 # Main APIView
 # -----------------------------------------------------------------------------------------
 # -----------------------------------------------------------------------------------------
+class DirectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Direction
+        fields = '__all__'
+
+
 class MainInstitutionSerializer(serializers.ModelSerializer):
+    direction = DirectionSerializer(read_only=True)
 
     class Meta:
         model = Institution
-        fields = ('id', 'image', 'name', 'inst_type', 'direction', )
+        fields = ('id', 'image', 'name', 'direction', )
 
 
 class MainUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'first_name', 'last_name', )
+        fields = ('id', 'full_name', )
 
 
 class MainProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ('id', 'name', 'poster', 'class_level', )
+        fields = ('id', 'name', 'poster', )
 
 
 #  Main ClassGroup

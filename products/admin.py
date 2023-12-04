@@ -1,9 +1,12 @@
 from django.contrib import admin
 from django_summernote.admin import SummernoteModelAdmin
+from .models import (
+    Category, Topic, Product, Purpose, Feature, Chapter, Lesson, Video, Task, Question, Answer,
+)
 
-from .models import Category, Topic, Product, Purpose, Feature, Chapter, Lesson, Video, Task, Question, Answer
 
-
+# Category admin
+# ------------------------------------------------------------------------------------------------
 class TopicInline(admin.TabularInline):
     model = Topic
     extra = 1
@@ -37,8 +40,8 @@ class ChapterTable(admin.TabularInline):
 
 
 class ProductAdmin(SummernoteModelAdmin):
-    list_display = ('name', 'product_type', 'class_level', )
-    list_filter = ('class_level', 'product_type', )
+    list_display = ('name', 'product_type', )
+    list_filter = ('product_type', )
     filter_horizontal = ('authors',)
     summernote_fields = ('about', 'description', )
 

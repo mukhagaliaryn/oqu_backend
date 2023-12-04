@@ -8,7 +8,8 @@ from accounts.models import User
 class BaseCategory(models.Model):
     name = models.CharField(verbose_name='Название', max_length=255, unique=True)
     slug = models.SlugField(verbose_name='Ключ', max_length=255, unique=True)
-    image = models.ImageField(verbose_name='Изображение', upload_to='products/category/', blank=True, null=True)
+    image = models.ImageField(verbose_name='Изображение', upload_to='products/category/',
+                              blank=True, null=True)
     category = models.ForeignKey('BaseCategory', on_delete=models.PROTECT,
                                  null=True, blank=True, verbose_name='Супер категория')
 
@@ -60,28 +61,12 @@ class Product(models.Model):
         ('COURSE', 'Курс'),
     )
 
-    LEVEL_CHOICE = (
-        ('NOT_DEFINED', 'Не выбрано'),
-        ('ONE', 1),
-        ('TWO', 2),
-        ('THREE', 3),
-        ('FOUR', 4),
-        ('FIVE', 5),
-        ('SIX', 6),
-        ('SEVEN', 7),
-        ('EIGHT', 8),
-        ('NINE', 9),
-        ('TEN', 10),
-        ('ELEVEN', 11),
-    )
-
     product_type = models.CharField(verbose_name='Тип продукта', max_length=255,
                                     choices=PRODUCT_CHOICE, default=PRODUCT_CHOICE[0][1])
-    class_level = models.CharField(verbose_name='Уровень класса',
-                                   choices=LEVEL_CHOICE, default=LEVEL_CHOICE[0][1])
     name = models.CharField(verbose_name='Название', max_length=40)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория')
-    topic = models.ForeignKey(Topic, related_name='topic', on_delete=models.CASCADE, verbose_name='Тема')
+    topic = models.ForeignKey(Topic, related_name='topic', on_delete=models.CASCADE,
+                              verbose_name='Тема')
     poster = models.ImageField(verbose_name='Обложка', upload_to='products/poster/',
                                blank=True, null=True)
     about = models.TextField(verbose_name='О продукте', blank=True, null=True)

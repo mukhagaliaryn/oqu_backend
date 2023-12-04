@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django_summernote',
 
     'accounts.apps.AccountsConfig',
+    'centres.apps.CentresConfig',
     'platforms.apps.PlatformsConfig',
     'products.apps.ProductsConfig',
     'profiles.apps.ProfilesConfig',
