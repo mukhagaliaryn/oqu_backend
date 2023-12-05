@@ -146,7 +146,7 @@ class UserAnswer(models.Model):
     max_score = models.PositiveSmallIntegerField(verbose_name='Максимальный балл', default=1)
 
     def __str__(self):
-        return '{} ответ: {}'.format(self.user_quiz.user.username, self.pk)
+        return '{} ответ: {}'.format(self.user_quiz.user, self.pk)
 
     class Meta:
         verbose_name = 'Ответ пользователя'

@@ -94,7 +94,7 @@ class ExplorerProductSerializer(serializers.ModelSerializer):
 class ProductAuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'first_name', 'last_name', 'image', )
+        fields = ('id', 'full_name', 'image', )
 
 
 class ProductSerializer(serializers.ModelSerializer):
