@@ -60,8 +60,9 @@ class VideoAdmin(admin.ModelAdmin):
     list_display = ('title', 'lesson', 'duration', )
 
 
-class TaskAdmin(admin.ModelAdmin):
+class TaskAdmin(SummernoteModelAdmin):
     list_display = ('title', 'lesson', 'duration', )
+    summernote_fields = ('body', )
 
 
 class AnswerTable(admin.TabularInline):
