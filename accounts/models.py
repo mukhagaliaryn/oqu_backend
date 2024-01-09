@@ -9,9 +9,9 @@ from django.core.exceptions import ValidationError
 class UserManager(BaseUserManager):
     def create_user(self, email, full_name, password=None):
         if not email:
-            raise ValueError('У пользователя должен быть адрес электронной почты')
+            raise ValueError(_('The user must have an email address'))
         if not full_name:
-            raise ValueError('Имя не должно быть пустым')
+            raise ValueError(_('The full name should not be empty'))
 
         email = self.normalize_email(email)
         user = self.model(email=email.lower(), full_name=full_name)
@@ -30,26 +30,18 @@ class UserManager(BaseUserManager):
 # User model
 # --------------------------------------------------------------------------------------------------
 class User(AbstractBaseUser, PermissionsMixin):
-    TYPE_CHOICES = (
-        ('NOT_DEFINED', 'Не выбрано'),
-        ('STUDENT', 'Студент'),
-        ('TEACHER', 'Педагог'),
-        ('MANAGER', 'Менеджер'),
-    )
 
     def validate_image(self):
         file_size = self.size
         megabyte_limit = 3.0
         if file_size > megabyte_limit * 1024 * 1024:
-            raise ValidationError(_("The maximum file size should be {}MB").format(str(megabyte_limit)))
+            raise ValidationError(_('The maximum file size should be {}MB').format(str(megabyte_limit)))
 
     email = models.EmailField(verbose_name=_('email'), max_length=64, unique=True)
-    full_name = models.CharField(verbose_name='Полная имя', max_length=64)
-    user_type = models.CharField(verbose_name='Тип', max_length=64,
-                                 choices=TYPE_CHOICES, default=TYPE_CHOICES[0][1])
+    full_name = models.CharField(verbose_name=_('Full name'), max_length=64)
     image = models.ImageField(
-        verbose_name='Изображение', validators=[validate_image], upload_to='accounts/user/image/',
-        blank=True, null=True, help_text='Максимальный размер файла составляет 2 МБ')
+        verbose_name=_('Image'), validators=[validate_image], upload_to='accounts/user/image/',
+        blank=True, null=True, help_text=_('The maximum file size is 2 MB'))
     is_staff = models.BooleanField(
         _("staff status"),
         default=False,
@@ -80,39 +72,39 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.full_name
 
     class Meta:
-        verbose_name = 'Пользователь'
-        verbose_name_plural = 'Пользователи'
+        verbose_name = _('User')
+        verbose_name_plural = _('Users')
 
 
 # Account model
 # ----------------------------------------------------------------------------------------
 class Account(models.Model):
     GENDER_CHOICES = (
-        ('NOT_DEFINED', 'Не выбрано'),
-        ('MALE', 'Ер'),
-        ('FAMALE', 'Әйел'),
+        ('NOT_DEFINED', _('Not selected')),
+        ('MALE', _('Male')),
+        ('FAMALE', _('Famale')),
     )
 
     CITY_CHOICES = (
-        ('NOT_DEFINED', 'Не выбрано'),
+        ('NOT_DEFINED', _('Not selected')),
         ('SHYMKENT', 'Шымкент'),
         ('ALMATY', 'Алматы'),
         ('ASTANA', 'Астана'),
     )
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='Пользователь')
-    birthday = models.DateField(verbose_name='День рождение', blank=True, null=True)
-    gender = models.CharField(verbose_name='Пол', max_length=64, choices=GENDER_CHOICES,
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_('User'))
+    birthday = models.DateField(verbose_name=_('Birthday'), blank=True, null=True)
+    gender = models.CharField(verbose_name=_('Gender'), max_length=64, choices=GENDER_CHOICES,
                               default=GENDER_CHOICES[0][1])
-    city = models.CharField(verbose_name='Город', max_length=64,
+    city = models.CharField(verbose_name=_('City'), max_length=64,
                             choices=CITY_CHOICES, default=CITY_CHOICES[0][1])
-    address = models.TextField(verbose_name='Адрес', max_length=255, blank=True, null=True)
-    phone = models.CharField(verbose_name='Телефон', max_length=255, null=True, blank=True)
-    account_fill = models.BooleanField(verbose_name='Аккаунт заполнено', default=False)
+    address = models.TextField(verbose_name=_('Address'), max_length=255, blank=True, null=True)
+    phone = models.CharField(verbose_name=_('Phone'), max_length=255, null=True, blank=True)
+    account_fill = models.BooleanField(verbose_name=_('Is filled out'), default=False)
 
     def __str__(self):
-        return f'Профиль: {self.user}'
+        return f'{self.user}'
 
     class Meta:
-        verbose_name = 'Аккаунт'
-        verbose_name_plural = 'Аккаунты'
+        verbose_name = _('Account')
+        verbose_name_plural = _('Accounts')

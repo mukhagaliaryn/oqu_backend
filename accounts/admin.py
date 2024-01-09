@@ -2,17 +2,18 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .models import User, Account
 from django.contrib.auth.models import Group
+from django.utils.translation import gettext_lazy as _
 
 
 # User Admin
 # -----------------------------------------------------------------------------------------------
 class UserAdmin(BaseUserAdmin):
-    list_display = ('email', 'full_name', 'user_type', 'is_superuser', 'is_staff', 'is_active')
-    list_filter = ('is_superuser', 'user_type', )
+    list_display = ('email', 'full_name', 'is_superuser', 'is_staff', 'is_active')
+    list_filter = ('is_superuser', )
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Персональные данные', {'fields': ('full_name', 'user_type', 'image', 'last_login',)}),
-        ('Разрешения', {'fields': ('is_superuser', 'is_active', 'is_staff')}),
+        (_('Personal data'), {'fields': ('full_name', 'image', 'last_login',)}),
+        (_('Permissions'), {'fields': ('is_superuser', 'is_active', 'is_staff')}),
     )
 
     add_fieldsets = (
@@ -26,7 +27,7 @@ class UserAdmin(BaseUserAdmin):
     filter_horizontal = ()
 
 
-# Account admin
+# Account Admin
 # -----------------------------------------------------------------------------------------------
 class AccountAdmin(admin.ModelAdmin):
     list_display = ('user', 'city', 'account_fill',)
