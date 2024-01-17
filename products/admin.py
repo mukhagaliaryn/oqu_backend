@@ -1,18 +1,23 @@
 from django.contrib import admin
 from django_summernote.admin import SummernoteModelAdmin
+from modeltranslation.admin import TranslationAdmin, TranslationTabularInline
 from .models import (
-    Category, Topic, Product, Purpose, Feature, Chapter, Lesson, Video, Task, Question, Answer,
+    Category, Topic, Language, Course, Purpose, Chapter, Lesson, Video, Article, Rating
 )
 
 
 # Category admin
 # ------------------------------------------------------------------------------------------------
-class TopicInline(admin.TabularInline):
+class TopicInline(TranslationTabularInline):
     model = Topic
     extra = 1
 
 
-class CategoryAdmin(admin.ModelAdmin):
+class LanguageAdmin(admin.ModelAdmin):
+    pass
+
+
+class CategoryAdmin(TranslationAdmin):
     list_display = ('name', 'slug', )
     search_fields = ('name', )
     exclude = ('category', )
@@ -27,25 +32,19 @@ class PurposeTable(admin.TabularInline):
     extra = 1
 
 
-class FeaturesTable(admin.TabularInline):
-    model = Feature
-    fields = ('product', 'label', 'item', )
-    extra = 1
-
-
 class ChapterTable(admin.TabularInline):
     model = Chapter
     fields = ('product', 'chapter_name', 'about', )
     extra = 1
 
 
-class ProductAdmin(SummernoteModelAdmin):
-    list_display = ('name', 'product_type', )
-    list_filter = ('product_type', )
-    filter_horizontal = ('authors',)
-    summernote_fields = ('about', 'description', )
+class CourseAdmin(SummernoteModelAdmin):
+    list_display = ('name', 'category', 'topic', 'last_update', 'is_headline', )
+    list_filter = ('category', 'topic',)
+    filter_horizontal = ('authors', 'requirements', )
+    summernote_fields = ('description', )
 
-    inlines = [PurposeTable, FeaturesTable, ChapterTable, ]
+    inlines = [PurposeTable, ChapterTable, ]
 
 
 # Lesson admin
@@ -57,28 +56,22 @@ class LessonAdmin(admin.ModelAdmin):
 
 
 class VideoAdmin(admin.ModelAdmin):
-    list_display = ('title', 'lesson', 'duration', )
+    list_display = ('lesson', 'duration', )
 
 
-class TaskAdmin(SummernoteModelAdmin):
-    list_display = ('title', 'lesson', 'duration', )
-    summernote_fields = ('body', )
+class ArticleAdmin(admin.ModelAdmin):
+    pass
 
 
-class AnswerTable(admin.TabularInline):
-    model = Answer
-    extra = 1
+class RatingAdmin(admin.ModelAdmin):
+    pass
 
 
-class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('title', 'format', 'quiz', )
-
-    inlines = [AnswerTable, ]
-
-
+# ------------------------------------------------------------------------------
 admin.site.register(Category, CategoryAdmin)
-admin.site.register(Product, ProductAdmin)
+admin.site.register(Language, LanguageAdmin)
+admin.site.register(Course, CourseAdmin)
 admin.site.register(Lesson, LessonAdmin)
 admin.site.register(Video, VideoAdmin)
-admin.site.register(Task, TaskAdmin)
-admin.site.register(Question, QuestionAdmin)
+admin.site.register(Article, ArticleAdmin)
+admin.site.register(Rating, RatingAdmin)

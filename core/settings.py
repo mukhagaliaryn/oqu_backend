@@ -30,10 +30,10 @@ INSTALLED_APPS = [
     'django_summernote',
 
     'accounts.apps.AccountsConfig',
-    'centres.apps.CentresConfig',
-    'platforms.apps.PlatformsConfig',
     'products.apps.ProductsConfig',
+    'platforms.apps.PlatformsConfig',
     'profiles.apps.ProfilesConfig',
+
 ]
 
 
@@ -54,7 +54,7 @@ REST_FRAMEWORK = {
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    # 'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -117,11 +117,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 LANGUAGES = (
+    ('kk', _('Kazakh')),
     ('ru', _('Russian')),
     ('en', _('English')),
 )
 
 MODELTRANSLATION_DEFAULT_LANGUAGE = 'ru'
+MODELTRANSLATION_LANGUAGES = ('ru', 'kk')
 
 LOCALE_PATHS = [
     BASE_DIR / 'locales'

@@ -38,6 +38,7 @@ class AccountAdmin(admin.ModelAdmin):
     filter_horizontal = ()
 
 
+# -----------------------------------------------------------------------------------------------
 admin.site.register(User, UserAdmin)
 admin.site.register(Account, AccountAdmin)
 

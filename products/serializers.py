@@ -1,6 +1,7 @@
 from rest_framework import serializers
-from accounts.models import User
-from products.models import Category, Topic, Purpose, Feature, Chapter, Lesson, Product
+
+from products.models import Category, Topic, Course
+from profiles.serializers import AuthorsListSerializer
 
 
 # Category
@@ -22,39 +23,18 @@ class TopicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Topic
-        fields = ('id', 'name', 'slug', 'category',)
+        fields = ('id', 'name', 'name_kk', 'slug', 'category',)
 
 
-# Product APIView
+# Course serializers
 # -----------------------------------------------------------------------------------
 # -----------------------------------------------------------------------------------
 
-# Product Detail
+# Course lists
 # -----------------------------------------------------------------------------------
+class LastCourseListSerializer(serializers.ModelSerializer):
+    authors = AuthorsListSerializer(many=True)
 
-# Purpose
-class ProductPurposeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Purpose
-        fields = ('id', 'item', )
-
-
-# Feature
-class ProductFeatureSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Feature
-        fields = ('id', 'label', 'item', )
-
-
-# Chapter
-class ProductChapterSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Chapter
-        fields = ('id', 'chapter_name', )
-
-
-# Lesson
-class ProductLessonSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Lesson
-        fields = ('id', 'title', 'chapter', 'duration', )
+        model = Course
+        fields = ('id', 'name', 'poster', 'course_type', 'authors', 'all_rating', )
