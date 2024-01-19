@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-14 05:38+0000\n"
+"POT-Creation-Date: 2024-01-19 14:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -82,7 +82,8 @@ msgstr ""
 msgid "date joined"
 msgstr ""
 
-#: accounts/models.py:75 accounts/models.py:95 products/models.py:89
+#: accounts/models.py:75 accounts/models.py:95 products/models.py:93
+#: profiles/models.py:9
 msgid "User"
 msgstr "Пользователь"
 
@@ -134,6 +135,10 @@ msgstr "Аккаунт"
 msgid "Accounts"
 msgstr "Аккаунты"
 
+#: core/settings.py:120
+msgid "Kazakh"
+msgstr ""
+
 #: core/settings.py:121
 msgid "Russian"
 msgstr "Русский"
@@ -146,8 +151,8 @@ msgstr "Английский"
 msgid "3. Products"
 msgstr "3. Продукты"
 
-#: products/models.py:10 products/models.py:26 products/models.py:63
-#: products/models.py:131
+#: products/models.py:10 products/models.py:26 products/models.py:62
+#: products/models.py:134 profiles/models.py:24
 msgid "Title"
 msgstr "Название"
 
@@ -155,7 +160,7 @@ msgstr "Название"
 msgid "Key"
 msgstr "Ключ"
 
-#: products/models.py:20 products/models.py:25 products/models.py:66
+#: products/models.py:20 products/models.py:25 products/models.py:65
 msgid "Category"
 msgstr "Категория"
 
@@ -163,7 +168,7 @@ msgstr "Категория"
 msgid "Categories"
 msgstr "Категории"
 
-#: products/models.py:36 products/models.py:68
+#: products/models.py:36 products/models.py:67
 msgid "Topic"
 msgstr "Тема"
 
@@ -179,7 +184,7 @@ msgstr "Название языка"
 msgid "Language key"
 msgstr "Ключ языка"
 
-#: products/models.py:52 products/models.py:73
+#: products/models.py:52 products/models.py:72
 msgid "Language"
 msgstr "Язык"
 
@@ -187,31 +192,31 @@ msgstr "Язык"
 msgid "Languages"
 msgstr "Языки"
 
-#: products/models.py:60
+#: products/models.py:59
 msgid "Detailed"
 msgstr "Подробный"
 
-#: products/models.py:61
+#: products/models.py:60
 msgid "Directed"
 msgstr "Направленный"
 
-#: products/models.py:64
+#: products/models.py:63
 msgid "Type"
 msgstr "Тип"
 
-#: products/models.py:69
+#: products/models.py:68 profiles/models.py:26
 msgid "Poster"
 msgstr "Обложка"
 
-#: products/models.py:71 products/models.py:118
+#: products/models.py:70 products/models.py:122 profiles/models.py:10
 msgid "About"
 msgstr "Подназвание"
 
-#: products/models.py:72 products/models.py:165
+#: products/models.py:71 products/models.py:167
 msgid "Description"
 msgstr "Описание"
 
-#: products/models.py:74
+#: products/models.py:73
 msgid "Authors"
 msgstr "Авторы"
 
@@ -219,102 +224,135 @@ msgstr "Авторы"
 msgid "Requirements"
 msgstr "Требования"
 
-#: products/models.py:83 products/models.py:90 products/models.py:103
-#: products/models.py:116
+#: products/models.py:79
+#, fuzzy
+#| msgid "Rating"
+msgid "All rating"
+msgstr "Рейтинг"
+
+#: products/models.py:86 products/models.py:94 products/models.py:107
+#: products/models.py:120 profiles/models.py:27
 msgid "Course"
 msgstr "Курс"
 
-#: products/models.py:84
+#: products/models.py:87
 msgid "Courses"
 msgstr "Курсы"
 
-#: products/models.py:91
+#: products/models.py:95
 msgid "Score"
 msgstr "Балл"
 
-#: products/models.py:97
+#: products/models.py:101
 msgid "Rating"
 msgstr "Рейтинг"
 
-#: products/models.py:98
+#: products/models.py:102
 msgid "Ratings"
 msgstr "Рейтинги"
 
-#: products/models.py:104
+#: products/models.py:108
 msgid "What will you learn"
 msgstr "Цель обучение"
 
-#: products/models.py:110
+#: products/models.py:114
 msgid "Purpose"
 msgstr "Цель"
 
-#: products/models.py:111
+#: products/models.py:115
 msgid "Purposes"
 msgstr "Цели"
 
-#: products/models.py:117
+#: products/models.py:121
 msgid "Chapter name"
 msgstr "Название главы"
 
-#: products/models.py:124 products/models.py:132
+#: products/models.py:128 products/models.py:135
 msgid "Chapter"
 msgstr "Глава"
 
-#: products/models.py:125
+#: products/models.py:129
 msgid "Chapters"
 msgstr "Главы"
 
-#: products/models.py:133
+#: products/models.py:136
 msgid "Access"
 msgstr "Доступ"
 
-#: products/models.py:134
-msgid "Duration"
-msgstr "Продолжительность"
-
-#: products/models.py:136
+#: products/models.py:138
 msgid "Date created"
 msgstr "Дата создания"
 
-#: products/models.py:137
+#: products/models.py:139
 msgid "Last update"
 msgstr "Последнее обновление"
 
-#: products/models.py:138
+#: products/models.py:140
 msgid "View"
 msgstr "Просмотр"
 
-#: products/models.py:144 products/models.py:150 products/models.py:164
+#: products/models.py:146 products/models.py:152 products/models.py:166
 msgid "Lesson"
 msgstr "Урок"
 
-#: products/models.py:145
+#: products/models.py:147
 msgid "Lessons"
 msgstr "Уроки"
 
-#: products/models.py:151
+#: products/models.py:153
 msgid "iFrame URL"
 msgstr "iFrame URL"
 
-#: products/models.py:152
+#: products/models.py:154 products/models.py:168
 msgid "Duration (min)"
 msgstr "Продолжительность (мин)"
 
-#: products/models.py:158
+#: products/models.py:160
 msgid "Video"
 msgstr "Видео"
 
-#: products/models.py:159
+#: products/models.py:161
 msgid "Videos"
 msgstr "Видео"
 
-#: products/models.py:171
+#: products/models.py:174
 msgid "Article"
 msgstr "Статья"
 
-#: products/models.py:172
+#: products/models.py:175
 msgid "Articles"
 msgstr "Статьи"
+
+#: profiles/models.py:11
+msgid "Favorite courses"
+msgstr "Любимые курсы"
+
+#: profiles/models.py:13
+msgid "Author"
+msgstr "Автор"
+
+#: profiles/models.py:19
+msgid "Profile"
+msgstr "Профиль"
+
+#: profiles/models.py:20
+msgid "Profiles"
+msgstr "Профили"
+
+#: profiles/models.py:25
+msgid "Subtitle"
+msgstr "Подзаголовок"
+
+#: profiles/models.py:33
+msgid "Headliner"
+msgstr "Хедлайнер"
+
+#: profiles/models.py:34
+msgid "Headliners"
+msgstr "Хедлайнеры"
+
+#~ msgid "Duration"
+#~ msgstr "Продолжительность"
 
 #~ msgid "Directions"
 #~ msgstr "Направлении"

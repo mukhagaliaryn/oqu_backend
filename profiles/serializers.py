@@ -8,4 +8,4 @@ class AuthorsListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ('id', 'user', 'is_author', )
+        fields = ('id', 'user', 'specialty', 'is_author', )

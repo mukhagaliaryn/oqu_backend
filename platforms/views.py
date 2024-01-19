@@ -5,7 +5,9 @@ from rest_framework import status, permissions
 
 from profiles.models import Profile
 from products.models import Course, Topic
-from products.serializers import LastCourseListSerializer, TopicSerializer, AuthorsListSerializer
+from products.serializers import (LastCourseListSerializer, HeadlinerCourseListSerializer,
+                                  TopicSerializer)
+from profiles.serializers import AuthorsListSerializer
 
 
 # Main API View
@@ -17,9 +19,9 @@ class MainAPIView(APIView):
         headliners = Course.objects.filter(is_headline=True)
         last_courses = Course.objects.all()[:8]
         popular_topics = Topic.objects.all()[:4]
-        authors = Profile.objects.all()[:8]
+        authors = Profile.objects.filter(is_author=True)[:8]
 
-        headliners_data = LastCourseListSerializer(headliners, many=True, context={'request': request})
+        headliners_data = HeadlinerCourseListSerializer(headliners, many=True, context={'request': request})
         last_courses_data = LastCourseListSerializer(last_courses, many=True, context={'request': request})
         authors_data = AuthorsListSerializer(authors, many=True, context={'request': request})
         popular_topics_data = TopicSerializer(popular_topics, many=True)
@@ -37,6 +39,7 @@ class MainAPIView(APIView):
         return Response(context, status=status.HTTP_200_OK)
 
 
+# Last courses
 class LastCoursesAPIView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
 
@@ -49,6 +52,7 @@ class LastCoursesAPIView(APIView):
         return Response(context, status=status.HTTP_200_OK)
 
 
+# Topics
 class TopicAPIView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
 
@@ -62,11 +66,21 @@ class TopicAPIView(APIView):
         return Response(context, status=status.HTTP_200_OK)
 
 
+# Settings
+class SettingsAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
+
+    def get(self, request):
+
+        return Response({'page': 'Settings page'}, status=status.HTTP_200_OK)
+
+
 # CourseDetail API View
 # ----------------------------------------------------------------------------------------
 class CourseDetailAPIView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
 
     def get(self, request, pk):
+        course = get_object_or_404(Course, pk=pk)
 
-        return Response({'page': 'Course Detail Page'}, status=status.HTTP_200_OK)
+        return Response({'course': course.name}, status=status.HTTP_200_OK)

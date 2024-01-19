@@ -65,7 +65,9 @@ class Course(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name=_('Category'))
     topic = models.ForeignKey(Topic, related_name='topic', on_delete=models.CASCADE,
                               verbose_name=_('Topic'))
-    poster = models.ImageField(verbose_name=_('Poster'), upload_to='products/poster/',
+    image = models.ImageField(verbose_name=_('Image'), upload_to='products/images/',
+                              blank=True, null=True)
+    poster = models.ImageField(verbose_name=_('Poster'), upload_to='products/posters/',
                                blank=True, null=True)
     about = models.TextField(verbose_name=_('About'), blank=True, null=True)
     description = models.TextField(verbose_name=_('Description'), blank=True, null=True)
