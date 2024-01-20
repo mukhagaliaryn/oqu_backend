@@ -52,6 +52,19 @@ class LastCoursesAPIView(APIView):
         return Response(context, status=status.HTTP_200_OK)
 
 
+# Last courses
+class AuthorsAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
+
+    def get(self, request):
+        authors = Profile.objects.filter(is_author=True)[:8]
+        authors_data = AuthorsListSerializer(authors, many=True, context={'request': request})
+        context = {
+            'authors': authors_data.data,
+        }
+        return Response(context, status=status.HTTP_200_OK)
+
+
 # Topics
 class TopicAPIView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
