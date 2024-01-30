@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from accounts.serializers import UserSerializer
-from products.models import Category, Topic, Course
+from products.models import Category, Topic, Course, Language
 
 
 # Category
@@ -45,3 +45,21 @@ class LastCourseListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = ('id', 'name', 'image', 'course_type', 'authors', 'all_rating', )
+
+
+# Course detail
+# -----------------------------------------------------------------------------------
+class LnSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Language
+        fields = ('id', 'name', 'slug',)
+
+
+class CourseDetailSerializer(serializers.ModelSerializer):
+    topic = TopicSerializer(read_only=True)
+    authors = UserSerializer(many=True)
+    ln = LnSerializer(many=True)
+
+    class Meta:
+        model = Course
+        exclude = ('category', 'poster', 'date_created', 'is_headline', )
