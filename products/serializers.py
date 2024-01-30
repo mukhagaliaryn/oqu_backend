@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from accounts.serializers import UserSerializer
-from products.models import Category, Topic, Course, Language
+from products.models import Category, Topic, Course, Language, Purpose, Rating, Lesson, Chapter
 
 
 # Category
@@ -53,6 +53,32 @@ class LnSerializer(serializers.ModelSerializer):
     class Meta:
         model = Language
         fields = ('id', 'name', 'slug',)
+
+
+class PurposeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Purpose
+        fields = ('id', 'item',)
+
+
+class RatingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Rating
+        fields = ('id', 'user', 'rating', 'comment', )
+
+
+class ChapterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Chapter
+        fields = ('id', 'chapter_name', )
+
+
+class LessonSerializer(serializers.ModelSerializer):
+    chapter = ChapterSerializer(read_only=True)
+
+    class Meta:
+        model = Lesson
+        fields = ('id', 'chapter', 'title', )
 
 
 class CourseDetailSerializer(serializers.ModelSerializer):

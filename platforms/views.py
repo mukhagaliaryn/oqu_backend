@@ -6,7 +6,7 @@ from rest_framework import status, permissions
 from profiles.models import Profile
 from products.models import Course, Topic
 from products.serializers import (LastCourseListSerializer, HeadlinerCourseListSerializer,
-                                  TopicSerializer, CourseDetailSerializer)
+                                  TopicSerializer, CourseDetailSerializer, PurposeSerializer)
 from profiles.serializers import AuthorsListSerializer
 
 
@@ -95,8 +95,11 @@ class CourseDetailAPIView(APIView):
 
     def get(self, request, pk):
         course = get_object_or_404(Course, pk=pk)
+        purposes = course.purpose_set.all()
         course_data = CourseDetailSerializer(course, partial=True, context={'request': request})
+        purposes_data = PurposeSerializer(purposes, many=True)
         context = {
-            'course': course_data.data
+            'course': course_data.data,
+            'purposes': purposes_data.data,
         }
         return Response(context, status=status.HTTP_200_OK)

@@ -78,7 +78,7 @@ class Course(models.Model):
     last_update = models.DateField(auto_now=True)
     requirements = models.ManyToManyField('Course', verbose_name=_('Requirements'), blank=True)
 
-    all_rating = models.DecimalField(verbose_name=_('All rating'), max_digits=3, decimal_places=2, default=0)
+    all_rating = models.DecimalField(verbose_name=_('All rating'), max_digits=2, decimal_places=1, default=0)
 
     # for headline slides
     is_headline = models.BooleanField(verbose_name=_('Headline'), default=False)
@@ -97,6 +97,7 @@ class Rating(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('User'))
     course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name=_('Course'))
     rating_score = models.PositiveSmallIntegerField(verbose_name=_('Score'), default=0)
+    comment = models.TextField(verbose_name=_('Comment'), blank=True, null=True)
 
     def __str__(self):
         return f'{self.user}:{self.course} - {self.rating_score}'
