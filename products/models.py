@@ -142,6 +142,7 @@ class Lesson(models.Model):
 
     date_created = models.DateTimeField(verbose_name=_('Date created'), auto_now_add=True)
     last_update = models.DateTimeField(verbose_name=_('Last update'), auto_now=True)
+    duration = models.PositiveSmallIntegerField(verbose_name=_('Duration (min)'), default=0)
     view = models.PositiveIntegerField(verbose_name=_('View'), default=0)
 
     def __str__(self):
@@ -156,7 +157,6 @@ class Lesson(models.Model):
 class Video(models.Model):
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, verbose_name=_('Lesson'))
     frame_url = models.CharField(verbose_name=_('iFrame URL'), max_length=255)
-    duration = models.PositiveSmallIntegerField(verbose_name=_('Duration (min)'), default=0)
 
     def __str__(self):
         return self.lesson
@@ -170,7 +170,6 @@ class Video(models.Model):
 class Article(models.Model):
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, verbose_name=_('Lesson'))
     description = models.TextField(verbose_name=_('Description'), blank=True, null=True)
-    duration = models.PositiveSmallIntegerField(verbose_name=_('Duration (min)'), default=0)
 
     def __str__(self):
         return self.lesson

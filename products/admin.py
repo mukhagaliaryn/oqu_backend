@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django_summernote.admin import SummernoteModelAdmin
+from django_summernote.admin import SummernoteModelAdmin, SummernoteModelAdminMixin
 from modeltranslation.admin import TranslationAdmin, TranslationTabularInline
 from .models import (
     Category, Topic, Language, Course, Purpose, Chapter, Lesson, Video, Article, Rating
@@ -49,18 +49,23 @@ class CourseAdmin(SummernoteModelAdmin):
 
 # Lesson admin
 # ------------------------------------------------------------------------------
+class VideoTabular(admin.TabularInline):
+    model = Video
+    extra = 1
+
+
+class ArticleTabular(SummernoteModelAdminMixin, admin.TabularInline):
+    model = Article
+    extra = 1
+    summernote_fields = ('description', )
+
+
 class LessonAdmin(admin.ModelAdmin):
-    list_display = ('title', 'chapter', 'access', 'date_created', )
+    list_display = ('title', 'chapter', 'access', 'duration', 'date_created', )
     search_fields = ('title', 'chapter')
-    list_filter = ('access', )
+    list_filter = ('access', 'chapter', )
 
-
-class VideoAdmin(admin.ModelAdmin):
-    list_display = ('lesson', 'duration', )
-
-
-class ArticleAdmin(admin.ModelAdmin):
-    pass
+    inlines = (VideoTabular, ArticleTabular, )
 
 
 class RatingAdmin(admin.ModelAdmin):
@@ -72,6 +77,4 @@ admin.site.register(Category, CategoryAdmin)
 admin.site.register(Language, LanguageAdmin)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Lesson, LessonAdmin)
-admin.site.register(Video, VideoAdmin)
-admin.site.register(Article, ArticleAdmin)
 admin.site.register(Rating, RatingAdmin)

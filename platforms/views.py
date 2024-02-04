@@ -4,9 +4,10 @@ from rest_framework.response import Response
 from rest_framework import status, permissions
 
 from profiles.models import Profile
-from products.models import Course, Topic
+from products.models import Course, Topic, Lesson
 from products.serializers import (LastCourseListSerializer, HeadlinerCourseListSerializer,
-                                  TopicSerializer, CourseDetailSerializer, PurposeSerializer)
+                                  TopicSerializer, CourseDetailSerializer, PurposeSerializer, LessonListSerializer,
+                                  ChapterSerializer)
 from profiles.serializers import AuthorsListSerializer
 
 
@@ -66,15 +67,45 @@ class AuthorsAPIView(APIView):
 
 
 # Topics
+# ----------------------------------------------------------------------------------------
 class TopicAPIView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
 
     def get(self, request, slug):
         topic = get_object_or_404(Topic, slug=slug)
         topic_courses = Course.objects.filter(topic=topic)
+
+        topic_data = TopicSerializer(topic, partial=True, context={'request': request})
         topic_courses_data = LastCourseListSerializer(topic_courses, many=True, context={'request': request})
+
         context = {
+            'topic': topic_data.data,
             'topic_courses': topic_courses_data.data,
+        }
+        return Response(context, status=status.HTTP_200_OK)
+
+
+# CourseDetail API View
+# ----------------------------------------------------------------------------------------
+class CourseDetailAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
+
+    def get(self, request, pk):
+        course = get_object_or_404(Course, pk=pk)
+        purposes = course.purpose_set.all()
+        chapters = course.chapter_set.all()
+        lessons = Lesson.objects.filter(chapter__in=chapters)
+
+        course_data = CourseDetailSerializer(course, partial=True, context={'request': request})
+        purposes_data = PurposeSerializer(purposes, many=True)
+        chapters_data = ChapterSerializer(chapters, many=True)
+        lessons_data = LessonListSerializer(lessons, many=True)
+
+        context = {
+            'course': course_data.data,
+            'purposes': purposes_data.data,
+            'chapters': chapters_data.data,
+            'lessons': lessons_data.data
         }
         return Response(context, status=status.HTTP_200_OK)
 
@@ -86,20 +117,3 @@ class SettingsAPIView(APIView):
     def get(self, request):
 
         return Response({'page': 'Settings page'}, status=status.HTTP_200_OK)
-
-
-# CourseDetail API View
-# ----------------------------------------------------------------------------------------
-class CourseDetailAPIView(APIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
-
-    def get(self, request, pk):
-        course = get_object_or_404(Course, pk=pk)
-        purposes = course.purpose_set.all()
-        course_data = CourseDetailSerializer(course, partial=True, context={'request': request})
-        purposes_data = PurposeSerializer(purposes, many=True)
-        context = {
-            'course': course_data.data,
-            'purposes': purposes_data.data,
-        }
-        return Response(context, status=status.HTTP_200_OK)

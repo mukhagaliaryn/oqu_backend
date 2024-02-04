@@ -13,17 +13,17 @@ from products.models import Category, Topic, Course, Language, Purpose, Rating, 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ('id', 'name', 'slug', )
+        fields = ('id', 'name', 'name_kk', 'slug', )
 
 
 # Topic
 # -----------------------------------------------------------------------------------
 class TopicSerializer(serializers.ModelSerializer):
-    category = CategorySerializer(read_only=True)
+    own = CategorySerializer(read_only=True)
 
     class Meta:
         model = Topic
-        fields = ('id', 'name', 'name_kk', 'slug', 'category',)
+        fields = ('id', 'name', 'name_kk', 'slug', 'own',)
 
 
 # Course serializers
@@ -73,14 +73,15 @@ class ChapterSerializer(serializers.ModelSerializer):
         fields = ('id', 'chapter_name', )
 
 
-class LessonSerializer(serializers.ModelSerializer):
-    chapter = ChapterSerializer(read_only=True)
+# Lessons list
+class LessonListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lesson
-        fields = ('id', 'chapter', 'title', )
+        fields = ('id', 'chapter', 'title', 'duration', )
 
 
+# Detail Course
 class CourseDetailSerializer(serializers.ModelSerializer):
     topic = TopicSerializer(read_only=True)
     authors = UserSerializer(many=True)
