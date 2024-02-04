@@ -1,15 +1,15 @@
 from rest_framework import serializers
 
 from accounts.serializers import UserSerializer
-from products.models import Category, Topic, Course, Language, Purpose, Rating, Lesson, Chapter
+from products.models import Category, Topic, Course, Language, Purpose, Rating, Lesson, Chapter, Video, Article
 
 
 # Category
-# -----------------------------------------------------------------------------------
-# -----------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
 
 # Category
-# -----------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
@@ -17,7 +17,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 # Topic
-# -----------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
 class TopicSerializer(serializers.ModelSerializer):
     own = CategorySerializer(read_only=True)
 
@@ -27,11 +27,11 @@ class TopicSerializer(serializers.ModelSerializer):
 
 
 # Course serializers
-# -----------------------------------------------------------------------------------
-# -----------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
 
 # Course lists
-# -----------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
 class HeadlinerCourseListSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -48,7 +48,7 @@ class LastCourseListSerializer(serializers.ModelSerializer):
 
 
 # Course detail
-# -----------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
 class LnSerializer(serializers.ModelSerializer):
     class Meta:
         model = Language
@@ -62,9 +62,11 @@ class PurposeSerializer(serializers.ModelSerializer):
 
 
 class RatingSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+
     class Meta:
         model = Rating
-        fields = ('id', 'user', 'rating', 'comment', )
+        fields = ('id', 'user', 'rating_score', 'comment', )
 
 
 class ChapterSerializer(serializers.ModelSerializer):
@@ -78,7 +80,7 @@ class LessonListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lesson
-        fields = ('id', 'chapter', 'title', 'duration', )
+        fields = ('id', 'chapter', 'title', 'lesson_type', 'duration', )
 
 
 # Detail Course
@@ -90,3 +92,28 @@ class CourseDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         exclude = ('category', 'poster', 'date_created', 'is_headline', )
+
+
+# Course player
+# ----------------------------------------------------------------------------------------------------------------------
+class LessonSerializer(serializers.ModelSerializer):
+    chapter = ChapterSerializer(read_only=True)
+
+    class Meta:
+        model = Lesson
+        fields = ('id', 'chapter', 'title', 'lesson_type', 'duration', )
+
+
+class VideoSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Video
+        fields = '__all__'
+
+
+class ArticleSerializer(serializers.ModelSerializer):
+    lesson = LessonSerializer(read_only=True)
+
+    class Meta:
+        model = Article
+        fields = '__all__'

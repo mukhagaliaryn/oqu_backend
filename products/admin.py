@@ -61,9 +61,9 @@ class ArticleTabular(SummernoteModelAdminMixin, admin.TabularInline):
 
 
 class LessonAdmin(admin.ModelAdmin):
-    list_display = ('title', 'chapter', 'access', 'duration', 'date_created', )
+    list_display = ('title', 'chapter', 'duration', 'date_created', 'access', )
     search_fields = ('title', 'chapter')
-    list_filter = ('access', 'chapter', )
+    list_filter = ('access', 'chapter', 'lesson_type', )
 
     inlines = (VideoTabular, ArticleTabular, )
 

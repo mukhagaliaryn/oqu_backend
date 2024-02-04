@@ -94,7 +94,7 @@ class Course(models.Model):
 
 # Rating
 class Rating(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('User'))
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_('User'))
     course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name=_('Course'))
     rating_score = models.PositiveSmallIntegerField(verbose_name=_('Score'), default=0)
     comment = models.TextField(verbose_name=_('Comment'), blank=True, null=True)
@@ -136,7 +136,14 @@ class Chapter(models.Model):
 
 # Lesson
 class Lesson(models.Model):
+    LESSON_TYPE = (
+        ('VIDEO', _('Video')),
+        ('ARTICLE', _('Article')),
+    )
+
     title = models.CharField(verbose_name=_('Title'), max_length=255)
+    lesson_type = models.CharField(verbose_name=_('Lesson type'), max_length=40,
+                                   choices=LESSON_TYPE, default=LESSON_TYPE[0][1])
     chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE, verbose_name=_('Chapter'))
     access = models.BooleanField(verbose_name=_('Access'), default=True)
 
@@ -155,11 +162,19 @@ class Lesson(models.Model):
 
 # Video
 class Video(models.Model):
+    URL_TYPE = (
+        ('YOUTUBE', _('YouTube')),
+        ('VIMEO', _('Vimeo')),
+        ('KINESCOPE', _('Kinescope')),
+    )
+
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, verbose_name=_('Lesson'))
+    url_type = models.CharField(verbose_name=_('URL type'), max_length=40,
+                                choices=URL_TYPE, default=URL_TYPE[0][1])
     frame_url = models.CharField(verbose_name=_('iFrame URL'), max_length=255)
 
     def __str__(self):
-        return self.lesson
+        return self.lesson.title
 
     class Meta:
         verbose_name = _('Video')
@@ -172,7 +187,7 @@ class Article(models.Model):
     description = models.TextField(verbose_name=_('Description'), blank=True, null=True)
 
     def __str__(self):
-        return self.lesson
+        return self.lesson.title
 
     class Meta:
         verbose_name = _('Article')

@@ -11,4 +11,5 @@ urlpatterns = [
 
     # course urls
     path('course/<pk>/', views.CourseDetailAPIView.as_view()),
+    path('course/<course_pk>/chapter/<chapter_pk>/lesson/<lesson_pk>/', views.CoursePlayerView.as_view()),
 ]

@@ -4,15 +4,15 @@ from rest_framework.response import Response
 from rest_framework import status, permissions
 
 from profiles.models import Profile
-from products.models import Course, Topic, Lesson
+from products.models import Course, Topic, Lesson, Rating, Video, Article
 from products.serializers import (LastCourseListSerializer, HeadlinerCourseListSerializer,
                                   TopicSerializer, CourseDetailSerializer, PurposeSerializer, LessonListSerializer,
-                                  ChapterSerializer)
+                                  ChapterSerializer, RatingSerializer, VideoSerializer, LessonSerializer)
 from profiles.serializers import AuthorsListSerializer
 
 
 # Main API View
-# ----------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
 class MainAPIView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
 
@@ -67,7 +67,7 @@ class AuthorsAPIView(APIView):
 
 
 # Topics
-# ----------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
 class TopicAPIView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
 
@@ -86,7 +86,7 @@ class TopicAPIView(APIView):
 
 
 # CourseDetail API View
-# ----------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
 class CourseDetailAPIView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
 
@@ -95,22 +95,74 @@ class CourseDetailAPIView(APIView):
         purposes = course.purpose_set.all()
         chapters = course.chapter_set.all()
         lessons = Lesson.objects.filter(chapter__in=chapters)
+        ratings = Rating.objects.filter(course=course).exclude(comment__exact='')
+
+        rating_scales = []
+        i = 1
+        while i <= 5:
+            rating_scales.append(Rating.objects.filter(course=course, rating_score=i).count())
+            i += 1
 
         course_data = CourseDetailSerializer(course, partial=True, context={'request': request})
         purposes_data = PurposeSerializer(purposes, many=True)
         chapters_data = ChapterSerializer(chapters, many=True)
         lessons_data = LessonListSerializer(lessons, many=True)
+        ratings_data = RatingSerializer(ratings, many=True, context={'request': request})
 
         context = {
             'course': course_data.data,
             'purposes': purposes_data.data,
             'chapters': chapters_data.data,
-            'lessons': lessons_data.data
+            'lessons': lessons_data.data,
+            'rating': {
+                'users_with_comments': ratings_data.data,
+                'rating_scales': rating_scales,
+                'all': Rating.objects.filter(course=course).count()
+            }
         }
         return Response(context, status=status.HTTP_200_OK)
 
 
+# CoursePlayerView API View
+# ----------------------------------------------------------------------------------------------------------------------
+class CoursePlayerView(APIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
+
+    def get(self, request, course_pk, chapter_pk, lesson_pk):
+        course = get_object_or_404(Course, pk=course_pk)
+        chapter = course.chapter_set.get(pk=chapter_pk)
+        lesson = chapter.lesson_set.get(pk=lesson_pk)
+
+        # lists
+        chapters = course.chapter_set.all()
+        lessons = Lesson.objects.filter(chapter__in=chapters)
+
+        context = {}
+        if lesson.lesson_type == 'VIDEO':
+            video = get_object_or_404(Video, lesson=lesson)
+            video_data = VideoSerializer(video, partial=True)
+            context['video'] = video_data.data
+        elif lesson.lesson_type == 'ARTICLE':
+            article = get_object_or_404(Article, lesson=lesson)
+            article_data = VideoSerializer(article, partial=True)
+            context['article'] = article_data.data
+
+        course_data = CourseDetailSerializer(course, partial=True, context={'request': request})
+        lesson_data = LessonSerializer(lesson, partial=True)
+
+        chapters_data = ChapterSerializer(chapters, many=True)
+        lessons_data = LessonListSerializer(lessons, many=True)
+
+        context['course'] = course_data.data
+        context['lesson'] = lesson_data.data
+        context['chapters'] = chapters_data.data
+        context['lessons'] = lessons_data.data
+
+        return Response(context, status=status.HTTP_200_OK)
+
+
 # Settings
+# ----------------------------------------------------------------------------------------------------------------------
 class SettingsAPIView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
 
