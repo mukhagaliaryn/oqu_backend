@@ -118,6 +118,11 @@ class CourseDetailAPIView(APIView):
                 'users_with_comments': ratings_data.data,
                 'rating_scales': rating_scales,
                 'all': Rating.objects.filter(course=course).count()
+            },
+            'first_url': {
+                'course_id': course.id,
+                'chapter_id': chapters.first().id,
+                'lesson_id': lessons.first().id
             }
         }
         return Response(context, status=status.HTTP_200_OK)
