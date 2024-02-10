@@ -151,6 +151,7 @@ class Lesson(models.Model):
     last_update = models.DateTimeField(verbose_name=_('Last update'), auto_now=True)
     duration = models.PositiveSmallIntegerField(verbose_name=_('Duration (min)'), default=0)
     view = models.PositiveIntegerField(verbose_name=_('View'), default=0)
+    index = models.PositiveSmallIntegerField(verbose_name=_('Index'), default=0)
 
     def __str__(self):
         return self.title

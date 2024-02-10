@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
 
-from profiles.models import Profile
+from profiles.models import Profile, UserCourse, UserChapter, UserLesson
 from products.models import Course, Topic, Lesson, Rating, Video, Article
 from products.serializers import (LastCourseListSerializer, HeadlinerCourseListSerializer,
                                   TopicSerializer, CourseDetailSerializer, PurposeSerializer, LessonListSerializer,
@@ -41,6 +41,7 @@ class MainAPIView(APIView):
 
 
 # Last courses
+# ----------------------------------------------------------------------------------------------------------------------
 class LastCoursesAPIView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
 
@@ -54,6 +55,7 @@ class LastCoursesAPIView(APIView):
 
 
 # Last courses
+# ----------------------------------------------------------------------------------------------------------------------
 class AuthorsAPIView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
 
@@ -85,6 +87,16 @@ class TopicAPIView(APIView):
         return Response(context, status=status.HTTP_200_OK)
 
 
+# Settings
+# ----------------------------------------------------------------------------------------------------------------------
+class SettingsAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
+
+    def get(self, request):
+
+        return Response({'page': 'Settings page'}, status=status.HTTP_200_OK)
+
+
 # CourseDetail API View
 # ----------------------------------------------------------------------------------------------------------------------
 class CourseDetailAPIView(APIView):
@@ -96,6 +108,10 @@ class CourseDetailAPIView(APIView):
         chapters = course.chapter_set.all()
         lessons = Lesson.objects.filter(chapter__in=chapters)
         ratings = Rating.objects.filter(course=course).exclude(comment__exact='')
+
+        user_course = get_object_or_404(UserCourse, user=request.user, course=course)
+        user_chapter = get_object_or_404(UserChapter, user=request.user, chapter=chapters.first())
+        user_lesson = get_object_or_404(UserLesson, user=request.user, lesson=lessons.first())
 
         rating_scales = []
         i = 1
@@ -120,10 +136,11 @@ class CourseDetailAPIView(APIView):
                 'all': Rating.objects.filter(course=course).count()
             },
             'first_url': {
-                'course_id': course.id,
-                'chapter_id': chapters.first().id,
-                'lesson_id': lessons.first().id
-            }
+                'user_course_id': user_course.id,
+                'user_chapter_id': user_chapter.first().id,
+                'user_lesson_id': user_lesson.first().id
+            },
+            'user_course__course_id': user_course.course.id
         }
         return Response(context, status=status.HTTP_200_OK)
 
@@ -164,13 +181,3 @@ class CoursePlayerView(APIView):
         context['lessons'] = lessons_data.data
 
         return Response(context, status=status.HTTP_200_OK)
-
-
-# Settings
-# ----------------------------------------------------------------------------------------------------------------------
-class SettingsAPIView(APIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
-
-    def get(self, request):
-
-        return Response({'page': 'Settings page'}, status=status.HTTP_200_OK)
