@@ -11,15 +11,18 @@ class HeadlinerAdmin(admin.ModelAdmin):
 
 
 class UserCourseAdmin(admin.ModelAdmin):
-    list_display = ('user', 'course', 'is_completed', )
+    list_display = ('course', 'user', 'is_completed', )
+    list_filter = ('is_completed', )
 
 
 class UserChapterAdmin(admin.ModelAdmin):
     list_display = ('user', 'chapter', 'is_completed', )
+    list_filter = ('is_completed', )
 
 
 class UserLessonAdmin(admin.ModelAdmin):
     list_display = ('user', 'lesson', 'is_completed', )
+    list_filter = ('is_completed',)
 
 
 admin.site.register(Profile, ProfileAdmin)

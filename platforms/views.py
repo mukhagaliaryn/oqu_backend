@@ -8,7 +8,8 @@ from products.models import Course, Topic, Lesson, Rating, Video, Article
 from products.serializers import (LastCourseListSerializer, HeadlinerCourseListSerializer,
                                   TopicSerializer, CourseDetailSerializer, PurposeSerializer, LessonListSerializer,
                                   ChapterSerializer, RatingSerializer, VideoSerializer, LessonSerializer)
-from profiles.serializers import AuthorsListSerializer
+from profiles.serializers import AuthorsListSerializer, UserCourseSerializer, UserLessonSerializer, \
+    UserChapterSerializer
 
 
 # Main API View
@@ -35,7 +36,7 @@ class MainAPIView(APIView):
         }
 
         if request.user.is_authenticated:
-            pass
+            context['user'] = request.user.full_name
 
         return Response(context, status=status.HTTP_200_OK)
 
@@ -106,12 +107,8 @@ class CourseDetailAPIView(APIView):
         course = get_object_or_404(Course, pk=pk)
         purposes = course.purpose_set.all()
         chapters = course.chapter_set.all()
-        lessons = Lesson.objects.filter(chapter__in=chapters)
+        lessons = Lesson.objects.filter(chapter__in=chapters).order_by('index')
         ratings = Rating.objects.filter(course=course).exclude(comment__exact='')
-
-        user_course = get_object_or_404(UserCourse, user=request.user, course=course)
-        user_chapter = get_object_or_404(UserChapter, user=request.user, chapter=chapters.first())
-        user_lesson = get_object_or_404(UserLesson, user=request.user, lesson=lessons.first())
 
         rating_scales = []
         i = 1
@@ -135,49 +132,66 @@ class CourseDetailAPIView(APIView):
                 'rating_scales': rating_scales,
                 'all': Rating.objects.filter(course=course).count()
             },
-            'first_url': {
-                'user_course_id': user_course.id,
-                'user_chapter_id': user_chapter.first().id,
-                'user_lesson_id': user_lesson.first().id
-            },
-            'user_course__course_id': user_course.course.id
         }
+
+        if request.user.is_authenticated:
+            user_course, created = UserCourse.objects.get_or_create(user=request.user, course=course)
+            user_chapter, created = UserChapter.objects.get_or_create(user=request.user, chapter=chapters.first())
+            user_lesson, created = UserLesson.objects.get_or_create(user=request.user, lesson=lessons.first())
+
+            context['first_url'] = {
+                'user_course_id': user_course.id,
+                'user_chapter_id': user_chapter.id,
+                'user_lesson_id': user_lesson.id
+            }
+            context['user_course__course_id'] = user_course.course.id
+
         return Response(context, status=status.HTTP_200_OK)
+
+    def post(self, request, pk):
+        course = get_object_or_404(Course, pk=pk)
+        chapters = course.chapter_set.all()
+        lessons = Lesson.objects.filter(chapter__in=chapters)
+
+        UserCourse.objects.get_or_create(course=course, user=request.user)
+        for chapter in chapters:
+            UserChapter.objects.get_or_create(chapter=chapter, user=request.user)
+        for lesson in lessons:
+            UserLesson.objects.get_or_create(lesson=lesson, user=request.user)
+
+        return Response({}, status=status.HTTP_201_CREATED)
 
 
 # CoursePlayerView API View
 # ----------------------------------------------------------------------------------------------------------------------
 class CoursePlayerView(APIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
 
     def get(self, request, course_pk, chapter_pk, lesson_pk):
-        course = get_object_or_404(Course, pk=course_pk)
-        chapter = course.chapter_set.get(pk=chapter_pk)
-        lesson = chapter.lesson_set.get(pk=lesson_pk)
+        user_course = get_object_or_404(UserCourse, pk=course_pk)
+        user_chapter = get_object_or_404(UserChapter, pk=chapter_pk)
+        user_lesson = get_object_or_404(UserLesson, pk=lesson_pk)
 
-        # lists
-        chapters = course.chapter_set.all()
-        lessons = Lesson.objects.filter(chapter__in=chapters)
+        # For lists
+        user_chapters = UserChapter.objects.filter(user=request.user, chapter__in=user_course.course.chapter_set.all())
+        user_lessons = UserLesson.objects.filter(user=request.user, lesson__in=user_chapter.chapter.lesson_set.all())
 
         context = {}
-        if lesson.lesson_type == 'VIDEO':
-            video = get_object_or_404(Video, lesson=lesson)
+        if user_lesson.lesson.lesson_type == 'VIDEO':
+            video = get_object_or_404(Video, lesson=user_lesson.lesson)
             video_data = VideoSerializer(video, partial=True)
             context['video'] = video_data.data
-        elif lesson.lesson_type == 'ARTICLE':
-            article = get_object_or_404(Article, lesson=lesson)
+        elif user_lesson.lesson.lesson_type == 'ARTICLE':
+            article = get_object_or_404(Article, lesson=user_lesson.lesson)
             article_data = VideoSerializer(article, partial=True)
             context['article'] = article_data.data
 
-        course_data = CourseDetailSerializer(course, partial=True, context={'request': request})
-        lesson_data = LessonSerializer(lesson, partial=True)
+        user_course_data = UserCourseSerializer(user_course, partial=True, context={'request': request})
+        # For lists
+        user_chapters_data = UserChapterSerializer(user_chapters, many=True)
+        user_lessons_data = UserLessonSerializer(user_lessons, many=True)
 
-        chapters_data = ChapterSerializer(chapters, many=True)
-        lessons_data = LessonListSerializer(lessons, many=True)
-
-        context['course'] = course_data.data
-        context['lesson'] = lesson_data.data
-        context['chapters'] = chapters_data.data
-        context['lessons'] = lessons_data.data
+        context['user_course'] = user_course_data.data
+        context['user_chapters'] = user_chapters_data.data
+        context['user_lessons'] = user_lessons_data.data
 
         return Response(context, status=status.HTTP_200_OK)

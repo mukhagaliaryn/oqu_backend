@@ -58,7 +58,7 @@ class UserChapter(models.Model):
     is_completed = models.BooleanField(verbose_name=_('Is_completed'), default=False)
 
     def __str__(self):
-        return '{}: {}'.format(self.user.full_name, self.chapter.title)
+        return '{}: {}'.format(self.user.full_name, self.chapter.chapter_name)
 
     class Meta:
         verbose_name = _('User chapter')

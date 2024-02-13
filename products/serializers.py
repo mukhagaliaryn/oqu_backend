@@ -4,7 +4,7 @@ from accounts.serializers import UserSerializer
 from products.models import Category, Topic, Course, Language, Purpose, Rating, Lesson, Chapter, Video, Article
 
 
-# Category
+# Category serializers
 # ----------------------------------------------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -69,6 +69,7 @@ class RatingSerializer(serializers.ModelSerializer):
         fields = ('id', 'user', 'rating_score', 'comment', )
 
 
+# Chapter
 class ChapterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chapter
@@ -83,7 +84,7 @@ class LessonListSerializer(serializers.ModelSerializer):
         fields = ('id', 'chapter', 'title', 'lesson_type', 'duration', )
 
 
-# Detail Course
+# Course detail
 class CourseDetailSerializer(serializers.ModelSerializer):
     topic = TopicSerializer(read_only=True)
     authors = UserSerializer(many=True)
@@ -101,7 +102,7 @@ class LessonSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lesson
-        fields = ('id', 'chapter', 'title', 'lesson_type', 'duration', )
+        fields = ('id', 'chapter', 'title', 'lesson_type', 'index', 'duration', )
 
 
 class VideoSerializer(serializers.ModelSerializer):

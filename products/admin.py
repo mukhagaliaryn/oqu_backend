@@ -61,7 +61,7 @@ class ArticleTabular(SummernoteModelAdminMixin, admin.TabularInline):
 
 
 class LessonAdmin(admin.ModelAdmin):
-    list_display = ('title', 'chapter', 'duration', 'date_created', 'access', )
+    list_display = ('title', 'chapter', 'duration', 'index', 'date_created', 'access', )
     search_fields = ('title', 'chapter')
     list_filter = ('access', 'chapter', 'lesson_type', )
 
