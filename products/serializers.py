@@ -98,7 +98,6 @@ class CourseDetailSerializer(serializers.ModelSerializer):
 # Course player
 # ----------------------------------------------------------------------------------------------------------------------
 class LessonSerializer(serializers.ModelSerializer):
-    chapter = ChapterSerializer(read_only=True)
 
     class Meta:
         model = Lesson
@@ -106,6 +105,7 @@ class LessonSerializer(serializers.ModelSerializer):
 
 
 class VideoSerializer(serializers.ModelSerializer):
+    lesson = LessonSerializer(read_only=True)
 
     class Meta:
         model = Video

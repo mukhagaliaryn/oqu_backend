@@ -135,17 +135,19 @@ class CourseDetailAPIView(APIView):
         }
 
         if request.user.is_authenticated:
-            user_course, created = UserCourse.objects.get_or_create(user=request.user, course=course)
-            user_chapter, created = UserChapter.objects.get_or_create(user=request.user, chapter=chapters.first())
-            user_lesson, created = UserLesson.objects.get_or_create(user=request.user, lesson=lessons.first())
+            try:
+                user_course = UserCourse.objects.get(user=request.user, course=course)
+                user_chapter = UserChapter.objects.get(user=request.user, chapter=chapters.first())
+                user_lesson = UserLesson.objects.get(user=request.user, lesson=lessons.first())
 
-            context['first_url'] = {
-                'user_course_id': user_course.id,
-                'user_chapter_id': user_chapter.id,
-                'user_lesson_id': user_lesson.id
-            }
-            context['user_course__course_id'] = user_course.course.id
-
+                context['first_url'] = {
+                    'user_course_id': user_course.id,
+                    'user_chapter_id': user_chapter.id,
+                    'user_lesson_id': user_lesson.id
+                }
+                context['user_course__course_id'] = user_course.course.id
+            except:
+                pass
         return Response(context, status=status.HTTP_200_OK)
 
     def post(self, request, pk):
@@ -154,6 +156,18 @@ class CourseDetailAPIView(APIView):
         lessons = Lesson.objects.filter(chapter__in=chapters)
 
         UserCourse.objects.get_or_create(course=course, user=request.user)
+        for chapter in chapters:
+            UserChapter.objects.get_or_create(chapter=chapter, user=request.user)
+        for lesson in lessons:
+            UserLesson.objects.get_or_create(lesson=lesson, user=request.user)
+
+        return Response({}, status=status.HTTP_201_CREATED)
+
+    def put(self, request, pk):
+        course = get_object_or_404(Course, pk=pk)
+        chapters = course.chapter_set.all()
+        lessons = Lesson.objects.filter(chapter__in=chapters)
+
         for chapter in chapters:
             UserChapter.objects.get_or_create(chapter=chapter, user=request.user)
         for lesson in lessons:
