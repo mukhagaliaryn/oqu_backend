@@ -7,9 +7,10 @@ from profiles.models import Profile, UserCourse, UserChapter, UserLesson
 from products.models import Course, Topic, Lesson, Rating, Video, Article
 from products.serializers import (LastCourseListSerializer, HeadlinerCourseListSerializer,
                                   TopicSerializer, CourseDetailSerializer, PurposeSerializer, LessonListSerializer,
-                                  ChapterSerializer, RatingSerializer, VideoSerializer, LessonSerializer)
-from profiles.serializers import AuthorsListSerializer, UserCourseSerializer, UserLessonSerializer, \
-    UserChapterSerializer
+                                  ChapterSerializer, RatingSerializer, VideoSerializer)
+from profiles.serializers import (AuthorsListSerializer, UserCourseSerializer, UserLessonSerializer,
+                                  UserChapterSerializer
+                                  )
 
 
 # Main API View
@@ -20,7 +21,7 @@ class MainAPIView(APIView):
     def get(self, request):
         headliners = Course.objects.filter(is_headline=True)
         last_courses = Course.objects.all()[:8]
-        popular_topics = Topic.objects.all()[:4]
+        popular_topics = Topic.objects.all()[:5]
         authors = Profile.objects.filter(is_author=True)[:8]
 
         headliners_data = HeadlinerCourseListSerializer(headliners, many=True, context={'request': request})
@@ -181,9 +182,9 @@ class CourseDetailAPIView(APIView):
 class CoursePlayerView(APIView):
 
     def get(self, request, course_pk, chapter_pk, lesson_pk):
-        user_course = get_object_or_404(UserCourse, pk=course_pk)
-        user_chapter = get_object_or_404(UserChapter, pk=chapter_pk)
-        user_lesson = get_object_or_404(UserLesson, pk=lesson_pk)
+        user_course = get_object_or_404(UserCourse, pk=course_pk, user=request.user)
+        user_chapter = get_object_or_404(UserChapter, pk=chapter_pk, user=request.user)
+        user_lesson = get_object_or_404(UserLesson, pk=lesson_pk, user=request.user)
 
         # For lists
         user_chapters = UserChapter.objects.filter(user=request.user, chapter__in=user_course.course.chapter_set.all())
@@ -209,3 +210,11 @@ class CoursePlayerView(APIView):
         context['user_lessons'] = user_lessons_data.data
 
         return Response(context, status=status.HTTP_200_OK)
+
+    def put(self, request, course_pk, chapter_pk, lesson_pk):
+        user_course = get_object_or_404(UserCourse, pk=course_pk)
+        user_chapter = get_object_or_404(UserChapter, pk=chapter_pk)
+        user_lesson = get_object_or_404(UserLesson, pk=lesson_pk)
+        user_lesson.is_completed = True
+        user_lesson.save()
+        return Response({'is_completed': user_lesson.is_completed}, status=status.HTTP_204_NO_CONTENT)
