@@ -133,6 +133,7 @@ class CourseDetailAPIView(APIView):
                 'rating_scales': rating_scales,
                 'all': Rating.objects.filter(course=course).count()
             },
+            'course_following_users': UserCourse.objects.filter(course=course).count()
         }
 
         if request.user.is_authenticated:

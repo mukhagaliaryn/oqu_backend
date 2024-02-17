@@ -41,6 +41,7 @@ class ChapterTable(admin.TabularInline):
 class CourseAdmin(SummernoteModelAdmin):
     list_display = ('name', 'category', 'topic', 'last_update', 'is_headline', )
     list_filter = ('category', 'topic',)
+    search_fields = ('name', 'category', 'topic',)
     filter_horizontal = ('authors', 'requirements', 'ln', )
     summernote_fields = ('description', )
 
