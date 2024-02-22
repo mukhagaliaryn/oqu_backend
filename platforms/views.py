@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
-
+from django.db.models import Sum
 from profiles.models import Profile, UserCourse, UserChapter, UserLesson
 from products.models import Course, Topic, Lesson, Rating, Video, Article
 from products.serializers import (LastCourseListSerializer, HeadlinerCourseListSerializer,
@@ -111,11 +111,15 @@ class CourseDetailAPIView(APIView):
         lessons = Lesson.objects.filter(chapter__in=chapters).order_by('index')
         ratings = Rating.objects.filter(course=course).exclude(comment__exact='')
 
+        # Rating counting
         rating_scales = []
         i = 1
         while i <= 5:
             rating_scales.append(Rating.objects.filter(course=course, rating_score=i).count())
             i += 1
+
+        # All lesson duration sum
+        all_lesson_duration_sum = lessons.aggregate(Sum('duration'))
 
         course_data = CourseDetailSerializer(course, partial=True, context={'request': request})
         purposes_data = PurposeSerializer(purposes, many=True)
@@ -125,6 +129,11 @@ class CourseDetailAPIView(APIView):
 
         context = {
             'course': course_data.data,
+            'course_following_users': UserCourse.objects.filter(course=course).count(),
+            'chapters_count': chapters.count(),
+            'lessons_count': lessons.count(),
+            'all_lesson_duration_sum': all_lesson_duration_sum['duration__sum'],
+
             'purposes': purposes_data.data,
             'chapters': chapters_data.data,
             'lessons': lessons_data.data,
@@ -133,7 +142,6 @@ class CourseDetailAPIView(APIView):
                 'rating_scales': rating_scales,
                 'all': Rating.objects.filter(course=course).count()
             },
-            'course_following_users': UserCourse.objects.filter(course=course).count()
         }
 
         if request.user.is_authenticated:
