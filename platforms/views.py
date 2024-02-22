@@ -189,7 +189,7 @@ class CoursePlayerView(APIView):
 
         # For lists
         user_chapters = UserChapter.objects.filter(user=request.user, chapter__in=user_course.course.chapter_set.all())
-        user_lessons = UserLesson.objects.filter(user=request.user, lesson__in=user_chapter.chapter.lesson_set.all())
+        user_lessons = UserLesson.objects.filter(user=request.user, lesson__chapter__in=user_course.course.chapter_set.all())
 
         context = {}
         if user_lesson.lesson.lesson_type == 'VIDEO':

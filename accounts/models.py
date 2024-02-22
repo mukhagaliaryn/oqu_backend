@@ -16,14 +16,14 @@ class UserManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(email=email.lower(), full_name=full_name)
         user.set_password(password)
-        user.save()
+        user.save(using=self._db)
         return user
 
     def create_superuser(self, email, full_name, password=None):
         user = self.create_user(email, full_name, password=password)
-        user.is_superuser = True
         user.is_staff = True
-        user.save()
+        user.is_superuser = True
+        user.save(using=self._db)
         return user
 
 

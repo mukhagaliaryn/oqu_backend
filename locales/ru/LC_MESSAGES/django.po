@@ -38,7 +38,7 @@ msgstr "У пользователя должен быть адрес элект�
 
 #: accounts/models.py:14
 msgid "The full name should not be empty"
-msgstr "Полное имя не должно быть пустым"
+msgstr "Имя и фамилия не должно быть пустым"
 
 #: accounts/models.py:38
 msgid "The maximum file size should be {}MB"
@@ -50,7 +50,7 @@ msgstr ""
 
 #: accounts/models.py:41
 msgid "Full name"
-msgstr "Полное имя"
+msgstr "Имя и фамилия"
 
 #: accounts/models.py:43 products/models.py:12 products/models.py:28
 #: products/models.py:68
