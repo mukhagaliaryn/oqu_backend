@@ -3,14 +3,17 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
 from django.db.models import Sum
+
+from platforms.serializers.course import CourseSerializer, CoursePurposeSerializer, CourseChapterListSerializer, \
+    CourseLessonListSerializer, CourseRatingListSerializer
+from platforms.serializers.main import MainHeadlinerCourseListSerializer, MainCourseListSerializer, \
+    MainAuthorListSerializer, MainTopicListSerializer
+from platforms.serializers.play import PlayVideoSerializer, PlayArticleSerializer, PlayUserCourseSerializer, \
+    PlayUserChapterListSerializer, PlayUserLessonListSerializer
+from platforms.serializers.topic import TopicSerializer, TopicCourseListSerializer
+
 from profiles.models import Profile, UserCourse, UserChapter, UserLesson
 from products.models import Course, Topic, Lesson, Rating, Video, Article
-from products.serializers import (LastCourseListSerializer, HeadlinerCourseListSerializer,
-                                  TopicSerializer, CourseDetailSerializer, PurposeSerializer, LessonListSerializer,
-                                  ChapterSerializer, RatingSerializer, VideoSerializer)
-from profiles.serializers import (AuthorsListSerializer, UserCourseSerializer, UserLessonSerializer,
-                                  UserChapterSerializer
-                                  )
 
 
 # Main API View
@@ -24,10 +27,10 @@ class MainAPIView(APIView):
         popular_topics = Topic.objects.all()[:5]
         authors = Profile.objects.filter(is_author=True)[:8]
 
-        headliners_data = HeadlinerCourseListSerializer(headliners, many=True, context={'request': request})
-        last_courses_data = LastCourseListSerializer(last_courses, many=True, context={'request': request})
-        authors_data = AuthorsListSerializer(authors, many=True, context={'request': request})
-        popular_topics_data = TopicSerializer(popular_topics, many=True)
+        headliners_data = MainHeadlinerCourseListSerializer(headliners, many=True, context={'request': request})
+        last_courses_data = MainCourseListSerializer(last_courses, many=True, context={'request': request})
+        authors_data = MainAuthorListSerializer(authors, many=True, context={'request': request})
+        popular_topics_data = MainTopicListSerializer(popular_topics, many=True)
 
         context = {
             'headliners': headliners_data.data,
@@ -49,7 +52,7 @@ class LastCoursesAPIView(APIView):
 
     def get(self, request):
         last_courses = Course.objects.all()[:48]
-        last_courses_data = LastCourseListSerializer(last_courses, many=True, context={'request': request})
+        last_courses_data = MainCourseListSerializer(last_courses, many=True, context={'request': request})
         context = {
             'last_courses': last_courses_data.data,
         }
@@ -63,14 +66,14 @@ class AuthorsAPIView(APIView):
 
     def get(self, request):
         authors = Profile.objects.filter(is_author=True)[:8]
-        authors_data = AuthorsListSerializer(authors, many=True, context={'request': request})
+        authors_data = MainAuthorListSerializer(authors, many=True, context={'request': request})
         context = {
             'authors': authors_data.data,
         }
         return Response(context, status=status.HTTP_200_OK)
 
 
-# Topics
+# Topic
 # ----------------------------------------------------------------------------------------------------------------------
 class TopicAPIView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
@@ -80,7 +83,7 @@ class TopicAPIView(APIView):
         topic_courses = Course.objects.filter(topic=topic)
 
         topic_data = TopicSerializer(topic, partial=True, context={'request': request})
-        topic_courses_data = LastCourseListSerializer(topic_courses, many=True, context={'request': request})
+        topic_courses_data = TopicCourseListSerializer(topic_courses, many=True, context={'request': request})
 
         context = {
             'topic': topic_data.data,
@@ -121,11 +124,11 @@ class CourseDetailAPIView(APIView):
         # All lesson duration sum
         all_lesson_duration_sum = lessons.aggregate(Sum('duration'))
 
-        course_data = CourseDetailSerializer(course, partial=True, context={'request': request})
-        purposes_data = PurposeSerializer(purposes, many=True)
-        chapters_data = ChapterSerializer(chapters, many=True)
-        lessons_data = LessonListSerializer(lessons, many=True)
-        ratings_data = RatingSerializer(ratings, many=True, context={'request': request})
+        course_data = CourseSerializer(course, partial=True, context={'request': request})
+        purposes_data = CoursePurposeSerializer(purposes, many=True)
+        chapters_data = CourseChapterListSerializer(chapters, many=True)
+        lessons_data = CourseLessonListSerializer(lessons, many=True)
+        ratings_data = CourseRatingListSerializer(ratings, many=True, context={'request': request})
 
         context = {
             'course': course_data.data,
@@ -203,17 +206,17 @@ class CoursePlayerView(APIView):
         context = {}
         if user_lesson.lesson.lesson_type == 'VIDEO':
             video = get_object_or_404(Video, lesson=user_lesson.lesson)
-            video_data = VideoSerializer(video, partial=True)
+            video_data = PlayVideoSerializer(video, partial=True)
             context['video'] = video_data.data
         elif user_lesson.lesson.lesson_type == 'ARTICLE':
             article = get_object_or_404(Article, lesson=user_lesson.lesson)
-            article_data = VideoSerializer(article, partial=True)
+            article_data = PlayArticleSerializer(article, partial=True)
             context['article'] = article_data.data
 
-        user_course_data = UserCourseSerializer(user_course, partial=True, context={'request': request})
+        user_course_data = PlayUserCourseSerializer(user_course, partial=True, context={'request': request})
         # For lists
-        user_chapters_data = UserChapterSerializer(user_chapters, many=True)
-        user_lessons_data = UserLessonSerializer(user_lessons, many=True)
+        user_chapters_data = PlayUserChapterListSerializer(user_chapters, many=True)
+        user_lessons_data = PlayUserLessonListSerializer(user_lessons, many=True)
 
         context['user_course'] = user_course_data.data
         context['user_chapters'] = user_chapters_data.data
