@@ -112,7 +112,8 @@ class CourseDetailAPIView(APIView):
         purposes = course.purpose_set.all()
         chapters = course.chapter_set.all()
         lessons = Lesson.objects.filter(chapter__in=chapters).order_by('index')
-        video = Video.objects.filter(lesson__in=lessons)[:3]
+        video = Video.objects.filter(
+            lesson__in=Lesson.objects.filter(chapter__in=chapters, access=True))[:3]
         ratings = Rating.objects.filter(course=course).exclude(comment__exact='')
 
         # Rating counting

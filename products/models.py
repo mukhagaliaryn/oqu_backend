@@ -146,7 +146,7 @@ class Lesson(models.Model):
     lesson_type = models.CharField(verbose_name=_('Lesson type'), max_length=40,
                                    choices=LESSON_TYPE, default=LESSON_TYPE[0][1])
     chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE, verbose_name=_('Chapter'))
-    access = models.BooleanField(verbose_name=_('Access'), default=True)
+    access = models.BooleanField(verbose_name=_('Access'), default=False)
 
     date_created = models.DateTimeField(verbose_name=_('Date created'), auto_now_add=True)
     last_update = models.DateTimeField(verbose_name=_('Last update'), auto_now=True)
