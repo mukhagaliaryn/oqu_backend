@@ -4,8 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 # Category
-# ----------------------------------------------------------------------------------------
-# ----------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
 class Category(models.Model):
     name = models.CharField(verbose_name=_('Title'), max_length=255, unique=True)
     slug = models.SlugField(verbose_name=_('Key'), max_length=255, unique=True)
@@ -38,8 +37,7 @@ class Topic(models.Model):
 
 
 # Course model
-# ----------------------------------------------------------------------------------------
-# ----------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
 # Language
 class Language(models.Model):
     name = models.CharField(verbose_name=_('Language name'), max_length=64)
@@ -56,9 +54,11 @@ class Language(models.Model):
 # Course
 class Course(models.Model):
     COURSE_TYPE = (
+        ('EXPRESS', _('Express')),
         ('DETAIL', _('Detailed')),
         ('DIRECT', _('Directed')),
     )
+
     name = models.CharField(verbose_name=_('Title'), max_length=40)
     course_type = models.CharField(verbose_name=_('Type'), max_length=40,
                                    choices=COURSE_TYPE, default=COURSE_TYPE[0][1])
@@ -135,6 +135,7 @@ class Chapter(models.Model):
 
 
 # Lesson
+# ----------------------------------------------------------------------------------------------------------------------
 class Lesson(models.Model):
     LESSON_TYPE = (
         ('VIDEO', _('Video')),

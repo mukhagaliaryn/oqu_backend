@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from accounts.models import User
-from products.models import Language, Purpose, Rating, Chapter, Lesson, Topic, Course
+from products.models import Language, Purpose, Rating, Chapter, Lesson, Topic, Course, Video
 
 
 class AuthorListSerializer(serializers.ModelSerializer):
@@ -51,6 +51,14 @@ class CourseLessonListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
         fields = ('id', 'chapter', 'title', 'lesson_type', 'duration', )
+
+
+# Course Video
+class CourseVideoListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Video
+        fields = ('id', 'frame_url', )
 
 
 # Course Detail

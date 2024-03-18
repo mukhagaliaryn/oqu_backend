@@ -5,7 +5,7 @@ from rest_framework import status, permissions
 from django.db.models import Sum
 
 from platforms.serializers.course import CourseSerializer, CoursePurposeSerializer, CourseChapterListSerializer, \
-    CourseLessonListSerializer, CourseRatingListSerializer
+    CourseLessonListSerializer, CourseRatingListSerializer, CourseVideoListSerializer
 from platforms.serializers.main import MainHeadlinerCourseListSerializer, MainCourseListSerializer, \
     MainAuthorListSerializer, MainTopicListSerializer
 from platforms.serializers.play import PlayVideoSerializer, PlayArticleSerializer, PlayUserCourseSerializer, \
@@ -59,7 +59,7 @@ class LastCoursesAPIView(APIView):
         return Response(context, status=status.HTTP_200_OK)
 
 
-# Last courses
+# Last authors
 # ----------------------------------------------------------------------------------------------------------------------
 class AuthorsAPIView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
@@ -112,22 +112,19 @@ class CourseDetailAPIView(APIView):
         purposes = course.purpose_set.all()
         chapters = course.chapter_set.all()
         lessons = Lesson.objects.filter(chapter__in=chapters).order_by('index')
+        video = Video.objects.filter(lesson__in=lessons)[:3]
         ratings = Rating.objects.filter(course=course).exclude(comment__exact='')
 
         # Rating counting
         rating_scales = []
-        i = 1
-        while i <= 5:
+        for i in range(1, 6):
             rating_scales.append(Rating.objects.filter(course=course, rating_score=i).count())
-            i += 1
-
-        # All lesson duration sum
-        all_lesson_duration_sum = lessons.aggregate(Sum('duration'))
 
         course_data = CourseSerializer(course, partial=True, context={'request': request})
         purposes_data = CoursePurposeSerializer(purposes, many=True)
         chapters_data = CourseChapterListSerializer(chapters, many=True)
         lessons_data = CourseLessonListSerializer(lessons, many=True)
+        video_data = CourseVideoListSerializer(video, many=True)
         ratings_data = CourseRatingListSerializer(ratings, many=True, context={'request': request})
 
         context = {
@@ -135,11 +132,12 @@ class CourseDetailAPIView(APIView):
             'course_following_users': UserCourse.objects.filter(course=course).count(),
             'chapters_count': chapters.count(),
             'lessons_count': lessons.count(),
-            'all_lesson_duration_sum': all_lesson_duration_sum['duration__sum'],
+            'all_lesson_duration_sum': lessons.aggregate(Sum('duration'))['duration__sum'],
 
             'purposes': purposes_data.data,
             'chapters': chapters_data.data,
             'lessons': lessons_data.data,
+            'open_video': video_data.data,
             'rating': {
                 'users_with_comments': ratings_data.data,
                 'rating_scales': rating_scales,
