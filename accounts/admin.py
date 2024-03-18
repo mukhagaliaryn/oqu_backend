@@ -30,15 +30,15 @@ class UserAdmin(BaseUserAdmin):
 # Account Admin
 # ----------------------------------------------------------------------------------------------------------------------
 class AccountAdmin(admin.ModelAdmin):
-    list_display = ('user', 'city', 'account_fill',)
-    list_filter = ('account_fill',)
+    list_display = ('user', 'account_type', 'id_number', 'specialty', )
+    list_filter = ('account_type',)
 
     fieldsets = (
         (None, {'fields': ('user', 'account_type', 'id_number', 'specialty', )}),
-        (_('Personal data'), {'fields': ('city', 'address', 'phone', 'website',)}),
+        (_('Personal data'), {'fields': ('city', 'address', 'phone', 'website', )}),
     )
 
-    search_fields = ('user', 'city', )
+    search_fields = ('user__full_name', 'user__email', 'id_number', 'specialty', )
     ordering = ('user',)
     filter_horizontal = ()
 
