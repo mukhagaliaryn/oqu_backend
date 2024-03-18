@@ -1,8 +1,7 @@
 from rest_framework import serializers
 
-from accounts.models import User
+from accounts.models import User, Account
 from products.models import Course, Topic
-from profiles.models import Profile
 
 
 # Main Headliner List
@@ -39,8 +38,8 @@ class MainAuthorListSerializer(serializers.ModelSerializer):
     user = AuthorUserSerializer(read_only=True)
 
     class Meta:
-        model = Profile
-        fields = ('id', 'user', 'specialty', 'is_author', )
+        model = Account
+        fields = ('id', 'user', 'account_type', 'specialty', )
 
 
 # Main Topic List

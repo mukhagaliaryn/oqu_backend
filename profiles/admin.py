@@ -1,13 +1,5 @@
 from django.contrib import admin
-from .models import Profile, Headliner, UserCourse, UserChapter, UserLesson
-
-
-class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'specialty', 'is_author', )
-
-
-class HeadlinerAdmin(admin.ModelAdmin):
-    pass
+from .models import UserCourse, UserChapter, UserLesson
 
 
 class UserCourseAdmin(admin.ModelAdmin):
@@ -25,8 +17,6 @@ class UserLessonAdmin(admin.ModelAdmin):
     list_filter = ('is_completed',)
 
 
-admin.site.register(Profile, ProfileAdmin)
-admin.site.register(Headliner, HeadlinerAdmin)
 admin.site.register(UserCourse, UserCourseAdmin)
 admin.site.register(UserChapter, UserChapterAdmin)
 admin.site.register(UserLesson, UserLessonAdmin)

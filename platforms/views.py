@@ -12,7 +12,8 @@ from platforms.serializers.play import PlayVideoSerializer, PlayArticleSerialize
     PlayUserChapterListSerializer, PlayUserLessonListSerializer
 from platforms.serializers.topic import TopicSerializer, TopicCourseListSerializer
 
-from profiles.models import Profile, UserCourse, UserChapter, UserLesson
+from accounts.models import Account
+from profiles.models import UserCourse, UserChapter, UserLesson
 from products.models import Course, Topic, Lesson, Rating, Video, Article
 
 
@@ -25,7 +26,7 @@ class MainAPIView(APIView):
         headliners = Course.objects.filter(is_headline=True)
         last_courses = Course.objects.all()[:8]
         popular_topics = Topic.objects.all()[:5]
-        authors = Profile.objects.filter(is_author=True)[:8]
+        authors = Account.objects.filter(account_type='AUTHOR')[:8]
 
         headliners_data = MainHeadlinerCourseListSerializer(headliners, many=True, context={'request': request})
         last_courses_data = MainCourseListSerializer(last_courses, many=True, context={'request': request})
@@ -65,7 +66,7 @@ class AuthorsAPIView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
 
     def get(self, request):
-        authors = Profile.objects.filter(is_author=True)[:8]
+        authors = Account.objects.filter(account_type='AUTHOR')
         authors_data = MainAuthorListSerializer(authors, many=True, context={'request': request})
         context = {
             'authors': authors_data.data,
