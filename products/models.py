@@ -54,9 +54,8 @@ class Language(models.Model):
 # Course
 class Course(models.Model):
     COURSE_TYPE = (
-        ('EXPRESS', _('Express')),
-        ('DETAIL', _('Detailed')),
-        ('DIRECT', _('Directed')),
+        ('FREE', _('Free')),
+        ('PRO', _('Pro')),
     )
 
     name = models.CharField(verbose_name=_('Title'), max_length=40)
@@ -90,6 +89,20 @@ class Course(models.Model):
         verbose_name = _('Course')
         verbose_name_plural = _('Courses')
         ordering = ('-date_created', )
+
+
+# Subscribe
+class Subscribe(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_('User'))
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name=_('Course'))
+    course_price = models.DecimalField(verbose_name=_('Course price'), max_digits=8, decimal_places=2)
+
+    def __str__(self):
+        return _('Subscribe: {}: {}').format(self.course, self.user)
+
+    class Meta:
+        verbose_name = _('Subscribe')
+        verbose_name_plural = _('Subscribes')
 
 
 # Rating

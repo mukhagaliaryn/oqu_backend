@@ -2,7 +2,7 @@ from django.contrib import admin
 from django_summernote.admin import SummernoteModelAdmin, SummernoteModelAdminMixin
 from modeltranslation.admin import TranslationAdmin, TranslationTabularInline
 from .models import (
-    Category, Topic, Language, Course, Purpose, Chapter, Lesson, Video, Article, Rating
+    Category, Topic, Language, Course, Purpose, Chapter, Lesson, Video, Article, Rating, Subscribe
 )
 
 
@@ -25,7 +25,7 @@ class CategoryAdmin(TranslationAdmin):
 
 
 # Product admin
-# ---------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
 class PurposeTable(admin.TabularInline):
     model = Purpose
     fields = ('product', 'item',)
@@ -40,7 +40,7 @@ class ChapterTable(admin.TabularInline):
 
 class CourseAdmin(SummernoteModelAdmin):
     list_display = ('name', 'category', 'topic', 'last_update', 'is_headline', )
-    list_filter = ('category', 'topic',)
+    list_filter = ('category', 'topic', 'course_type',)
     search_fields = ('name', 'category', 'topic',)
     filter_horizontal = ('authors', 'requirements', 'ln', )
     summernote_fields = ('description', )
@@ -48,8 +48,17 @@ class CourseAdmin(SummernoteModelAdmin):
     inlines = [PurposeTable, ChapterTable, ]
 
 
+class RatingAdmin(admin.ModelAdmin):
+    pass
+
+
+class SubscribeAdmin(admin.ModelAdmin):
+    list_display = ('course', 'user', 'course_price', )
+    list_filter = ('course', 'user', )
+
+
 # Lesson admin
-# ------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
 class VideoTabular(admin.TabularInline):
     model = Video
     extra = 1
@@ -69,13 +78,10 @@ class LessonAdmin(admin.ModelAdmin):
     inlines = (VideoTabular, ArticleTabular, )
 
 
-class RatingAdmin(admin.ModelAdmin):
-    pass
-
-
-# ------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Language, LanguageAdmin)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Lesson, LessonAdmin)
 admin.site.register(Rating, RatingAdmin)
+admin.site.register(Subscribe, SubscribeAdmin)
