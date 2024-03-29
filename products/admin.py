@@ -24,22 +24,22 @@ class CategoryAdmin(TranslationAdmin):
     inlines = (TopicInline, )
 
 
-# Product admin
+# Course admin
 # ----------------------------------------------------------------------------------------------------------------------
 class PurposeTable(admin.TabularInline):
     model = Purpose
     fields = ('product', 'item',)
-    extra = 1
+    extra = 0
 
 
 class ChapterTable(admin.TabularInline):
     model = Chapter
-    fields = ('product', 'chapter_name', 'about', )
-    extra = 1
+    fields = ('product', 'chapter_index', 'chapter_name', )
+    extra = 0
 
 
 class CourseAdmin(SummernoteModelAdmin):
-    list_display = ('name', 'category', 'topic', 'last_update', 'is_headline', )
+    list_display = ('name', 'category', 'topic', 'last_update', 'course_type', )
     list_filter = ('category', 'topic', 'course_type',)
     search_fields = ('name', 'category', 'topic',)
     filter_horizontal = ('authors', 'requirements', 'ln', )
@@ -61,12 +61,12 @@ class SubscribeAdmin(admin.ModelAdmin):
 # ----------------------------------------------------------------------------------------------------------------------
 class VideoTabular(admin.TabularInline):
     model = Video
-    extra = 1
+    extra = 0
 
 
 class ArticleTabular(SummernoteModelAdminMixin, admin.TabularInline):
     model = Article
-    extra = 1
+    extra = 0
     summernote_fields = ('description', )
 
 

@@ -42,7 +42,7 @@ class CourseRatingListSerializer(serializers.ModelSerializer):
 class CourseChapterListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chapter
-        fields = ('id', 'chapter_name', )
+        fields = ('id', 'chapter_index', 'chapter_name', )
 
 
 # Course Lesson
@@ -50,7 +50,7 @@ class CourseLessonListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lesson
-        fields = ('id', 'chapter', 'title', 'lesson_type', 'duration', )
+        fields = ('id', 'chapter', 'title', 'index', 'lesson_type', 'duration', )
 
 
 # Course Video
@@ -69,4 +69,4 @@ class CourseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        exclude = ('category', 'poster', 'date_created', 'is_headline', )
+        exclude = ('category', 'date_created', )

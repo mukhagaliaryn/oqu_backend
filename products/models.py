@@ -61,11 +61,10 @@ class Course(models.Model):
     name = models.CharField(verbose_name=_('Title'), max_length=40)
     course_type = models.CharField(verbose_name=_('Type'), max_length=40,
                                    choices=COURSE_TYPE, default=COURSE_TYPE[0][1])
+    course_price = models.DecimalField(verbose_name=_('Course price'), max_digits=8, decimal_places=2, default=0)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name=_('Category'))
     topic = models.ForeignKey(Topic, related_name='topic', on_delete=models.CASCADE,
                               verbose_name=_('Topic'))
-    image = models.ImageField(verbose_name=_('Image'), upload_to='products/images/',
-                              blank=True, null=True)
     poster = models.ImageField(verbose_name=_('Poster'), upload_to='products/posters/',
                                blank=True, null=True)
     about = models.TextField(verbose_name=_('About'), blank=True, null=True)
@@ -74,13 +73,9 @@ class Course(models.Model):
     authors = models.ManyToManyField(User, verbose_name=_('Authors'),
                                      related_name="authors", blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
-    last_update = models.DateField(auto_now=True)
+    last_update = models.DateField(verbose_name=_('Last update'), auto_now=True)
     requirements = models.ManyToManyField('Course', verbose_name=_('Requirements'), blank=True)
-
     all_rating = models.DecimalField(verbose_name=_('All rating'), max_digits=2, decimal_places=1, default=0)
-
-    # for headline slides
-    is_headline = models.BooleanField(verbose_name=_('Headline'), default=False)
 
     def __str__(self):
         return self.name
@@ -136,8 +131,8 @@ class Purpose(models.Model):
 # Chapter
 class Chapter(models.Model):
     product = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name=_('Course'))
+    chapter_index = models.PositiveSmallIntegerField(verbose_name=_('Chapter index'), default=1)
     chapter_name = models.CharField(verbose_name=_('Chapter name'), max_length=64)
-    about = models.TextField(verbose_name=_('About'), blank=True, null=True)
 
     def __str__(self):
         return self.chapter_name
@@ -149,6 +144,7 @@ class Chapter(models.Model):
 
 # Lesson
 # ----------------------------------------------------------------------------------------------------------------------
+# Lesson
 class Lesson(models.Model):
     LESSON_TYPE = (
         ('VIDEO', _('Video')),
@@ -164,7 +160,6 @@ class Lesson(models.Model):
     date_created = models.DateTimeField(verbose_name=_('Date created'), auto_now_add=True)
     last_update = models.DateTimeField(verbose_name=_('Last update'), auto_now=True)
     duration = models.PositiveSmallIntegerField(verbose_name=_('Duration (min)'), default=0)
-    view = models.PositiveIntegerField(verbose_name=_('View'), default=0)
     index = models.PositiveSmallIntegerField(verbose_name=_('Index'), default=0)
 
     def __str__(self):

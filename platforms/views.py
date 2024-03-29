@@ -6,8 +6,7 @@ from django.db.models import Sum
 
 from platforms.serializers.course import CourseSerializer, CoursePurposeSerializer, CourseChapterListSerializer, \
     CourseLessonListSerializer, CourseRatingListSerializer, CourseVideoListSerializer
-from platforms.serializers.main import MainHeadlinerCourseListSerializer, MainCourseListSerializer, \
-    MainAuthorListSerializer, MainTopicListSerializer
+from platforms.serializers.main import MainCourseListSerializer, MainAuthorListSerializer, MainTopicListSerializer
 from platforms.serializers.play import PlayVideoSerializer, PlayArticleSerializer, PlayUserCourseSerializer, \
     PlayUserChapterListSerializer, PlayUserLessonListSerializer
 from platforms.serializers.topic import TopicSerializer, TopicCourseListSerializer
@@ -23,18 +22,15 @@ class MainAPIView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
 
     def get(self, request):
-        headliners = Course.objects.filter(is_headline=True)
         last_courses = Course.objects.all()[:8]
         popular_topics = Topic.objects.all()[:5]
         authors = Account.objects.filter(account_type='AUTHOR')[:8]
 
-        headliners_data = MainHeadlinerCourseListSerializer(headliners, many=True, context={'request': request})
         last_courses_data = MainCourseListSerializer(last_courses, many=True, context={'request': request})
         authors_data = MainAuthorListSerializer(authors, many=True, context={'request': request})
         popular_topics_data = MainTopicListSerializer(popular_topics, many=True)
 
         context = {
-            'headliners': headliners_data.data,
             'last_courses': last_courses_data.data,
             'authors': authors_data.data,
             'popular_topics': popular_topics_data.data,
@@ -114,7 +110,8 @@ class CourseDetailAPIView(APIView):
         chapters = course.chapter_set.all()
         lessons = Lesson.objects.filter(chapter__in=chapters).order_by('index')
         video = Video.objects.filter(
-            lesson__in=Lesson.objects.filter(chapter__in=chapters, access=True))[:3]
+            lesson__in=Lesson.objects.filter(chapter__in=chapters, access=True)
+        ).order_by('lesson__index')[:3]
         ratings = Rating.objects.filter(course=course).exclude(comment__exact='')
 
         # Rating counting
