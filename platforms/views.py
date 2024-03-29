@@ -13,7 +13,7 @@ from platforms.serializers.topic import TopicSerializer, TopicCourseListSerializ
 
 from accounts.models import Account
 from profiles.models import UserCourse, UserChapter, UserLesson
-from products.models import Course, Topic, Lesson, Rating, Video, Article
+from products.models import Course, Topic, Lesson, Rating, Video, Article, Subscribe
 
 
 # Main API View
@@ -145,20 +145,45 @@ class CourseDetailAPIView(APIView):
         }
 
         if request.user.is_authenticated:
-            try:
-                user_course = UserCourse.objects.get(user=request.user, course=course)
-                user_chapter = UserChapter.objects.get(user=request.user, chapter=chapters.first())
-                user_lesson = UserLesson.objects.get(user=request.user, lesson=lessons.first())
+            if course.course_type == 'FREE':
+                try:
+                    user_course = UserCourse.objects.get(user=request.user, course=course)
+                    user_chapter = UserChapter.objects.get(user=request.user, chapter=chapters.first())
+                    user_lesson = UserLesson.objects.get(user=request.user, lesson=lessons.first())
 
-                context['first_url'] = {
-                    'user_course_id': user_course.id,
-                    'user_chapter_id': user_chapter.id,
-                    'user_lesson_id': user_lesson.id
-                }
-                context['user_course__course_id'] = user_course.course.id
-            except:
-                pass
-        return Response(context, status=status.HTTP_200_OK)
+                    context['first_url'] = {
+                        'user_course_id': user_course.id,
+                        'user_chapter_id': user_chapter.id,
+                        'user_lesson_id': user_lesson.id
+                    }
+                    context['user_course__course_id'] = user_course.course.id
+                except:
+                    pass
+
+            elif course.course_type == 'PRO':
+                try:
+                    user_course = UserCourse.objects.get(user=request.user, course=course)
+                    user_chapter = UserChapter.objects.get(user=request.user, chapter=chapters.first())
+                    user_lesson = UserLesson.objects.get(user=request.user, lesson=lessons.first())
+
+                    context['first_url'] = {
+                        'user_course_id': user_course.id,
+                        'user_chapter_id': user_chapter.id,
+                        'user_lesson_id': user_lesson.id
+                    }
+                    context['user_course__course_id'] = user_course.course.id
+                except:
+                    pass
+
+                try:
+                    user_subscribe_course = Subscribe.objects.get(user=request.user, course=course)
+                    context['user_subscribe_course_id'] = user_subscribe_course.course.id
+                except:
+                    pass
+
+            return Response(context, status=status.HTTP_200_OK)
+        else:
+            return Response(context, status=status.HTTP_200_OK)
 
     def post(self, request, pk):
         course = get_object_or_404(Course, pk=pk)

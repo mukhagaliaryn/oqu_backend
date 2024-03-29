@@ -88,7 +88,7 @@ class Course(models.Model):
 
 # Subscribe
 class Subscribe(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_('User'))
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('User'))
     course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name=_('Course'))
     course_price = models.DecimalField(verbose_name=_('Course price'), max_digits=8, decimal_places=2)
 
