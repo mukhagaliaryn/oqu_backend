@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class PlatformsConfig(AppConfig):
+class MainConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'platforms'
+    name = 'main'

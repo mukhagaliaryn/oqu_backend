@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from platforms.serializers.course import CourseSerializer
+from .course import CourseSerializer
 from products.models import Lesson, Video, Article, Chapter
 from profiles.models import UserCourse, UserChapter, UserLesson
 

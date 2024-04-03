@@ -4,12 +4,12 @@ from rest_framework.response import Response
 from rest_framework import status, permissions
 from django.db.models import Sum
 
-from platforms.serializers.course import CourseSerializer, CoursePurposeSerializer, CourseChapterListSerializer, \
+from .serializers.course import CourseSerializer, CoursePurposeSerializer, CourseChapterListSerializer, \
     CourseLessonListSerializer, CourseRatingListSerializer, CourseVideoListSerializer
-from platforms.serializers.main import MainCourseListSerializer, MainAuthorListSerializer, MainTopicListSerializer
-from platforms.serializers.play import PlayVideoSerializer, PlayArticleSerializer, PlayUserCourseSerializer, \
+from .serializers.main import MainCourseListSerializer, MainAuthorListSerializer, MainTopicListSerializer
+from .serializers.play import PlayVideoSerializer, PlayArticleSerializer, PlayUserCourseSerializer, \
     PlayUserChapterListSerializer, PlayUserLessonListSerializer
-from platforms.serializers.topic import TopicSerializer, TopicCourseListSerializer
+from .serializers.topic import TopicSerializer, TopicCourseListSerializer
 
 from accounts.models import Account
 from profiles.models import UserCourse, UserChapter, UserLesson

@@ -31,7 +31,7 @@ INSTALLED_APPS = [
 
     'accounts.apps.AccountsConfig',
     'products.apps.ProductsConfig',
-    'platforms.apps.PlatformsConfig',
+    'main.apps.MainConfig',
     'profiles.apps.ProfilesConfig',
 
 ]
