@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from accounts.models import User
-from products.models import Language, Purpose, Rating, Chapter, Lesson, Topic, Course, Video
+from main.models import Language, Purpose, Rating, Chapter, Lesson, SubCategory, Course, Video
 
 
 class AuthorListSerializer(serializers.ModelSerializer):
@@ -10,9 +10,9 @@ class AuthorListSerializer(serializers.ModelSerializer):
         fields = ('id', 'full_name', 'email', 'image', )
 
 
-class CourseTopicSerializer(serializers.ModelSerializer):
+class CourseSubCategorySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Topic
+        model = SubCategory
         fields = ('id', 'name', 'name_kk', 'slug', )
 
 
@@ -42,7 +42,7 @@ class CourseRatingListSerializer(serializers.ModelSerializer):
 class CourseChapterListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chapter
-        fields = ('id', 'chapter_index', 'chapter_name', )
+        fields = ('id', 'index', 'name', )
 
 
 # Course Lesson
@@ -63,8 +63,8 @@ class CourseVideoListSerializer(serializers.ModelSerializer):
 
 # Course Detail
 class CourseSerializer(serializers.ModelSerializer):
-    topic = CourseTopicSerializer(read_only=True)
-    authors = AuthorListSerializer(many=True)
+    sub_category = CourseSubCategorySerializer(read_only=True)
+    course_authors = AuthorListSerializer(many=True)
     ln = LnSerializer(many=True)
 
     class Meta:

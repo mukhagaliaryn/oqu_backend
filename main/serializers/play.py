@@ -1,8 +1,7 @@
 from rest_framework import serializers
 
 from .course import CourseSerializer
-from products.models import Lesson, Video, Article, Chapter
-from profiles.models import UserCourse, UserChapter, UserLesson
+from main.models import Lesson, Video, Article, Chapter, UserCourse, UserChapter, UserLesson
 
 
 # Course Player
@@ -42,7 +41,7 @@ class PlayUserCourseSerializer(serializers.ModelSerializer):
 class ChapterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chapter
-        fields = ('id', 'chapter_index', 'chapter_name', )
+        fields = ('id', 'index', 'name', )
 
 
 class PlayUserChapterListSerializer(serializers.ModelSerializer):

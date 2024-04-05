@@ -4,16 +4,15 @@ from rest_framework.response import Response
 from rest_framework import status, permissions
 from django.db.models import Sum
 
+from accounts.models import Account
+from .models import Course, SubCategory, Lesson, Rating, UserCourse, UserChapter, UserLesson, Subscribe, Video, Article
+
 from .serializers.course import CourseSerializer, CoursePurposeSerializer, CourseChapterListSerializer, \
     CourseLessonListSerializer, CourseRatingListSerializer, CourseVideoListSerializer
-from .serializers.main import MainCourseListSerializer, MainAuthorListSerializer, MainTopicListSerializer
+from .serializers.main import MainCourseListSerializer, MainAuthorListSerializer, MainSubCategoryListSerializer
 from .serializers.play import PlayVideoSerializer, PlayArticleSerializer, PlayUserCourseSerializer, \
     PlayUserChapterListSerializer, PlayUserLessonListSerializer
-from .serializers.topic import TopicSerializer, TopicCourseListSerializer
-
-from accounts.models import Account
-from profiles.models import UserCourse, UserChapter, UserLesson
-from products.models import Course, Topic, Lesson, Rating, Video, Article, Subscribe
+from .serializers.topic import SubCategorySerializer, SubCategoryCourseListSerializer
 
 
 # Main API View
@@ -23,12 +22,12 @@ class MainAPIView(APIView):
 
     def get(self, request):
         last_courses = Course.objects.all()[:8]
-        popular_topics = Topic.objects.all()[:5]
+        popular_topics = SubCategory.objects.all()[:5]
         authors = Account.objects.filter(account_type='AUTHOR')[:8]
 
         last_courses_data = MainCourseListSerializer(last_courses, many=True, context={'request': request})
         authors_data = MainAuthorListSerializer(authors, many=True, context={'request': request})
-        popular_topics_data = MainTopicListSerializer(popular_topics, many=True)
+        popular_topics_data = MainSubCategoryListSerializer(popular_topics, many=True)
 
         context = {
             'last_courses': last_courses_data.data,
@@ -76,11 +75,11 @@ class TopicAPIView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
 
     def get(self, request, slug):
-        topic = get_object_or_404(Topic, slug=slug)
-        topic_courses = Course.objects.filter(topic=topic)
+        sub_category = get_object_or_404(SubCategory, slug=slug)
+        sub_category_courses = Course.objects.filter(sub_category=sub_category)
 
-        topic_data = TopicSerializer(topic, partial=True, context={'request': request})
-        topic_courses_data = TopicCourseListSerializer(topic_courses, many=True, context={'request': request})
+        topic_data = SubCategorySerializer(sub_category, partial=True, context={'request': request})
+        topic_courses_data = SubCategoryCourseListSerializer(sub_category_courses, many=True, context={'request': request})
 
         context = {
             'topic': topic_data.data,

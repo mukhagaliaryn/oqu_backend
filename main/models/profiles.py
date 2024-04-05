@@ -50,3 +50,4 @@ class UserLesson(models.Model):
     class Meta:
         verbose_name = _('User lesson')
         verbose_name_plural = _('User lessons')
+        ordering = ('lesson__index', )

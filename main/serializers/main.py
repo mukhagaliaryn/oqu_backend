@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from accounts.models import User, Account
-from products.models import Course, Topic
+from ..models import Course, SubCategory
 
 
 # Main Headliner List
@@ -20,11 +20,11 @@ class AuthorSerializer(serializers.ModelSerializer):
 
 
 class MainCourseListSerializer(serializers.ModelSerializer):
-    authors = AuthorSerializer(many=True)
+    course_authors = AuthorSerializer(many=True)
 
     class Meta:
         model = Course
-        fields = ('id', 'name', 'poster', 'course_type', 'authors', 'all_rating', )
+        fields = ('id', 'name', 'poster', 'course_type', 'course_authors', 'all_rating', )
 
 
 # Author List
@@ -42,8 +42,8 @@ class MainAuthorListSerializer(serializers.ModelSerializer):
         fields = ('id', 'user', 'account_type', 'specialty', )
 
 
-# Main Topic List
-class MainTopicListSerializer(serializers.ModelSerializer):
+# Main SubCategory List
+class MainSubCategoryListSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Topic
+        model = SubCategory
         fields = ('id', 'name', 'name_kk', 'slug', )
