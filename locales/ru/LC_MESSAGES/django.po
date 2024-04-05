@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-04 06:13+0000\n"
+"POT-Creation-Date: 2024-04-05 13:14+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,8 +29,8 @@ msgid "Permissions"
 msgstr "Разрешения"
 
 #: accounts/apps.py:8
-msgid "1. Accountization"
-msgstr "1. Аккаунтизация"
+msgid "Accountization"
+msgstr "Аккаунтизация"
 
 #: accounts/models.py:12
 msgid "The user must have an email address"
@@ -64,8 +64,7 @@ msgstr ""
 msgid "Full name"
 msgstr "Имя и фамилия"
 
-#: accounts/models.py:48 main/models/course.py:12 main/models/course.py:29
-#: products/models.py:11 products/models.py:27
+#: accounts/models.py:48 main/models/courses.py:12 main/models/courses.py:29
 msgid "Image"
 msgstr "Изображение"
 
@@ -104,9 +103,9 @@ msgid "date joined"
 msgstr ""
 
 #: accounts/models.py:84 accounts/models.py:99 accounts/models.py:104
-#: main/models/subscribes.py:9 main/models/subscribes.py:23
-#: products/models.py:91 products/models.py:105 profiles/models.py:11
-#: profiles/models.py:26 profiles/models.py:41
+#: main/models/profiles.py:11 main/models/profiles.py:26
+#: main/models/profiles.py:42 main/models/subscribes.py:9
+#: main/models/subscribes.py:24
 msgid "User"
 msgstr "Пользователь"
 
@@ -150,7 +149,7 @@ msgstr "Телефон"
 msgid "Website"
 msgstr "Вебсайт"
 
-#: accounts/models.py:114 main/models/course.py:72 products/models.py:70
+#: accounts/models.py:114 main/models/courses.py:72
 msgid "About"
 msgstr "Подназвание"
 
@@ -166,15 +165,15 @@ msgstr "Аккаунт"
 msgid "Accounts"
 msgstr "Аккаунты"
 
-#: core/settings.py:121
+#: core/settings.py:119
 msgid "Kazakh"
 msgstr "Қазақша"
 
-#: core/settings.py:122
+#: core/settings.py:120
 msgid "Russian"
 msgstr "Русский"
 
-#: core/settings.py:123
+#: core/settings.py:121
 msgid "English"
 msgstr "English"
 
@@ -182,278 +181,245 @@ msgstr "English"
 msgid "Platform app"
 msgstr "Платформа"
 
-#: main/models/course.py:10 main/models/course.py:27 main/models/course.py:45
+#: main/models/courses.py:10 main/models/courses.py:27
+#: main/models/courses.py:45
 msgid "Name"
 msgstr "Название"
 
-#: main/models/course.py:11 main/models/course.py:28 main/models/course.py:46
-#: products/models.py:10 products/models.py:26
+#: main/models/courses.py:11 main/models/courses.py:28
+#: main/models/courses.py:46
 msgid "Key"
 msgstr "Ключ"
 
-#: main/models/course.py:20 main/models/course.py:26 main/models/course.py:67
-#: products/models.py:19 products/models.py:24 products/models.py:65
+#: main/models/courses.py:20 main/models/courses.py:26
+#: main/models/courses.py:67
 msgid "Category"
 msgstr "Категория"
 
-#: main/models/course.py:21 products/models.py:20
+#: main/models/courses.py:21
 msgid "Categories"
 msgstr "Категории"
 
-#: main/models/course.py:37 main/models/course.py:69
+#: main/models/courses.py:37 main/models/courses.py:69
 msgid "Subcategory"
 msgstr "Подкатегория"
 
-#: main/models/course.py:38
+#: main/models/courses.py:38
 msgid "Subcategories"
 msgstr "Подкатегории"
 
-#: main/models/course.py:52 products/models.py:50 products/models.py:72
+#: main/models/courses.py:52
 msgid "Language"
 msgstr "Язык"
 
-#: main/models/course.py:53 main/models/course.py:74 products/models.py:51
+#: main/models/courses.py:53 main/models/courses.py:74
 msgid "Languages"
 msgstr "Языки"
 
-#: main/models/course.py:59 products/models.py:57
+#: main/models/courses.py:59
 msgid "Free"
 msgstr "Бесплатный"
 
-#: main/models/course.py:60 products/models.py:58
+#: main/models/courses.py:60
 msgid "Pro"
 msgstr "Платный"
 
-#: main/models/course.py:63 main/models/course.py:126 products/models.py:9
-#: products/models.py:25 products/models.py:61 products/models.py:154
+#: main/models/courses.py:63 main/models/courses.py:126
 msgid "Title"
 msgstr "Название"
 
-#: main/models/course.py:64
+#: main/models/courses.py:64
 msgid "Course type"
 msgstr "Тип курса"
 
-#: main/models/course.py:66 main/models/subscribes.py:11 products/models.py:64
-#: products/models.py:93
+#: main/models/courses.py:66 main/models/subscribes.py:26
 msgid "Course price"
 msgstr "Цена курса"
 
-#: main/models/course.py:70 products/models.py:68
+#: main/models/courses.py:70
 msgid "Poster"
 msgstr "Обложка"
 
-#: main/models/course.py:73 main/models/course.py:172 products/models.py:71
-#: products/models.py:197
+#: main/models/courses.py:73 main/models/courses.py:172
 msgid "Description"
 msgstr "Описание"
 
-#: main/models/course.py:75 products/models.py:73
+#: main/models/courses.py:75
 msgid "Authors"
 msgstr "Авторы"
 
-#: main/models/course.py:77 main/models/course.py:134 products/models.py:160
+#: main/models/courses.py:77 main/models/courses.py:134
 msgid "Date created"
 msgstr "Дата создания"
 
-#: main/models/course.py:78 main/models/course.py:135 products/models.py:76
-#: products/models.py:161
+#: main/models/courses.py:78 main/models/courses.py:135
 msgid "Last update"
 msgstr "Последнее обновление"
 
-#: main/models/course.py:79 products/models.py:78
+#: main/models/courses.py:79
 msgid "All rating"
 msgstr "Общий рейтинг"
 
-#: main/models/course.py:85 main/models/course.py:92 main/models/course.py:105
-#: main/models/course.py:128 main/models/course.py:154
-#: main/models/course.py:170 main/models/subscribes.py:10
-#: main/models/subscribes.py:24 products/models.py:84 products/models.py:92
-#: products/models.py:106 products/models.py:120 products/models.py:133
-#: profiles/models.py:12
+#: main/models/courses.py:85 main/models/courses.py:92
+#: main/models/courses.py:105 main/models/courses.py:128
+#: main/models/courses.py:154 main/models/courses.py:170
+#: main/models/profiles.py:12 main/models/subscribes.py:10
+#: main/models/subscribes.py:25
 msgid "Course"
 msgstr "Курс"
 
-#: main/models/course.py:86 products/models.py:85
+#: main/models/courses.py:86
 msgid "Courses"
 msgstr "Курсы"
 
-#: main/models/course.py:93 products/models.py:121
+#: main/models/courses.py:93
 msgid "What will you learn"
 msgstr "Цель обучение"
 
-#: main/models/course.py:99 products/models.py:127
+#: main/models/courses.py:99
 msgid "Purpose"
 msgstr "Цель"
 
-#: main/models/course.py:100 products/models.py:128
+#: main/models/courses.py:100
 msgid "Purposes"
 msgstr "Цели"
 
-#: main/models/course.py:106 main/models/course.py:127 products/models.py:163
+#: main/models/courses.py:106 main/models/courses.py:127
 msgid "Index"
 msgstr "Индекс"
 
-#: main/models/course.py:107 products/models.py:135
+#: main/models/courses.py:107
 msgid "Chapter name"
 msgstr "Название главы"
 
-#: main/models/course.py:113 main/models/course.py:129 products/models.py:141
-#: products/models.py:157 profiles/models.py:27
+#: main/models/courses.py:113 main/models/courses.py:129
+#: main/models/profiles.py:28
 msgid "Chapter"
 msgstr "Глава"
 
-#: main/models/course.py:114 products/models.py:142
+#: main/models/courses.py:114
 msgid "Chapters"
 msgstr "Главы"
 
-#: main/models/course.py:122 main/models/course.py:164 products/models.py:150
-#: products/models.py:190
+#: main/models/courses.py:122 main/models/courses.py:164
 msgid "Video"
 msgstr "Видео"
 
-#: main/models/course.py:123 main/models/course.py:178 products/models.py:151
-#: products/models.py:203
+#: main/models/courses.py:123 main/models/courses.py:178
 msgid "Article"
 msgstr "Статья"
 
-#: main/models/course.py:131 products/models.py:155
+#: main/models/courses.py:131
 msgid "Lesson type"
 msgstr "Тип урок"
 
-#: main/models/course.py:133 products/models.py:158
+#: main/models/courses.py:133
 msgid "Access"
 msgstr "Доступ"
 
-#: main/models/course.py:136 products/models.py:162
+#: main/models/courses.py:136
 msgid "Duration (min)"
 msgstr "Продолжительность (мин)"
 
-#: main/models/course.py:142 main/models/course.py:155
-#: main/models/course.py:171 products/models.py:169 products/models.py:181
-#: products/models.py:196 profiles/models.py:42
+#: main/models/courses.py:142 main/models/courses.py:155
+#: main/models/courses.py:171 main/models/profiles.py:44
 msgid "Lesson"
 msgstr "Урок"
 
-#: main/models/course.py:143 products/models.py:170
+#: main/models/courses.py:143
 msgid "Lessons"
 msgstr "Уроки"
 
-#: main/models/course.py:149 products/models.py:176
+#: main/models/courses.py:149
 msgid "YouTube"
 msgstr ""
 
-#: main/models/course.py:150 products/models.py:177
+#: main/models/courses.py:150
 msgid "Vimeo"
 msgstr ""
 
-#: main/models/course.py:151 products/models.py:178
+#: main/models/courses.py:151
 msgid "Kinescope"
 msgstr ""
 
-#: main/models/course.py:156 products/models.py:182
+#: main/models/courses.py:156
 msgid "URL type"
 msgstr "Тип URL"
 
-#: main/models/course.py:158 products/models.py:184
+#: main/models/courses.py:158
 msgid "iFrame URL"
 msgstr "iFrame URL"
 
-#: main/models/course.py:165 products/models.py:191
+#: main/models/courses.py:161
+msgid "Video: {}"
+msgstr "Видео: {}"
+
+#: main/models/courses.py:165
 msgid "Videos"
 msgstr "Видео"
 
-#: main/models/course.py:179 products/models.py:204
+#: main/models/courses.py:175
+msgid "Article: {}"
+msgstr "Статья: {}"
+
+#: main/models/courses.py:179
 msgid "Articles"
 msgstr "Статьи"
 
-#: main/models/subscribes.py:14 products/models.py:96
-msgid "Subscribe: {}: {}"
-msgstr "Подписка: {}: {}"
-
-#: main/models/subscribes.py:17 products/models.py:99
-msgid "Subscribe"
-msgstr "Подписка"
-
-#: main/models/subscribes.py:18 products/models.py:100
-msgid "Subscribes"
-msgstr "Подписки"
-
-#: main/models/subscribes.py:25 products/models.py:107
-msgid "Score"
-msgstr "Балл"
-
-#: main/models/subscribes.py:26 products/models.py:108
-msgid "Comment"
-msgstr "Комментарий"
-
-#: main/models/subscribes.py:32 products/models.py:114
-msgid "Rating"
-msgstr "Рейтинг"
-
-#: main/models/subscribes.py:33 products/models.py:115
-msgid "Ratings"
-msgstr "Рейтинги"
-
-#: products/apps.py:8
-msgid "3. Products"
-msgstr "3. Продукты"
-
-#: products/models.py:35 products/models.py:67
-msgid "Topic"
-msgstr "Тема"
-
-#: products/models.py:36
-msgid "Topics"
-msgstr "Темы"
-
-#: products/models.py:43
-msgid "Language name"
-msgstr "Название языка"
-
-#: products/models.py:44
-msgid "Language key"
-msgstr "Ключ языка"
-
-#: products/models.py:62
-msgid "Type"
-msgstr "Тип"
-
-#: products/models.py:77
-msgid "Requirements"
-msgstr "Требования"
-
-#: products/models.py:134
-msgid "Chapter index"
-msgstr "Индекс главы"
-
-#: profiles/apps.py:8
-msgid "User data"
-msgstr "Пользовательские данные"
-
-#: profiles/models.py:13 profiles/models.py:28 profiles/models.py:43
+#: main/models/profiles.py:13 main/models/profiles.py:29
+#: main/models/profiles.py:45
 msgid "Is_completed"
 msgstr "Выполнено"
 
-#: profiles/models.py:19
+#: main/models/profiles.py:19 main/models/profiles.py:27
+#: main/models/profiles.py:43
 msgid "User course"
 msgstr "Пользовательский курс"
 
-#: profiles/models.py:20
+#: main/models/profiles.py:20
 msgid "User courses"
 msgstr "Пользовательские курсы"
 
-#: profiles/models.py:34
+#: main/models/profiles.py:35
 msgid "User chapter"
 msgstr "Пользовательская глава"
 
-#: profiles/models.py:35
+#: main/models/profiles.py:36
 msgid "User chapters"
 msgstr "Пользовательские главы"
 
-#: profiles/models.py:49
+#: main/models/profiles.py:51
 msgid "User lesson"
 msgstr "Пользовательский урок"
 
-#: profiles/models.py:50
+#: main/models/profiles.py:52
 msgid "User lessons"
 msgstr "Пользовательские уроки"
+
+#: main/models/subscribes.py:11
+msgid "Score"
+msgstr "Балл"
+
+#: main/models/subscribes.py:12
+msgid "Comment"
+msgstr "Комментарий"
+
+#: main/models/subscribes.py:18
+msgid "Rating"
+msgstr "Рейтинг"
+
+#: main/models/subscribes.py:19
+msgid "Ratings"
+msgstr "Рейтинги"
+
+#: main/models/subscribes.py:29
+msgid "Subscribe: {}: {}"
+msgstr "Подписка: {}: {}"
+
+#: main/models/subscribes.py:32
+msgid "Subscribe"
+msgstr "Подписка"
+
+#: main/models/subscribes.py:33
+msgid "Subscribes"
+msgstr "Подписки"
