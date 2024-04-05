@@ -158,7 +158,7 @@ class Video(models.Model):
     frame_url = models.CharField(verbose_name=_('iFrame URL'), max_length=255)
 
     def __str__(self):
-        return 'Видео: {}'.format(self.lesson)
+        return _('Video: {}').format(self.lesson)
 
     class Meta:
         verbose_name = _('Video')
@@ -172,7 +172,7 @@ class Article(models.Model):
     description = models.TextField(verbose_name=_('Description'), blank=True, null=True)
 
     def __str__(self):
-        return 'Статья: {}'.format(self.lesson)
+        return _('Article: {}').format(self.lesson)
 
     class Meta:
         verbose_name = _('Article')

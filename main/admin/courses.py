@@ -1,9 +1,7 @@
 from django.contrib import admin
 from django_summernote.admin import SummernoteModelAdmin, SummernoteModelAdminMixin
 from modeltranslation.admin import TranslationAdmin, TranslationTabularInline
-from .models import (
-    Category, SubCategory, Course, Purpose, Chapter, Lesson, Video, Article, Rating, Subscribe
-)
+from main.models import Category, SubCategory, Course, Purpose, Chapter, Lesson, Video, Article
 
 
 # Category
@@ -66,22 +64,6 @@ class CourseAdmin(SummernoteModelAdmin):
     inlines = [PurposeTable, ChapterTable, LessonTable, VideoTable, ArticleTable, ]
 
 
-# Subscribes
-# ----------------------------------------------------------------------------------------------------------------------
-# Rating
-class RatingAdmin(admin.ModelAdmin):
-    list_display = ('course', 'user', 'rating_score', )
-    list_filter = ('course', 'user', )
-
-
-# Subscribe
-class SubscribeAdmin(admin.ModelAdmin):
-    list_display = ('course', 'user', 'course_price', )
-    list_filter = ('course', 'user', )
-
-
 # ----------------------------------------------------------------------------------------------------------------------
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Course, CourseAdmin)
-admin.site.register(Rating, RatingAdmin)
-admin.site.register(Subscribe, SubscribeAdmin)
