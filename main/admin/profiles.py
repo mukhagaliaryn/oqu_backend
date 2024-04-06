@@ -14,7 +14,8 @@ class UserLessonTable(admin.TabularInline):
 
 class UserCourseAdmin(admin.ModelAdmin):
     list_display = ('course', 'user', 'is_completed', )
-    list_filter = ('is_completed', )
+    list_filter = ('user', 'course', 'is_completed', )
+    search_fields = ('course', 'user', )
 
     inlines = [UserChapterTable, UserLessonTable]
 
