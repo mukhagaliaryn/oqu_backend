@@ -189,25 +189,27 @@ class CourseDetailAPIView(APIView):
         chapters = course.chapter_set.all()
         lessons = Lesson.objects.filter(chapter__in=chapters)
 
-        UserCourse.objects.get_or_create(course=course, user=request.user)
+        user_course, created = UserCourse.objects.get_or_create(course=course, user=request.user)
         for chapter in chapters:
-            UserChapter.objects.get_or_create(chapter=chapter, user=request.user)
+            UserChapter.objects.get_or_create(chapter=chapter, user=request.user, user_course=user_course)
         for lesson in lessons:
-            UserLesson.objects.get_or_create(lesson=lesson, user=request.user)
+            UserLesson.objects.get_or_create(lesson=lesson, user=request.user, user_course=user_course)
 
-        return Response({}, status=status.HTTP_201_CREATED)
+        return Response({'has_user_course': created}, status=status.HTTP_201_CREATED)
 
     def put(self, request, pk):
         course = get_object_or_404(Course, pk=pk)
         chapters = course.chapter_set.all()
         lessons = Lesson.objects.filter(chapter__in=chapters)
 
-        for chapter in chapters:
-            UserChapter.objects.get_or_create(chapter=chapter, user=request.user)
-        for lesson in lessons:
-            UserLesson.objects.get_or_create(lesson=lesson, user=request.user)
+        user_course, created = UserCourse.objects.get_or_create(course=course, user=request.user)
 
-        return Response({}, status=status.HTTP_201_CREATED)
+        for chapter in chapters:
+            UserChapter.objects.get_or_create(chapter=chapter, user=request.user, user_course=user_course)
+        for lesson in lessons:
+            UserLesson.objects.get_or_create(lesson=lesson, user=request.user, user_course=user_course)
+
+        return Response({'has_user_course': created}, status=status.HTTP_201_CREATED)
 
 
 # CoursePlayerView API View
