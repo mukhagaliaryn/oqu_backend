@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User, OldAccount
+from .models import User, OldAccount, CloneUser
 from django.contrib.auth.models import Group
 from django.utils.translation import gettext_lazy as _
 
@@ -57,6 +57,6 @@ class CloneUserAdmin(BaseUserAdmin):
 # -----------------------------------------------------------------------------------------------
 admin.site.register(User, UserAdmin)
 admin.site.register(OldAccount, AccountAdmin)
-# admin.site.register(CloneUser, CloneUserAdmin)
+admin.site.register(CloneUser, CloneUserAdmin)
 
 admin.site.unregister(Group)
