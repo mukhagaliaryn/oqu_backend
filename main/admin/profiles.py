@@ -1,23 +1,23 @@
 from django.contrib import admin
-from main.models import UserCourse, UserChapter, UserLesson
+from main.models import OldUserCourse, OldUserChapter, OldUserLesson
 
 
-class UserChapterTable(admin.TabularInline):
-    model = UserChapter
+class OldUserChapterTable(admin.TabularInline):
+    model = OldUserChapter
     extra = 0
 
 
-class UserLessonTable(admin.TabularInline):
-    model = UserLesson
+class OldUserLessonTable(admin.TabularInline):
+    model = OldUserLesson
     extra = 0
 
 
-class UserCourseAdmin(admin.ModelAdmin):
+class OldUserCourseAdmin(admin.ModelAdmin):
     list_display = ('course', 'user', 'is_completed', )
     list_filter = ('user', 'course', 'is_completed', )
     search_fields = ('course', 'user', )
 
-    inlines = [UserChapterTable, UserLessonTable]
+    inlines = [OldUserChapterTable, OldUserLessonTable]
 
 
-admin.site.register(UserCourse, UserCourseAdmin)
+admin.site.register(OldUserCourse, OldUserCourseAdmin)

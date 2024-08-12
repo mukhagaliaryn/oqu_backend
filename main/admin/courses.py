@@ -1,69 +1,69 @@
 from django.contrib import admin
 from django_summernote.admin import SummernoteModelAdmin, SummernoteModelAdminMixin
 from modeltranslation.admin import TranslationAdmin, TranslationTabularInline
-from main.models import Category, SubCategory, Course, Purpose, Chapter, Lesson, Video, Article
+from main.models import *
 
 
 # Category
 # ----------------------------------------------------------------------------------------------------------------------
-class SubCategoryInline(TranslationTabularInline):
-    model = SubCategory
+class OldSubCategoryInline(TranslationTabularInline):
+    model = OldSubCategory
     extra = 1
 
 
-class CategoryAdmin(TranslationAdmin):
+class OldCategoryAdmin(TranslationAdmin):
     list_display = ('name', 'slug', )
     search_fields = ('name', )
     exclude = ('category', )
-    inlines = (SubCategoryInline, )
+    inlines = (OldSubCategoryInline, )
 
 
 # Course admin
 # ----------------------------------------------------------------------------------------------------------------------
 # Purpose Tab
-class PurposeTable(admin.TabularInline):
-    model = Purpose
+class OldPurposeTable(admin.TabularInline):
+    model = OldPurpose
     fields = ('course', 'item', )
     extra = 0
 
 
 # Chapter Tab
-class ChapterTable(admin.TabularInline):
-    model = Chapter
+class OldChapterTable(admin.TabularInline):
+    model = OldChapter
     extra = 0
 
 
 # Video
-class LessonTable(admin.TabularInline):
+class OldLessonTable(admin.TabularInline):
 
-    model = Lesson
+    model = OldLesson
     extra = 0
 
 
 # Video
-class VideoTable(admin.TabularInline):
-    model = Video
+class OldVideoTable(admin.TabularInline):
+    model = OldVideo
     extra = 0
 
 
 # Article
-class ArticleTable(SummernoteModelAdminMixin, admin.TabularInline):
-    model = Article
+class OldArticleTable(SummernoteModelAdminMixin, admin.TabularInline):
+    model = OldArticle
     extra = 0
     summernote_fields = ('description', )
 
 
 # Course
-class CourseAdmin(SummernoteModelAdmin):
+class OldCourseAdmin(SummernoteModelAdmin):
     list_display = ('name', 'category', 'sub_category', 'last_update', 'course_type', )
     list_filter = ('category', 'sub_category', 'course_type',)
     search_fields = ('name', 'category', 'sub_category', )
     filter_horizontal = ('course_authors', 'ln', )
     summernote_fields = ('description', )
 
-    inlines = [PurposeTable, ChapterTable, LessonTable, VideoTable, ArticleTable, ]
+    inlines = [OldPurposeTable, OldChapterTable, OldLessonTable, OldVideoTable, OldArticleTable, ]
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-admin.site.register(Category, CategoryAdmin)
-admin.site.register(Course, CourseAdmin)
+admin.site.register(OldCategory, OldCategoryAdmin)
+admin.site.register(OldCourse, OldCourseAdmin)

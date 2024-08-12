@@ -1,13 +1,13 @@
 from modeltranslation.translator import register, TranslationOptions
-from .models import Category, SubCategory
+from .models import OldCategory, OldSubCategory
 
 
-@register(Category)
+@register(OldCategory)
 class CategoryTranslationOptions(TranslationOptions):
     fields = ('name', )
 
 
-@register(SubCategory)
+@register(OldSubCategory)
 class SubCategoryTranslationOptions(TranslationOptions):
     fields = ('name', )
 

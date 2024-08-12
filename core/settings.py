@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'main.apps.MainConfig',
 
+    'src.platform.myaccount.apps.MyAccountConfig'
 ]
 
 

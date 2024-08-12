@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.models import Account
-from main.models import Course, SubCategory
+from main.models import OldCourse, OldSubCategory
 from main.serializers.main import MainCourseListSerializer, MainAuthorListSerializer, MainSubCategoryListSerializer
 from main.serializers.topic import SubCategorySerializer, SubCategoryCourseListSerializer
 
@@ -15,8 +15,8 @@ class MainAPIView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
 
     def get(self, request):
-        last_courses = Course.objects.all()[:8]
-        popular_topics = SubCategory.objects.all()[:5]
+        last_courses = OldCourse.objects.all()[:8]
+        popular_topics = OldSubCategory.objects.all()[:5]
         authors = Account.objects.filter(account_type='AUTHOR')[:8]
 
         last_courses_data = MainCourseListSerializer(last_courses, many=True, context={'request': request})
@@ -41,7 +41,7 @@ class LastCoursesAPIView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
 
     def get(self, request):
-        last_courses = Course.objects.all()[:48]
+        last_courses = OldCourse.objects.all()[:48]
         last_courses_data = MainCourseListSerializer(last_courses, many=True, context={'request': request})
         context = {
             'last_courses': last_courses_data.data,
@@ -69,8 +69,8 @@ class TopicAPIView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
 
     def get(self, request, slug):
-        sub_category = get_object_or_404(SubCategory, slug=slug)
-        sub_category_courses = Course.objects.filter(sub_category=sub_category)
+        sub_category = get_object_or_404(OldSubCategory, slug=slug)
+        sub_category_courses = OldCourse.objects.filter(sub_category=sub_category)
 
         topic_data = SubCategorySerializer(sub_category, partial=True, context={'request': request})
         topic_courses_data = SubCategoryCourseListSerializer(sub_category_courses, many=True, context={'request': request})

@@ -1,7 +1,9 @@
 from rest_framework import serializers
-
 from accounts.models import User
-from main.models import Language, Purpose, Rating, Chapter, Lesson, SubCategory, Course, Video
+from main.models import (
+    OldLanguage, OldPurpose, OldRating, OldChapter, OldLesson,
+    OldSubCategory, OldCourse, OldVideo
+)
 
 
 class AuthorListSerializer(serializers.ModelSerializer):
@@ -12,20 +14,20 @@ class AuthorListSerializer(serializers.ModelSerializer):
 
 class CourseSubCategorySerializer(serializers.ModelSerializer):
     class Meta:
-        model = SubCategory
+        model = OldSubCategory
         fields = ('id', 'name', 'name_kk', 'slug', )
 
 
 class LnSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Language
+        model = OldLanguage
         fields = ('id', 'name', 'slug', )
 
 
 # Course Purpose
 class CoursePurposeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Purpose
+        model = OldPurpose
         fields = ('id', 'item', )
 
 
@@ -34,14 +36,14 @@ class CourseRatingListSerializer(serializers.ModelSerializer):
     user = AuthorListSerializer(read_only=True)
 
     class Meta:
-        model = Rating
+        model = OldRating
         fields = ('id', 'user', 'rating_score', 'comment', )
 
 
 # Course Chapter
 class CourseChapterListSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Chapter
+        model = OldChapter
         fields = ('id', 'index', 'name', )
 
 
@@ -49,7 +51,7 @@ class CourseChapterListSerializer(serializers.ModelSerializer):
 class CourseLessonListSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Lesson
+        model = OldLesson
         fields = ('id', 'chapter', 'title', 'index', 'lesson_type', 'duration', )
 
 
@@ -57,7 +59,7 @@ class CourseLessonListSerializer(serializers.ModelSerializer):
 class CourseVideoListSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Video
+        model = OldVideo
         fields = ('id', 'frame_url', )
 
 
@@ -68,5 +70,5 @@ class CourseSerializer(serializers.ModelSerializer):
     ln = LnSerializer(many=True)
 
     class Meta:
-        model = Course
+        model = OldCourse
         exclude = ('category', 'date_created', )

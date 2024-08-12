@@ -1,14 +1,13 @@
 from rest_framework import serializers
-
 from .course import CourseSerializer
-from main.models import Lesson, Video, Article, Chapter, UserCourse, UserChapter, UserLesson
+from main.models import OldLesson, OldVideo, OldArticle, OldChapter, OldUserCourse, OldUserChapter, OldUserLesson
 
 
 # Course Player
 class PlayLessonSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Lesson
+        model = OldLesson
         fields = ('id', 'chapter', 'title', 'lesson_type', 'index', 'duration', )
 
 
@@ -16,7 +15,7 @@ class PlayVideoSerializer(serializers.ModelSerializer):
     lesson = PlayLessonSerializer(read_only=True)
 
     class Meta:
-        model = Video
+        model = OldVideo
         fields = '__all__'
 
 
@@ -24,7 +23,7 @@ class PlayArticleSerializer(serializers.ModelSerializer):
     lesson = PlayLessonSerializer(read_only=True)
 
     class Meta:
-        model = Article
+        model = OldArticle
         fields = '__all__'
 
 
@@ -33,14 +32,14 @@ class PlayUserCourseSerializer(serializers.ModelSerializer):
     course = CourseSerializer(read_only=True)
 
     class Meta:
-        model = UserCourse
+        model = OldUserCourse
         fields = ('id', 'course', 'is_completed', )
 
 
 # Play Chapter List
 class ChapterSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Chapter
+        model = OldChapter
         fields = ('id', 'index', 'name', )
 
 
@@ -48,7 +47,7 @@ class PlayUserChapterListSerializer(serializers.ModelSerializer):
     chapter = ChapterSerializer(read_only=True)
 
     class Meta:
-        model = UserChapter
+        model = OldUserChapter
         fields = ('id', 'chapter', 'is_completed', )
 
 
@@ -56,7 +55,7 @@ class PlayUserChapterListSerializer(serializers.ModelSerializer):
 class LessonSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Lesson
+        model = OldLesson
         fields = ('id', 'index', 'chapter', 'title', 'lesson_type', 'duration', )
 
 
@@ -64,5 +63,5 @@ class PlayUserLessonListSerializer(serializers.ModelSerializer):
     lesson = LessonSerializer(read_only=True)
 
     class Meta:
-        model = UserLesson
+        model = OldUserLesson
         fields = ('id', 'lesson', 'is_completed', )

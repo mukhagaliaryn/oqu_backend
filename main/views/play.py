@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from main.models import UserCourse, UserChapter, UserLesson, Video, Article
+from main.models import OldUserCourse, OldUserChapter, OldUserLesson, OldVideo, OldArticle
 from main.serializers.play import PlayVideoSerializer, PlayArticleSerializer, PlayUserCourseSerializer, \
     PlayUserChapterListSerializer, PlayUserLessonListSerializer
 
@@ -13,22 +13,22 @@ from main.serializers.play import PlayVideoSerializer, PlayArticleSerializer, Pl
 class CoursePlayerView(APIView):
 
     def get(self, request, course_pk, chapter_pk, lesson_pk):
-        user_course = get_object_or_404(UserCourse, pk=course_pk, user=request.user)
-        user_chapter = get_object_or_404(UserChapter, pk=chapter_pk, user=request.user)
-        user_lesson = get_object_or_404(UserLesson, pk=lesson_pk, user=request.user)
+        user_course = get_object_or_404(OldUserCourse, pk=course_pk, user=request.user)
+        user_chapter = get_object_or_404(OldUserChapter, pk=chapter_pk, user=request.user)
+        user_lesson = get_object_or_404(OldUserLesson, pk=lesson_pk, user=request.user)
 
         # For lists
-        user_chapters = UserChapter.objects.filter(user=request.user, chapter__in=user_course.course.chapter_set.all())
-        user_lessons = UserLesson.objects.filter(
+        user_chapters = OldUserChapter.objects.filter(user=request.user, chapter__in=user_course.course.chapter_set.all())
+        user_lessons = OldUserLesson.objects.filter(
             user=request.user, lesson__chapter__in=user_course.course.chapter_set.all()).order_by('lesson__index')
 
         context = {}
         if user_lesson.lesson.lesson_type == 'VIDEO':
-            video = get_object_or_404(Video, lesson=user_lesson.lesson)
+            video = get_object_or_404(OldVideo, lesson=user_lesson.lesson)
             video_data = PlayVideoSerializer(video, partial=True)
             context['video'] = video_data.data
         elif user_lesson.lesson.lesson_type == 'ARTICLE':
-            article = get_object_or_404(Article, lesson=user_lesson.lesson)
+            article = get_object_or_404(OldArticle, lesson=user_lesson.lesson)
             article_data = PlayArticleSerializer(article, partial=True)
             context['article'] = article_data.data
 
@@ -44,9 +44,9 @@ class CoursePlayerView(APIView):
         return Response(context, status=status.HTTP_200_OK)
 
     def put(self, request, course_pk, chapter_pk, lesson_pk):
-        user_course = get_object_or_404(UserCourse, pk=course_pk)
-        user_chapter = get_object_or_404(UserChapter, pk=chapter_pk)
-        user_lesson = get_object_or_404(UserLesson, pk=lesson_pk)
+        user_course = get_object_or_404(OldUserCourse, pk=course_pk)
+        user_chapter = get_object_or_404(OldUserChapter, pk=chapter_pk)
+        user_lesson = get_object_or_404(OldUserLesson, pk=lesson_pk)
         user_lesson.is_completed = True
         user_lesson.save()
         return Response({'is_completed': user_lesson.is_completed}, status=status.HTTP_204_NO_CONTENT)

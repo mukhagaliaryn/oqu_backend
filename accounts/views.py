@@ -8,7 +8,7 @@ from .serializers import AccountSerializer
 from .serializers import UserSerializer, UserUpdateSerializer, UserAvatarSerializer
 
 
-# All users
+# All myaccount
 # ----------------------------------------------------------------------------------------------------------
 class UsersView(views.APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
@@ -18,7 +18,7 @@ class UsersView(views.APIView):
         users_serializer = UserSerializer(users, many=True)
 
         context = {
-            'users': users_serializer.data
+            'myaccount': users_serializer.data
         }
         return Response(context, status=status.HTTP_200_OK)
 

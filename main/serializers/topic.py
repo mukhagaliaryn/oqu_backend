@@ -1,13 +1,12 @@
 from rest_framework import serializers
-
 from accounts.models import User
-from main.models import Course, Category, SubCategory
+from main.models import OldCourse, OldCategory, OldSubCategory
 
 
 # SubCategory
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Category
+        model = OldCategory
         fields = ('id', 'name', 'name_kk', 'slug', )
 
 
@@ -15,7 +14,7 @@ class SubCategorySerializer(serializers.ModelSerializer):
     own = CategorySerializer(read_only=True)
 
     class Meta:
-        model = SubCategory
+        model = OldSubCategory
         fields = ('id', 'name', 'name_kk', 'slug', 'own',)
 
 
@@ -30,5 +29,5 @@ class SubCategoryCourseListSerializer(serializers.ModelSerializer):
     course_authors = AuthorSerializer(many=True)
 
     class Meta:
-        model = Course
+        model = OldCourse
         fields = ('id', 'name', 'poster', 'course_type', 'course_authors', 'all_rating', )
