@@ -123,7 +123,7 @@ class OldAccount(models.Model):
         ('LLP', _('Limited Liability Partnership')),
     )
 
-    user = models.OneToOneField(CloneUser, on_delete=models.CASCADE, verbose_name=_('User'))
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_('User'))
     account_type = models.CharField(verbose_name=_('Account type'), max_length=64,
                                     choices=ACCOUNT_TYPE, default=ACCOUNT_TYPE[0][1])
     id_number = models.CharField(verbose_name=_('ID number account'), max_length=64, blank=True, null=True, unique=True)
