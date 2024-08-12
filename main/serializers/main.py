@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from accounts.models import User, Account
+from accounts.models import User, OldAccount
 from ..models import OldCourse, OldSubCategory
 
 
@@ -37,7 +37,7 @@ class MainAuthorListSerializer(serializers.ModelSerializer):
     user = AuthorUserSerializer(read_only=True)
 
     class Meta:
-        model = Account
+        model = OldAccount
         fields = ('id', 'user', 'account_type', 'specialty', )
 
 

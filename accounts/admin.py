@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User, Account
+from .models import User, OldAccount
 from django.contrib.auth.models import Group
 from django.utils.translation import gettext_lazy as _
 
@@ -45,6 +45,6 @@ class AccountAdmin(admin.ModelAdmin):
 
 # -----------------------------------------------------------------------------------------------
 admin.site.register(User, UserAdmin)
-admin.site.register(Account, AccountAdmin)
+admin.site.register(OldAccount, AccountAdmin)
 
 admin.site.unregister(Group)

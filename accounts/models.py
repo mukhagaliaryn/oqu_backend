@@ -87,7 +87,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 # Account model
 # ----------------------------------------------------------------------------------------------------------------------
-class Account(models.Model):
+class OldAccount(models.Model):
     CITY_CHOICES = (
         ('NOT_DEFINED', _('Not selected')),
         ('SHYMKENT', 'Шымкент'),
@@ -119,5 +119,5 @@ class Account(models.Model):
         return f'{self.user}'
 
     class Meta:
-        verbose_name = _('Account')
-        verbose_name_plural = _('Accounts')
+        verbose_name = _('Old Account')
+        verbose_name_plural = _('Old Accounts')

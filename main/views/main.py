@@ -3,7 +3,7 @@ from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from accounts.models import Account
+from accounts.models import OldAccount
 from main.models import OldCourse, OldSubCategory
 from main.serializers.main import MainCourseListSerializer, MainAuthorListSerializer, MainSubCategoryListSerializer
 from main.serializers.topic import SubCategorySerializer, SubCategoryCourseListSerializer
@@ -17,7 +17,7 @@ class MainAPIView(APIView):
     def get(self, request):
         last_courses = OldCourse.objects.all()[:8]
         popular_topics = OldSubCategory.objects.all()[:5]
-        authors = Account.objects.filter(account_type='AUTHOR')[:8]
+        authors = OldAccount.objects.filter(account_type='AUTHOR')[:8]
 
         last_courses_data = MainCourseListSerializer(last_courses, many=True, context={'request': request})
         authors_data = MainAuthorListSerializer(authors, many=True, context={'request': request})
@@ -55,7 +55,7 @@ class AuthorsAPIView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
 
     def get(self, request):
-        authors = Account.objects.filter(account_type='AUTHOR')
+        authors = OldAccount.objects.filter(account_type='AUTHOR')
         authors_data = MainAuthorListSerializer(authors, many=True, context={'request': request})
         context = {
             'authors': authors_data.data,
