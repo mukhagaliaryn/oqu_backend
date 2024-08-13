@@ -11,7 +11,6 @@ urlpatterns = [
     re_path(r'^auth/', include('djoser.urls.jwt')),
 
     # apps...
-    path('', include('main.urls')),
 ]
 
 

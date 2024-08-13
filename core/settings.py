@@ -29,10 +29,10 @@ INSTALLED_APPS = [
     'storages',
     'django_summernote',
 
-
-    'main.apps.MainConfig',
-
-    'src.platform.myaccount.apps.MyAccountConfig'
+    # platform apps...
+    'src.platform.myaccount.apps.MyAccountConfig',
+    'src.platform.workspace.apps.WorkspaceConfig',
+    'src.platform.resources.apps.ResourcesConfig',
 ]
 
 
@@ -63,7 +63,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-AUTH_USER_MODEL = 'main.CloneUser'
+AUTH_USER_MODEL = 'myaccount.User'
 ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [
@@ -195,10 +195,10 @@ DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': 'accounts/confirm/{uid}/{token}',
     'USERNAME_RESET_CONFIRM_URL': 'email/reset/confirm/{uid}/{token}',
 
-    'SERIALIZERS': {
-        'user_create': 'main.serializers.users.UserSerializer',
-        'user': 'main.serializers.users.UserSerializer',
-        'current_user': 'main.serializers.users.UserSerializer',
-        'user_delete': 'djoser.serializers.UserSerializer',
-    }
+    # 'SERIALIZERS': {
+    #     'user_create': 'main.serializers.users.UserSerializer',
+    #     'user': 'main.serializers.users.UserSerializer',
+    #     'current_user': 'main.serializers.users.UserSerializer',
+    #     'user_delete': 'djoser.serializers.UserSerializer',
+    # }
 }
