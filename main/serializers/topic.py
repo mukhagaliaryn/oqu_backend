@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from accounts.models import User
-from main.models import OldCourse, OldCategory, OldSubCategory
+from main.models import OldCourse, OldCategory, OldSubCategory, CloneUser
 
 
 # SubCategory
@@ -21,7 +20,7 @@ class SubCategorySerializer(serializers.ModelSerializer):
 # SubCategory Course List
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = CloneUser
         fields = ('id', 'full_name', )
 
 

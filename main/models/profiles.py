@@ -1,14 +1,13 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
-from accounts.models import User
-from .courses import OldCourse, OldLesson, OldChapter
+from main.models.users import CloneUser
+from main.models.courses import OldCourse, OldLesson, OldChapter
 
 
 # UserCourse
 # ----------------------------------------------------------------------------------------------------------------------
 class OldUserCourse(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_course', verbose_name=_('User'))
+    user = models.ForeignKey(CloneUser, on_delete=models.CASCADE, related_name='user_course', verbose_name=_('User'))
     course = models.ForeignKey(OldCourse, on_delete=models.CASCADE, verbose_name=_('Course'))
     is_completed = models.BooleanField(verbose_name=_('Is_completed'), default=False)
 
@@ -23,7 +22,7 @@ class OldUserCourse(models.Model):
 # UserChapter
 # ----------------------------------------------------------------------------------------------------------------------
 class OldUserChapter(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_chapter', verbose_name=_('User'))
+    user = models.ForeignKey(CloneUser, on_delete=models.CASCADE, related_name='user_chapter', verbose_name=_('User'))
     user_course = models.ForeignKey(OldUserCourse, on_delete=models.CASCADE, verbose_name=_('User course'))
     chapter = models.ForeignKey(OldChapter, on_delete=models.CASCADE, verbose_name=_('Chapter'))
     is_completed = models.BooleanField(verbose_name=_('Is_completed'), default=False)
@@ -39,7 +38,7 @@ class OldUserChapter(models.Model):
 # UserLesson
 # ----------------------------------------------------------------------------------------------------------------------
 class OldUserLesson(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_lesson', verbose_name=_('User'))
+    user = models.ForeignKey(CloneUser, on_delete=models.CASCADE, related_name='user_lesson', verbose_name=_('User'))
     user_course = models.ForeignKey(OldUserCourse, on_delete=models.CASCADE, verbose_name=_('User course'))
     lesson = models.ForeignKey(OldLesson, on_delete=models.CASCADE, verbose_name=_('Lesson'))
     is_completed = models.BooleanField(verbose_name=_('Is_completed'), default=False)

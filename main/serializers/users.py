@@ -1,7 +1,7 @@
 from djoser.serializers import UserCreateSerializer
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from .models import OldAccount
+from main.models import CloneAccount
 
 User = get_user_model()
 
@@ -33,5 +33,5 @@ class AccountSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
 
     class Meta:
-        model = OldAccount
+        model = CloneAccount
         fields = ('id', 'user', 'birthday', 'gender', 'city', 'address', 'phone', )

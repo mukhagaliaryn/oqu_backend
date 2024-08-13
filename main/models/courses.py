@@ -1,5 +1,5 @@
 from django.db import models
-from accounts.models import User
+from main.models.users import CloneUser
 from django.utils.translation import gettext_lazy as _
 
 
@@ -72,7 +72,7 @@ class OldCourse(models.Model):
     about = models.TextField(verbose_name=_('About'), blank=True, null=True)
     description = models.TextField(verbose_name=_('Description'), blank=True, null=True)
     ln = models.ManyToManyField(OldLanguage, verbose_name=_('Languages'), blank=True)
-    course_authors = models.ManyToManyField(User, verbose_name=_('Authors'),
+    course_authors = models.ManyToManyField(CloneUser, verbose_name=_('Authors'),
                                             related_name="course_authors", blank=True)
     date_created = models.DateTimeField(verbose_name=_('Date created'), auto_now_add=True)
     last_update = models.DateField(verbose_name=_('Last update'), auto_now=True)

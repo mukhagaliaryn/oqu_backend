@@ -3,7 +3,6 @@ from django.shortcuts import get_object_or_404
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 from main.models import OldCourse, OldLesson, OldRating, OldUserCourse, OldUserChapter, OldUserLesson, OldSubscribe, OldVideo
 from main.serializers.course import CourseSerializer, CoursePurposeSerializer, CourseChapterListSerializer, \
     CourseLessonListSerializer, CourseVideoListSerializer, CourseRatingListSerializer
@@ -112,12 +111,9 @@ class CourseDetailAPIView(APIView):
         course = get_object_or_404(OldCourse, pk=pk)
         chapters = course.chapter_set.all()
         lessons = OldLesson.objects.filter(chapter__in=chapters)
-
         user_course, created = OldUserCourse.objects.get_or_create(course=course, user=request.user)
-
         for chapter in chapters:
             OldUserChapter.objects.get_or_create(chapter=chapter, user=request.user, user_course=user_course)
         for lesson in lessons:
             OldUserLesson.objects.get_or_create(lesson=lesson, user=request.user, user_course=user_course)
-
         return Response({'has_user_course': created}, status=status.HTTP_201_CREATED)

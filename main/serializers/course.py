@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from accounts.models import User
+from main.models import CloneUser
 from main.models import (
     OldLanguage, OldPurpose, OldRating, OldChapter, OldLesson,
     OldSubCategory, OldCourse, OldVideo
@@ -8,7 +8,7 @@ from main.models import (
 
 class AuthorListSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = CloneUser
         fields = ('id', 'full_name', 'email', 'image', )
 
 

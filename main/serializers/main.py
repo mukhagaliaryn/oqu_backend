@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from accounts.models import User, OldAccount
-from ..models import OldCourse, OldSubCategory
+
+from ..models import OldCourse, OldSubCategory, CloneUser, CloneAccount
 
 
 # Main Headliner List
@@ -14,7 +14,7 @@ class MainHeadlinerCourseListSerializer(serializers.ModelSerializer):
 # Main Course List
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = CloneUser
         fields = ('id', 'full_name', )
 
 
@@ -29,7 +29,7 @@ class MainCourseListSerializer(serializers.ModelSerializer):
 # Author List
 class AuthorUserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = CloneUser
         fields = ('id', 'full_name', 'image', )
 
 
@@ -37,7 +37,7 @@ class MainAuthorListSerializer(serializers.ModelSerializer):
     user = AuthorUserSerializer(read_only=True)
 
     class Meta:
-        model = OldAccount
+        model = CloneAccount
         fields = ('id', 'user', 'account_type', 'specialty', )
 
 

@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 # CloneUser manager
-# -------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
 class CloneUserManager(BaseUserManager):
     def create_user(self, username, email, full_name, password=None):
         if not username:
