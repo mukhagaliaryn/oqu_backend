@@ -43,20 +43,8 @@ class AccountAdmin(admin.ModelAdmin):
     filter_horizontal = ()
 
 
-class CloneUserAdmin(BaseUserAdmin):
-    list_display = ('username', 'email', 'full_name', 'is_staff', 'is_active', 'is_superuser', )
-    list_filter = ('is_active', 'is_staff', )
-    fieldsets = (
-        (None, {'fields': ('username', 'email', 'password')}),
-        (_('Personal data'), {'fields': ('full_name', 'image', 'birthday', 'last_login',)}),
-        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser', )}),
-    )
-    filter_horizontal = ()
-
-
 # -----------------------------------------------------------------------------------------------
 admin.site.register(User, UserAdmin)
 admin.site.register(OldAccount, AccountAdmin)
-# admin.site.register(CloneUser, CloneUserAdmin)
 
 admin.site.unregister(Group)

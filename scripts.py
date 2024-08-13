@@ -1,4 +1,5 @@
-from accounts.models import User, CloneUser
+from accounts.models import User
+from main.models import CloneUser
 
 
 def transfer_data():
@@ -11,6 +12,7 @@ def transfer_data():
             image=user.image,
             birthday=user.birthday,
             is_staff=user.is_staff,
+            is_superuser=user.is_staff,
             is_active=user.is_active,
             date_joined=user.date_joined
         )
