@@ -29,7 +29,7 @@ INSTALLED_APPS = [
     'storages',
     'django_summernote',
 
-    'accounts.apps.AccountsConfig',
+
     'main.apps.MainConfig',
 
     'src.platform.myaccount.apps.MyAccountConfig'
@@ -196,9 +196,9 @@ DJOSER = {
     'USERNAME_RESET_CONFIRM_URL': 'email/reset/confirm/{uid}/{token}',
 
     'SERIALIZERS': {
-        'user_create': 'accounts.serializers.UserSerializer',
-        'user': 'accounts.serializers.UserSerializer',
-        'current_user': 'accounts.serializers.UserSerializer',
+        'user_create': 'main.serializers.users.UserSerializer',
+        'user': 'main.serializers.users.UserSerializer',
+        'current_user': 'main.serializers.users.UserSerializer',
         'user_delete': 'djoser.serializers.UserSerializer',
     }
 }
