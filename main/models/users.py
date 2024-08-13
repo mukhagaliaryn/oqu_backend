@@ -71,3 +71,41 @@ class CloneUser(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = _('Clone User')
         verbose_name_plural = _('Clone Users')
+
+
+# Account model
+# ----------------------------------------------------------------------------------------------------------------------
+class CloneAccount(models.Model):
+    CITY_CHOICES = (
+        ('NOT_DEFINED', _('Not selected')),
+        ('SHYMKENT', 'Шымкент'),
+        ('ALMATY', 'Алматы'),
+        ('ASTANA', 'Астана'),
+    )
+
+    ACCOUNT_TYPE = (
+        ('USER', _('User')),
+        ('AUTHOR', _('Author')),
+        ('LLP', _('Limited Liability Partnership')),
+    )
+
+    user = models.OneToOneField(CloneUser, on_delete=models.CASCADE, verbose_name=_('User'))
+    account_type = models.CharField(verbose_name=_('Account type'), max_length=64,
+                                    choices=ACCOUNT_TYPE, default=ACCOUNT_TYPE[0][1])
+    id_number = models.CharField(verbose_name=_('ID number account'), max_length=64, blank=True, null=True, unique=True)
+    specialty = models.CharField(verbose_name=_('Specialty'), max_length=64, blank=True, null=True)
+    city = models.CharField(verbose_name=_('City'), max_length=64,
+                            choices=CITY_CHOICES, default=CITY_CHOICES[0][1])
+    address = models.TextField(verbose_name=_('Address'), max_length=255, blank=True, null=True)
+    phone = models.CharField(verbose_name=_('Phone'), max_length=255, null=True, blank=True)
+    website = models.URLField(verbose_name=_('Website'), max_length=255, null=True, blank=True)
+    about = models.TextField(verbose_name=_('About'), max_length=120, blank=True, null=True)
+
+    account_fill = models.BooleanField(verbose_name=_('Is filled out'), default=False)
+
+    def __str__(self):
+        return f'{self.user}'
+
+    class Meta:
+        verbose_name = _('Clone Account')
+        verbose_name_plural = _('Clone Accounts')

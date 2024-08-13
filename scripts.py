@@ -1,5 +1,5 @@
-from accounts.models import User
-from main.models import CloneUser
+from accounts.models import User, OldAccount
+from main.models import CloneUser, CloneAccount
 
 
 def transfer_data():
@@ -26,3 +26,21 @@ def transfer_data_password():
         clone_user.save()
 
     print('Transfer data password successfully')
+
+
+def transfer_account_data():
+    for account in OldAccount.objects.all():
+        CloneAccount.objects.create(
+            pk=account.pk,
+            user=CloneUser.objects.get(pk=account.user.pk),
+            account_type=account.account_type,
+            id_number=account.id_number,
+            specialty=account.specialty,
+            city=account.city,
+            address=account.address,
+            phone=account.phone,
+            website=account.website,
+            about=account.about,
+            account_fill=account.account_fill,
+        )
+    print('Transfer CloneAccount data successfully')
