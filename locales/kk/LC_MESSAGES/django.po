@@ -16,9 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
-"(n%100>=11 && n%100<=14)? 2 : 3);\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
 #: core/settings.py:120
 msgid "Kazakh"
 msgstr ""
@@ -33,11 +31,11 @@ msgstr ""
 
 #: src/platform/myaccount/admin/users.py:13
 msgid "Personal data"
-msgstr "Личные данные"
+msgstr "Жеке деректер"
 
 #: src/platform/myaccount/admin/users.py:14
 msgid "Permissions"
-msgstr "Разрешения"
+msgstr "Рұқсаттар"
 
 #: src/platform/myaccount/apps.py:8
 msgid "Platform | My account"
@@ -45,7 +43,7 @@ msgstr ""
 
 #: src/platform/myaccount/models/accounts.py:10
 msgid "Student"
-msgstr "Студент"
+msgstr "Білім алушы"
 
 #: src/platform/myaccount/models/accounts.py:11
 msgid "Author"
@@ -54,15 +52,15 @@ msgstr "Автор"
 #: src/platform/myaccount/models/accounts.py:14
 #: src/platform/myaccount/models/users.py:68
 msgid "User"
-msgstr "Пользователь"
+msgstr "Қолданушы"
 
 #: src/platform/myaccount/models/accounts.py:16
 msgid "Account type"
-msgstr "Тип учетной записи"
+msgstr "Аккаунт түрі"
 
 #: src/platform/myaccount/models/accounts.py:19
 msgid "Specialty"
-msgstr "Специальность"
+msgstr "Мамандығы"
 
 #: src/platform/myaccount/models/accounts.py:20
 msgid "Bio"
@@ -70,7 +68,7 @@ msgstr "Био"
 
 #: src/platform/myaccount/models/accounts.py:21
 msgid "Is filled out"
-msgstr "Заполняется?"
+msgstr "Толтырылды ма?"
 
 #: src/platform/myaccount/models/accounts.py:27
 msgid "Account"
@@ -78,39 +76,39 @@ msgstr "Аккаунт"
 
 #: src/platform/myaccount/models/accounts.py:28
 msgid "Accounts"
-msgstr "Аккаунты"
+msgstr "Аккаунттар"
 
 #: src/platform/myaccount/models/users.py:12
 msgid "The user must have an username"
-msgstr "У пользователя должно быть имя пользователя"
+msgstr "Пайдаланушының пайдаланушы аты болуы керек"
 
 #: src/platform/myaccount/models/users.py:14
 msgid "The user must have an email address"
-msgstr "У пользователя должен быть адрес электронной почты"
+msgstr "Пайдаланушының электрондық пошта мекенжайы болуы керек"
 
 #: src/platform/myaccount/models/users.py:16
 msgid "The full name should not be empty"
-msgstr "Полное имя не должно быть пустым"
+msgstr "Толық аты-жөні болуы керек"
 
 #: src/platform/myaccount/models/users.py:35
 msgid "email"
-msgstr "Электронная почта"
+msgstr "Электронды пошта"
 
 #: src/platform/myaccount/models/users.py:36
 msgid "username"
-msgstr "Имя пользователя"
+msgstr "Қолданушының лақап аты"
 
 #: src/platform/myaccount/models/users.py:37
 msgid "Full name"
-msgstr "Полная имя"
+msgstr "Толық аты-жөні"
 
 #: src/platform/myaccount/models/users.py:38
 msgid "Image"
-msgstr "Изображение"
+msgstr "Суреті"
 
 #: src/platform/myaccount/models/users.py:39
 msgid "Birthday"
-msgstr "День рождения"
+msgstr "Туылған күні"
 
 #: src/platform/myaccount/models/users.py:41
 msgid "staff status"
@@ -136,4 +134,4 @@ msgstr ""
 
 #: src/platform/myaccount/models/users.py:69
 msgid "Users"
-msgstr "Пользователи"
+msgstr "Қолданушылар"
