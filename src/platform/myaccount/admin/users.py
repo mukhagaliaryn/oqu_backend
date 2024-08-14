@@ -11,7 +11,7 @@ class UserAdmin(BaseUserAdmin):
     fieldsets = (
         (None, {'fields': ('username', 'email', 'password')}),
         (_('Personal data'), {'fields': ('full_name', 'image', 'birthday', 'last_login',)}),
-        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser', )}),
+        (_('Permissions'), {'fields': ('user_permissions', 'is_active', 'is_staff', 'is_superuser', )}),
     )
     add_fieldsets = (
         (
@@ -22,7 +22,7 @@ class UserAdmin(BaseUserAdmin):
             },
         ),
     )
-    filter_horizontal = ()
+    filter_horizontal = ('user_permissions', )
 
 
 admin.site.register(User, UserAdmin)

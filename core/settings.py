@@ -54,8 +54,8 @@ REST_FRAMEWORK = {
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -123,10 +123,11 @@ LANGUAGES = (
 )
 
 MODELTRANSLATION_DEFAULT_LANGUAGE = 'ru'
-MODELTRANSLATION_LANGUAGES = ('ru', 'kk')
+MODELTRANSLATION_LANGUAGES = ('ru', 'kk', 'en', )
 
 MODELTRANSLATION_TRANSLATION_FILES = (
     'src.platform.myaccount.translations',
+    'src.platform.resources.translations',
 )
 
 LOCALE_PATHS = [
@@ -199,10 +200,10 @@ DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': 'accounts/confirm/{uid}/{token}',
     'USERNAME_RESET_CONFIRM_URL': 'email/reset/confirm/{uid}/{token}',
 
-    # 'SERIALIZERS': {
-    #     'user_create': 'main.serializers.users.UserSerializer',
-    #     'user': 'main.serializers.users.UserSerializer',
-    #     'current_user': 'main.serializers.users.UserSerializer',
-    #     'user_delete': 'djoser.serializers.UserSerializer',
-    # }
+    'SERIALIZERS': {
+        'user_create': 'src.platform.myaccount.serializers.users.UserSerializer',
+        'user': 'src.platform.myaccount.serializers.users.UserSerializer',
+        'current_user': 'src.platform.myaccount.serializers.users.UserSerializer',
+        'user_delete': 'djoser.serializers.UserSerializer',
+    }
 }

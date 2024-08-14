@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-13 12:46+0000\n"
+"POT-Creation-Date: 2024-08-14 19:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,17 +19,18 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
 "(n%100>=11 && n%100<=14)? 2 : 3);\n"
+
 #: core/settings.py:120
 msgid "Kazakh"
-msgstr ""
+msgstr "Қазақша"
 
 #: core/settings.py:121
 msgid "Russian"
-msgstr ""
+msgstr "Русский"
 
 #: core/settings.py:122
 msgid "English"
-msgstr ""
+msgstr "English"
 
 #: src/platform/myaccount/admin/users.py:13
 msgid "Personal data"
@@ -40,7 +41,7 @@ msgid "Permissions"
 msgstr "Разрешения"
 
 #: src/platform/myaccount/apps.py:8
-msgid "Platform | My account"
+msgid "Platform | MyAccount"
 msgstr ""
 
 #: src/platform/myaccount/models/accounts.py:10
@@ -53,6 +54,7 @@ msgstr "Автор"
 
 #: src/platform/myaccount/models/accounts.py:14
 #: src/platform/myaccount/models/users.py:68
+#: src/platform/resources/models/courses.py:118
 msgid "User"
 msgstr "Пользователь"
 
@@ -70,7 +72,7 @@ msgstr "Био"
 
 #: src/platform/myaccount/models/accounts.py:21
 msgid "Is filled out"
-msgstr "Заполняется?"
+msgstr "Заполняется"
 
 #: src/platform/myaccount/models/accounts.py:27
 msgid "Account"
@@ -137,3 +139,201 @@ msgstr ""
 #: src/platform/myaccount/models/users.py:69
 msgid "Users"
 msgstr "Пользователи"
+
+#: src/platform/resources/apps.py:8
+msgid "Platform | Resources"
+msgstr ""
+
+#: src/platform/resources/models/contents.py:9
+msgid "YouTube"
+msgstr "YouTube"
+
+#: src/platform/resources/models/contents.py:10
+msgid "Vimeo"
+msgstr "Vimeo"
+
+#: src/platform/resources/models/contents.py:15
+#: src/platform/resources/models/courses.py:91
+#: src/platform/resources/models/courses.py:100
+#: src/platform/resources/models/courses.py:122
+#: src/platform/resources/models/courses.py:139
+#: src/platform/resources/models/courses.py:158
+msgid "Course"
+msgstr "Курс"
+
+#: src/platform/resources/models/contents.py:19
+#: src/platform/resources/models/courses.py:175
+msgid "Lesson"
+msgstr "Урок"
+
+#: src/platform/resources/models/contents.py:21
+msgid "URL type"
+msgstr "Тип URL"
+
+#: src/platform/resources/models/contents.py:22
+msgid "URL"
+msgstr "URL"
+
+#: src/platform/resources/models/contents.py:23
+#: src/platform/resources/models/courses.py:12
+#: src/platform/resources/models/courses.py:31
+#: src/platform/resources/models/courses.py:103
+#: src/platform/resources/models/courses.py:142
+#: src/platform/resources/models/courses.py:169
+msgid "Order"
+msgstr ""
+
+#: src/platform/resources/models/contents.py:26
+msgid "Video: {}"
+msgstr "Видео: {}"
+
+#: src/platform/resources/models/contents.py:29
+msgid "Video"
+msgstr "Видео"
+
+#: src/platform/resources/models/contents.py:30
+msgid "Videos"
+msgstr "Видео"
+
+#: src/platform/resources/models/courses.py:10
+#: src/platform/resources/models/courses.py:29
+#: src/platform/resources/models/courses.py:46
+#: src/platform/resources/models/courses.py:64
+#: src/platform/resources/models/courses.py:141
+msgid "Name"
+msgstr "Название"
+
+#: src/platform/resources/models/courses.py:11
+#: src/platform/resources/models/courses.py:30
+#: src/platform/resources/models/courses.py:47
+msgid "Key"
+msgstr "Ключ"
+
+#: src/platform/resources/models/courses.py:18
+#: src/platform/resources/models/courses.py:27
+#: src/platform/resources/models/courses.py:67
+msgid "Category"
+msgstr "Категория"
+
+#: src/platform/resources/models/courses.py:19
+msgid "Categories"
+msgstr "Категории"
+
+#: src/platform/resources/models/courses.py:37
+#: src/platform/resources/models/courses.py:71
+msgid "Subcategory"
+msgstr "Подкатегория"
+
+#: src/platform/resources/models/courses.py:38
+msgid "Subcategories"
+msgstr "Подкатегории"
+
+#: src/platform/resources/models/courses.py:53
+msgid "Language"
+msgstr "Язык"
+
+#: src/platform/resources/models/courses.py:54
+#: src/platform/resources/models/courses.py:78
+msgid "Languages"
+msgstr "Языки"
+
+#: src/platform/resources/models/courses.py:60
+msgid "Free"
+msgstr "Бесплатный"
+
+#: src/platform/resources/models/courses.py:61
+msgid "Pro"
+msgstr "Платный"
+
+#: src/platform/resources/models/courses.py:73
+msgid "Course type"
+msgstr "Тип курса"
+
+#: src/platform/resources/models/courses.py:74
+msgid "Price"
+msgstr "Цена"
+
+#: src/platform/resources/models/courses.py:75
+msgid "Poster"
+msgstr "Постер"
+
+#: src/platform/resources/models/courses.py:76
+#: src/platform/resources/models/courses.py:164
+msgid "About"
+msgstr "Краткая информация"
+
+#: src/platform/resources/models/courses.py:77
+msgid "Description"
+msgstr "Описание"
+
+#: src/platform/resources/models/courses.py:80
+msgid "Authors"
+msgstr "Авторы"
+
+#: src/platform/resources/models/courses.py:83
+#: src/platform/resources/models/courses.py:165
+msgid "Date created"
+msgstr "Дата создания"
+
+#: src/platform/resources/models/courses.py:84
+#: src/platform/resources/models/courses.py:166
+msgid "Last update"
+msgstr "Последнее обновление"
+
+#: src/platform/resources/models/courses.py:85
+#: src/platform/resources/models/courses.py:131
+msgid "Rating"
+msgstr "Рейтинг"
+
+#: src/platform/resources/models/courses.py:92
+msgid "Courses"
+msgstr "Курсы"
+
+#: src/platform/resources/models/courses.py:102
+msgid "What will you learn"
+msgstr "Чему вы научитесь"
+
+#: src/platform/resources/models/courses.py:109
+msgid "Purpose"
+msgstr "Цель"
+
+#: src/platform/resources/models/courses.py:110
+msgid "Purposes"
+msgstr "Цели"
+
+#: src/platform/resources/models/courses.py:124
+msgid "Assessment"
+msgstr "Оценка"
+
+#: src/platform/resources/models/courses.py:125
+msgid "Comment"
+msgstr "Комментарий"
+
+#: src/platform/resources/models/courses.py:132
+msgid "Ratings"
+msgstr "Рейтинги"
+
+#: src/platform/resources/models/courses.py:148
+#: src/platform/resources/models/courses.py:162
+msgid "Chapter"
+msgstr "Раздел"
+
+#: src/platform/resources/models/courses.py:149
+msgid "Chapters"
+msgstr "Разделы"
+
+#: src/platform/resources/models/courses.py:155
+msgid "Title"
+msgstr "Название"
+
+#: src/platform/resources/models/courses.py:167
+msgid "Duration (min)"
+msgstr "Длительность (мин)"
+
+#: src/platform/resources/models/courses.py:168
+msgid "Access"
+msgstr "Доступ"
+
+#: src/platform/resources/models/courses.py:176
+msgid "Lessons"
+msgstr "Уроки"

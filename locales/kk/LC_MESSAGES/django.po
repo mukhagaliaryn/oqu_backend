@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-13 12:46+0000\n"
+"POT-Creation-Date: 2024-08-14 19:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,17 +17,18 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
 #: core/settings.py:120
 msgid "Kazakh"
-msgstr ""
+msgstr "Қазақша"
 
 #: core/settings.py:121
 msgid "Russian"
-msgstr ""
+msgstr "Русский"
 
 #: core/settings.py:122
 msgid "English"
-msgstr ""
+msgstr "English"
 
 #: src/platform/myaccount/admin/users.py:13
 msgid "Personal data"
@@ -38,7 +39,7 @@ msgid "Permissions"
 msgstr "Рұқсаттар"
 
 #: src/platform/myaccount/apps.py:8
-msgid "Platform | My account"
+msgid "Platform | MyAccount"
 msgstr ""
 
 #: src/platform/myaccount/models/accounts.py:10
@@ -51,6 +52,7 @@ msgstr "Автор"
 
 #: src/platform/myaccount/models/accounts.py:14
 #: src/platform/myaccount/models/users.py:68
+#: src/platform/resources/models/courses.py:118
 msgid "User"
 msgstr "Қолданушы"
 
@@ -68,7 +70,7 @@ msgstr "Био"
 
 #: src/platform/myaccount/models/accounts.py:21
 msgid "Is filled out"
-msgstr "Толтырылды ма?"
+msgstr "Толтырылды"
 
 #: src/platform/myaccount/models/accounts.py:27
 msgid "Account"
@@ -135,3 +137,201 @@ msgstr ""
 #: src/platform/myaccount/models/users.py:69
 msgid "Users"
 msgstr "Қолданушылар"
+
+#: src/platform/resources/apps.py:8
+msgid "Platform | Resources"
+msgstr ""
+
+#: src/platform/resources/models/contents.py:9
+msgid "YouTube"
+msgstr "YouTube"
+
+#: src/platform/resources/models/contents.py:10
+msgid "Vimeo"
+msgstr "Vimeo"
+
+#: src/platform/resources/models/contents.py:15
+#: src/platform/resources/models/courses.py:91
+#: src/platform/resources/models/courses.py:100
+#: src/platform/resources/models/courses.py:122
+#: src/platform/resources/models/courses.py:139
+#: src/platform/resources/models/courses.py:158
+msgid "Course"
+msgstr "Курс"
+
+#: src/platform/resources/models/contents.py:19
+#: src/platform/resources/models/courses.py:175
+msgid "Lesson"
+msgstr "Сабақ"
+
+#: src/platform/resources/models/contents.py:21
+msgid "URL type"
+msgstr "URL типі"
+
+#: src/platform/resources/models/contents.py:22
+msgid "URL"
+msgstr "URL"
+
+#: src/platform/resources/models/contents.py:23
+#: src/platform/resources/models/courses.py:12
+#: src/platform/resources/models/courses.py:31
+#: src/platform/resources/models/courses.py:103
+#: src/platform/resources/models/courses.py:142
+#: src/platform/resources/models/courses.py:169
+msgid "Order"
+msgstr ""
+
+#: src/platform/resources/models/contents.py:26
+msgid "Video: {}"
+msgstr "Видео: {}"
+
+#: src/platform/resources/models/contents.py:29
+msgid "Video"
+msgstr "Видео"
+
+#: src/platform/resources/models/contents.py:30
+msgid "Videos"
+msgstr "Видеолар"
+
+#: src/platform/resources/models/courses.py:10
+#: src/platform/resources/models/courses.py:29
+#: src/platform/resources/models/courses.py:46
+#: src/platform/resources/models/courses.py:64
+#: src/platform/resources/models/courses.py:141
+msgid "Name"
+msgstr "Атауы"
+
+#: src/platform/resources/models/courses.py:11
+#: src/platform/resources/models/courses.py:30
+#: src/platform/resources/models/courses.py:47
+msgid "Key"
+msgstr "Кілттік сөз"
+
+#: src/platform/resources/models/courses.py:18
+#: src/platform/resources/models/courses.py:27
+#: src/platform/resources/models/courses.py:67
+msgid "Category"
+msgstr "Категория"
+
+#: src/platform/resources/models/courses.py:19
+msgid "Categories"
+msgstr "Категориялар"
+
+#: src/platform/resources/models/courses.py:37
+#: src/platform/resources/models/courses.py:71
+msgid "Subcategory"
+msgstr "Ішкі категория"
+
+#: src/platform/resources/models/courses.py:38
+msgid "Subcategories"
+msgstr "Ішкі категориялар"
+
+#: src/platform/resources/models/courses.py:53
+msgid "Language"
+msgstr "Тіл"
+
+#: src/platform/resources/models/courses.py:54
+#: src/platform/resources/models/courses.py:78
+msgid "Languages"
+msgstr "Тілдер"
+
+#: src/platform/resources/models/courses.py:60
+msgid "Free"
+msgstr "Тегін"
+
+#: src/platform/resources/models/courses.py:61
+msgid "Pro"
+msgstr "Ақылы"
+
+#: src/platform/resources/models/courses.py:73
+msgid "Course type"
+msgstr "Курс түрі"
+
+#: src/platform/resources/models/courses.py:74
+msgid "Price"
+msgstr "Бағасы"
+
+#: src/platform/resources/models/courses.py:75
+msgid "Poster"
+msgstr "Постер"
+
+#: src/platform/resources/models/courses.py:76
+#: src/platform/resources/models/courses.py:164
+msgid "About"
+msgstr "Шағын мәлімет"
+
+#: src/platform/resources/models/courses.py:77
+msgid "Description"
+msgstr "Сипаттама"
+
+#: src/platform/resources/models/courses.py:80
+msgid "Authors"
+msgstr "Авторлар"
+
+#: src/platform/resources/models/courses.py:83
+#: src/platform/resources/models/courses.py:165
+msgid "Date created"
+msgstr "Шыққан уақыты"
+
+#: src/platform/resources/models/courses.py:84
+#: src/platform/resources/models/courses.py:166
+msgid "Last update"
+msgstr "Соңғы өзгеріс"
+
+#: src/platform/resources/models/courses.py:85
+#: src/platform/resources/models/courses.py:131
+msgid "Rating"
+msgstr "Рейтинг"
+
+#: src/platform/resources/models/courses.py:92
+msgid "Courses"
+msgstr "Курстар"
+
+#: src/platform/resources/models/courses.py:102
+msgid "What will you learn"
+msgstr "Сен бұл курста үйренетін нәрсе"
+
+#: src/platform/resources/models/courses.py:109
+msgid "Purpose"
+msgstr "Мақсаты"
+
+#: src/platform/resources/models/courses.py:110
+msgid "Purposes"
+msgstr "Мақсаттар"
+
+#: src/platform/resources/models/courses.py:124
+msgid "Assessment"
+msgstr "Бағалау"
+
+#: src/platform/resources/models/courses.py:125
+msgid "Comment"
+msgstr "Түсініктеме"
+
+#: src/platform/resources/models/courses.py:132
+msgid "Ratings"
+msgstr "Рейтингтер"
+
+#: src/platform/resources/models/courses.py:148
+#: src/platform/resources/models/courses.py:162
+msgid "Chapter"
+msgstr "Бөлім"
+
+#: src/platform/resources/models/courses.py:149
+msgid "Chapters"
+msgstr "Бөлімдер"
+
+#: src/platform/resources/models/courses.py:155
+msgid "Title"
+msgstr "Тақырыбы"
+
+#: src/platform/resources/models/courses.py:167
+msgid "Duration (min)"
+msgstr "Ұзақтығы (мин)"
+
+#: src/platform/resources/models/courses.py:168
+msgid "Access"
+msgstr "Қолжетімділік"
+
+#: src/platform/resources/models/courses.py:176
+msgid "Lessons"
+msgstr "Сабақтар"

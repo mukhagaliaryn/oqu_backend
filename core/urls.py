@@ -11,8 +11,9 @@ urlpatterns = [
     re_path(r'^auth/', include('djoser.urls.jwt')),
 
     # apps...
+    path('myaccount/', include('src.platform.myaccount.urls'))
 ]
 
-
+urlpatterns += [re_path(r'^i18n/', include('django.conf.urls.i18n'))]
 urlpatterns += [re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT})]
 urlpatterns += [re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT})]

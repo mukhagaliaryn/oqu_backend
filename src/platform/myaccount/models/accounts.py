@@ -14,7 +14,7 @@ class Account(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_('User'))
     account_type = models.CharField(
         _('Account type'), max_length=64,
-        choices=ACCOUNT_TYPE, default=ACCOUNT_TYPE[0][1]
+        choices=ACCOUNT_TYPE, default='STUDENT'
     )
     specialty = models.CharField(_('Specialty'), max_length=128, blank=True, null=True)
     bio = models.TextField(_('Bio'), max_length=256, blank=True, null=True)
