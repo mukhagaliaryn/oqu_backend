@@ -9,30 +9,32 @@ from src.platform.resources.models import Subcategory, Purpose, Chapter, Lesson,
 class SubCategoryInline(TranslationTabularInline):
     model = Subcategory
     extra = 1
+    prepopulated_fields = {'slug': ('name_en', )}
 
 
 class CategoryAdmin(TranslationAdmin):
     list_display = ('name', 'slug', )
     search_fields = ('name', )
+    prepopulated_fields = {'slug': ('name_en', )}
     inlines = (SubCategoryInline, )
 
 
 # Course
 # ----------------------------------------------------------------------------------------------------------------------
 # Purpose Tab
-class PurposeTable(admin.TabularInline):
+class PurposeTable(TranslationTabularInline):
     model = Purpose
     extra = 0
 
 
 # Chapter Tab
-class ChapterTable(admin.TabularInline):
+class ChapterTable(TranslationTabularInline):
     model = Chapter
     extra = 0
 
 
 # Video
-class LessonTable(admin.TabularInline):
+class LessonTable(TranslationTabularInline):
     model = Lesson
     extra = 0
 
@@ -50,7 +52,6 @@ class CourseAdmin(SummernoteModelAdminMixin, TranslationAdmin):
     search_fields = ('name', 'category', 'sub_category', )
     filter_horizontal = ('authors', 'ln', )
     summernote_fields = ('description', )
-
     inlines = (PurposeTable, ChapterTable, LessonTable, OldVideoTable, )
 
 
