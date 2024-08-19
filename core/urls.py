@@ -11,7 +11,8 @@ urlpatterns = [
     re_path(r'^auth/', include('djoser.urls.jwt')),
 
     # apps...
-    path('myaccount/', include('src.platform.myaccount.urls'))
+    path('myaccount/', include('src.platform.myaccount.urls')),
+    path('workspace/', include('src.platform.workspace.urls')),
 ]
 
 urlpatterns += [re_path(r'^i18n/', include('django.conf.urls.i18n'))]
