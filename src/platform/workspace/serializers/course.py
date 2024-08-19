@@ -25,7 +25,7 @@ class SubcategoryCourseSerializer(serializers.ModelSerializer):
 class PurposeCourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Purpose
-        fields = ('id', 'item', )
+        fields = ('id', 'item_kk', )
 
 
 # Rating
@@ -49,7 +49,7 @@ class LessonsCourseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lesson
-        fields = ('id', 'chapter', 'title_en', 'title_ru', 'title_kk', 'lesson_type', 'duration', 'order', )
+        fields = ('id', 'chapter', 'title_en', 'title_ru', 'title_kk', 'duration', 'order', )
 
 
 # Video
