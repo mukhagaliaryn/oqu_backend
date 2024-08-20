@@ -19,9 +19,9 @@ class CoursePlayerWorkspaceAPIView(APIView):
         user_lesson = get_object_or_404(UserLesson, pk=lesson_pk, user=request.user)
 
         # For lists
-        user_chapters = UserChapter.objects.filter(user=request.user, chapter__in=user_course.course.chapter_set.all())
+        user_chapters = UserChapter.objects.filter(user=request.user, chapter__in=user_course.course.chapters.all())
         user_lessons = UserLesson.objects.filter(
-            user=request.user, lesson__chapter__in=user_course.course.chapter_set.all()
+            user=request.user, lesson__chapter__in=user_course.course.chapters.all()
         ).order_by('lesson__order')
         video = get_object_or_404(Video, lesson=user_lesson.lesson)
         video_data = PlayVideoSerializer(video, partial=True)
